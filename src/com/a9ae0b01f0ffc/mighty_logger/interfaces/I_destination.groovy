@@ -15,4 +15,10 @@ interface I_destination {
 
     void add_configuration_event(I_event i_event)
 
+    void set_destination_purpose(String i_destination_purpose)
+
+    void set_location(String i_location)
+
+    String get_destination_purpose()
+
 }

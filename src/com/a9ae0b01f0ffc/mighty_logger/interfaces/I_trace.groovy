@@ -20,4 +20,16 @@ interface I_trace {
 
     void add_child_trace(I_trace i_child_trace_config)
 
+    Object get_ref()
+
+    void set_ref(Object i_ref)
+
+    String get_val()
+
+    void set_val(String i_val)
+
+    String get_name()
+
+    void set_name(String i_name)
+
 }

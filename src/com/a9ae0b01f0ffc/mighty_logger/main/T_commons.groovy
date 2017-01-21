@@ -1,4 +1,4 @@
-package com.a9ae0b01f0ffc.mighty_logger.implementation
+package com.a9ae0b01f0ffc.mighty_logger.main
 
 import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
 import groovy.util.slurpersupport.GPathResult
