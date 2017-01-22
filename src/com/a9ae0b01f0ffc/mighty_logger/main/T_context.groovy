@@ -6,8 +6,9 @@ import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_logger_builder
 @Singleton
 class T_context {
 
-    ThreadLocal<I_logger> p_logger_thread_local = T_commons.GC_NULL_OBJ_REF as ThreadLocal<I_logger>
-    I_logger_builder p_logger_builder = T_commons.GC_NULL_OBJ_REF as I_logger_builder
+    ThreadLocal<T_commons> p_commons_thread_local = new ThreadLocal<T_commons>()
+    ThreadLocal<I_logger> p_logger_thread_local = new ThreadLocal<I_logger>()
+    ThreadLocal<I_logger_builder> p_logger_builder_thread_local = new ThreadLocal<I_logger_builder>()
 
     void init_default() {
         init_custom(T_commons.GC_CONST_CONF_FILE_NAME)
@@ -15,13 +16,20 @@ class T_context {
 
     void init_custom(String i_conf_file_name) {
         T_commons.init_custom(i_conf_file_name)
-        p_logger_builder = new T_logger_builder(T_commons.GC_DEFAULT_LOGGER_CONF_FILE_NAME, T_commons.GC_CLASS_LOADER_CONF_FILE_NAME)
-        p_logger_thread_local = new ThreadLocal<I_logger>() {
-            @Override
-            protected I_logger initialValue() {
-                return p_logger_builder.create_logger(i_conf_file_name)
-            }
-        }
+        p_commons_thread_local.set(new T_commons())
+        p_logger_builder_thread_local.set(new T_logger_builder(p_commons_thread_local.get().GC_CLASS_LOADER_CONF_FILE_NAME))
+        p_logger_thread_local.set(p_logger_builder_thread_local.get().create_logger(i_conf_file_name))
     }
 
+    ThreadLocal<T_commons> get_commons_thread_local() {
+        return p_commons_thread_local
+    }
+
+    ThreadLocal<I_logger> get_logger_thread_local() {
+        return p_logger_thread_local
+    }
+
+    ThreadLocal<I_logger_builder> get_logger_builder_thread_local() {
+        return p_logger_builder_thread_local
+    }
 }

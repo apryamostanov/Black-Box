@@ -13,16 +13,20 @@ import groovy.util.slurpersupport.GPathResult
 
 class T_logger_builder implements I_logger_builder {
 
-    T_class_loader p_class_loader = T_commons.GC_NULL_OBJ_REF as T_class_loader
-    T_conf p_conf = T_commons.GC_NULL_OBJ_REF as T_conf
+    T_class_loader p_class_loader = T_s.c().GC_NULL_OBJ_REF as T_class_loader
+    GPathResult p_conf = T_s.c().GC_NULL_OBJ_REF as GPathResult
 
-    T_logger_builder(String i_log_conf_file_name, String i_class_conf_file_name) {
+    T_logger_builder(String i_class_conf_file_name) {
         p_class_loader = new T_class_loader(i_class_conf_file_name)
-        p_conf = new T_conf(i_log_conf_file_name)
+
     }
 
     I_logger create_logger(String i_conf_file_name) {
+        p_conf = (GPathResult) new XmlSlurper().parse(i_conf_file_name)
         I_logger l_logger = (I_logger) p_class_loader.instantiate("I_logger")
+        if (!p_conf.@mode.isEmpty()) {
+            l_logger.set_mode(p_conf.@mode.text())
+        }
         for (l_destination_xml in p_conf.children()) {
             l_logger.add_destination(init_destination(l_destination_xml as GPathResult))
         }
@@ -42,6 +46,10 @@ class T_logger_builder implements I_logger_builder {
 
     I_event init_event(GPathResult i_event_xml) {
         I_event l_event = (I_event) p_class_loader.instantiate(i_event_xml.name())
+        l_event.set_event_type(i_event_xml.name())
+        if (!i_event_xml.@mute.isEmpty()) {
+            l_event.set_muted(i_event_xml.@mute.asBoolean())
+        }
         for (l_trace_xml in i_event_xml.children()) {
             l_event.add_trace_config(init_trace((GPathResult) l_trace_xml))
         }
@@ -62,5 +70,8 @@ class T_logger_builder implements I_logger_builder {
         }
         return l_trace_config
     }
-    
+
+    T_class_loader get_class_loader() {
+        return p_class_loader
+    }
 }

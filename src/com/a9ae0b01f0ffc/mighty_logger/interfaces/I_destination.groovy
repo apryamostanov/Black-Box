@@ -1,13 +1,8 @@
 package com.a9ae0b01f0ffc.mighty_logger.interfaces
 
-import com.a9ae0b01f0ffc.mighty_logger.model.interfaces.formatters.I_event_formatter
-import com.a9ae0b01f0ffc.mighty_logger.model.interfaces.traces.I_destination_purpose
-
 interface I_destination {
 
     void log_generic(I_event i_event)
-
-    void add_event(I_event i_event)
 
     void set_formatter(I_event_formatter i_formatter)
 
@@ -20,5 +15,7 @@ interface I_destination {
     void set_location(String i_location)
 
     String get_destination_purpose()
+
+    void store(ArrayList<I_trace> i_trace_list)
 
 }

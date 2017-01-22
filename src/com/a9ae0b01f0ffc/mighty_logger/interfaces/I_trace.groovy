@@ -14,12 +14,6 @@ interface I_trace {
 
     I_trace_formatter get_formatter()
 
-    void set_child_traces(ArrayList<I_trace> i_child_traces)
-
-    ArrayList<I_trace> get_child_traces()
-
-    void add_child_trace(I_trace i_child_trace_config)
-
     Object get_ref()
 
     void set_ref(Object i_ref)

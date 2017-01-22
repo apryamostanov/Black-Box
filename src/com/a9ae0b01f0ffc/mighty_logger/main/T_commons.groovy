@@ -1,9 +1,9 @@
 package com.a9ae0b01f0ffc.mighty_logger.main
 
 import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
-import groovy.util.slurpersupport.GPathResult
+import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 
-public class T_commons {
+class T_commons {
     static final String GC_CONST_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/mighty_logger/conf/commons.conf"
     static final Object GC_NULL_OBJ_REF = null
     static final Object GC_SKIPPED_ARG = new Object()
@@ -29,6 +29,7 @@ public class T_commons {
     static final String GC_SUBST_THREADID = "%THREADID%"
     static final String GC_USERNAME = System.getProperty("user.name")
     static final String GC_THREADID = Long.toString(Thread.currentThread().getId())
+    static final T_static_string_builder GC_STATIC_STRING_BUILDER = new T_static_string_builder()
     static T_conf GC_CONST_CONF = new T_conf(GC_CONST_CONF_FILE_NAME)
     static String GC_LOG_DATETIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
     static String GC_LOG_FILENAME_DATE_FORMAT = "yyyyMMdd"
@@ -44,6 +45,10 @@ public class T_commons {
     static Boolean GC_DEDUPLICATE_TRACES = GC_FALSE
     static String GC_DEFAULT_LOGGER_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/mighty_logger/conf/main.conf"
     static String GC_CLASS_LOADER_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/mighty_logger/conf/classes.conf"
+    static String GC_LOGGER_MODE_PRODUCTION = "production"
+    static String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
+    static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
+    static String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
 
 
     static Boolean init_default() {
@@ -67,5 +72,9 @@ public class T_commons {
         GC_CONST_CONF.GC_DEDUPLICATE_TRACES(GC_DEDUPLICATE_TRACES)
         GC_CONST_CONF.GC_DEFAULT_LOGGER_CONF_FILE_NAME(GC_DEFAULT_LOGGER_CONF_FILE_NAME)
         GC_CONST_CONF.GC_CLASS_LOADER_CONF_FILE_NAME(GC_CLASS_LOADER_CONF_FILE_NAME)
+        GC_CONST_CONF.GC_LOGGER_MODE_PRODUCTION(GC_LOGGER_MODE_PRODUCTION)
+        GC_CONST_CONF.GC_LOGGER_MODE_DIAGNOSTIC(GC_LOGGER_MODE_DIAGNOSTIC)
+        GC_CONST_CONF.GC_DESTINATION_PURPOSE_DISPLAY(GC_DESTINATION_PURPOSE_DISPLAY)
+        GC_CONST_CONF.GC_DESTINATION_PURPOSE_WAREHOUSE(GC_DESTINATION_PURPOSE_WAREHOUSE)
     }
 }
