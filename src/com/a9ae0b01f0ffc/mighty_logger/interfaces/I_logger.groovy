@@ -10,9 +10,9 @@ interface I_logger {
 
     void log_generic(I_event i_event)
 
-    ArrayList<Object> get_trace_context_list()
+    ArrayList<I_trace> get_trace_context_list()
 
-    void put_to_context(Object i_object)
+    void put_to_context(Object i_object, String i_name)
 
     void add_destination(I_destination i_destination)
 
@@ -55,7 +55,7 @@ interface I_logger {
 
     I_trace[] objects2traces(Object[] i_objects)
 
-    I_trace trace2trace(I_trace i_trace)
+    I_trace spawn_trace(I_trace i_trace)
 
     void set_mode(String i_mode)
 

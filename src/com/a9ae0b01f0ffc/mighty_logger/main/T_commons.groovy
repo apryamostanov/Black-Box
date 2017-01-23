@@ -6,7 +6,7 @@ import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 class T_commons {
     static final String GC_CONST_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/mighty_logger/conf/commons.conf"
     static final Object GC_NULL_OBJ_REF = null
-    static final Object GC_SKIPPED_ARG = new Object()
+    static final Object[] GC_SKIPPED_ARG = new Object()
     static final String GC_EMPTY_STRING = ""
     static final String GC_COMMA = ","
     static final String GC_COLON = ":"
