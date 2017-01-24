@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.mighty_logger.implementation
 
+import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_maskable
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_trace
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_trace_formatter
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
@@ -41,7 +42,15 @@ class T_trace implements I_trace {
         } else if (p_muted) {
             return T_s.c().GC_DEFAULT_TRACE_MUTED
         } else if (p_masked) {
-            return T_s.c().GC_DEFAULT_TRACE_MASKED
+            if (p_ref instanceof I_maskable) {
+                if (p_value != T_s.c().GC_EMPTY_STRING) {
+                    return T_s.c().GC_DEFAULT_TRACE_MASKED//there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
+                } else {
+                    return ((I_maskable) p_ref).to_string_masked()
+                }
+            } else {
+                return T_s.c().GC_DEFAULT_TRACE_MASKED
+            }
         } else {
             if (p_value != T_s.c().GC_EMPTY_STRING) {
                 return p_value

@@ -44,9 +44,13 @@ class T_logger implements I_logger {
     }
 
     @Override
-    I_trace spawn_trace(I_trace i_trace) {
+    I_trace spawn_trace(I_trace i_trace, I_trace i_trace_config) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         l_trace.set_name(i_trace.get_name())
+        l_trace.set_masked(i_trace_config.is_masked())
+        l_trace.set_muted(i_trace_config.is_muted())
+        l_trace.set_source(i_trace_config.get_source())
+        l_trace.set_formatter(i_trace_config.get_formatter())
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_trace.get_ref())
             l_trace.set_val(i_trace.get_val())

@@ -5,6 +5,7 @@ import com.a9ae0b01f0ffc.mighty_logger.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.mighty_logger.main.T_context
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 import com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan
+import com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable
 import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 import org.junit.Test
 
@@ -55,6 +56,34 @@ class T_tests {
         T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_006.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
         assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace missing"
+    }
+
+    @Test
+    void test_007() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_007.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
+    }
+
+    @Test
+    void test_008() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_008.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan_maskable(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
+    }
+
+    @Test
+    void test_009() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_009.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan_maskable(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|444777******2222"
+    }
+
+    @Test
+    void test_010() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_010.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
     }
 
 }

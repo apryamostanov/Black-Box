@@ -55,7 +55,7 @@ interface I_logger {
 
     I_trace[] objects2traces(Object[] i_objects)
 
-    I_trace spawn_trace(I_trace i_trace)
+    I_trace spawn_trace(I_trace i_trace, I_trace i_trace_config)
 
     void set_mode(String i_mode)
 

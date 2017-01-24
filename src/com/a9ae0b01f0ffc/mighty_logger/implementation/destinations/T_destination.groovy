@@ -96,12 +96,12 @@ abstract class T_destination implements I_destination {
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_RUNTIME) {
             for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
                 if (l_trace_config_name == l_trace_runtime.get_name()) {
-                    l_result_trace = T_s.l().spawn_trace(l_trace_runtime)
+                    l_result_trace = T_s.l().spawn_trace(l_trace_runtime, i_trace_config)
                     return l_result_trace
                 }
                 if (l_trace_runtime.get_ref() != T_s.c().GC_NULL_OBJ_REF) {
                     if (l_trace_config_name == l_trace_runtime.get_ref().getClass().getSimpleName() || l_trace_config_name == l_trace_runtime.get_ref().getClass().getCanonicalName()) {
-                        l_result_trace = T_s.l().spawn_trace(l_trace_runtime)
+                        l_result_trace = T_s.l().spawn_trace(l_trace_runtime, i_trace_config)
                         return l_result_trace
                     }
                 }
@@ -110,7 +110,7 @@ abstract class T_destination implements I_destination {
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_CONTEXT) {
             for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
                 if (l_trace_config_name == l_trace_context.get_name()) {
-                    l_result_trace = T_s.l().spawn_trace(l_trace_context)
+                    l_result_trace = T_s.l().spawn_trace(l_trace_context, i_trace_config)
                     return l_result_trace
                 }
             }
