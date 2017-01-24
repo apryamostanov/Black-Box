@@ -12,4 +12,8 @@ class T_destination_variable extends T_destination {
         p_log_line = p_formatter.format_traces(i_trace_list)
     }
 
+    static String l() {
+        return p_log_line
+    }
+
 }

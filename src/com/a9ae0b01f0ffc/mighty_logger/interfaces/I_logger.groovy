@@ -23,30 +23,30 @@ interface I_logger {
     void log_enter(
             String i_class_name
             , String i_method_name
-            , Object... i_trace_args
+            , I_trace... i_traces
     )
 
     void log_exit(
             String i_class_name
             , String i_method_name
-            , Object... i_trace_args
+            , I_trace... i_traces
     )
 
-    void log_exception(String i_class_name, String i_method_name, Exception i_exception, Object... i_method_arguments)
+    void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces)
 
     void log_debug(
             T_static_string i_static_string_message
-            , Object... i_trace_args
+            , I_trace... i_traces
     )
 
     void log_info(
             T_static_string i_static_string_info
-            , Object... i_trace_args
+            , I_trace... i_traces
     )
 
     void log_warning(
             T_static_string i_static_string_warning
-            , Object... i_trace_args
+            , I_trace... i_traces
     )
 
     I_event create_event(String i_event_type, String i_class_name, String i_method_name)

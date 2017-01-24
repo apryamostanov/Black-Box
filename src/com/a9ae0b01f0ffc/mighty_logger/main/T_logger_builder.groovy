@@ -68,6 +68,9 @@ class T_logger_builder implements I_logger_builder {
         if (!i_trace_xml.@formatter.isEmpty()) {
             l_trace_config.set_formatter((I_trace_formatter) p_class_loader.instantiate(i_trace_xml.@formatter.text()))
         }
+        if (!i_trace_xml.@source.isEmpty()) {
+            l_trace_config.set_source(i_trace_xml.@source.text())
+        }
         return l_trace_config
     }
 

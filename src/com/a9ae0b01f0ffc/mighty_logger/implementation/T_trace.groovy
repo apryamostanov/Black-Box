@@ -12,6 +12,7 @@ class T_trace implements I_trace {
     String p_name = T_s.c().GC_EMPTY_STRING
     Object p_ref = T_s.c().GC_NULL_OBJ_REF
     String p_value = T_s.c().GC_EMPTY_STRING
+    String p_source = T_s.c().GC_EMPTY_STRING
 
     @Override
     Boolean is_muted() {
@@ -90,4 +91,13 @@ class T_trace implements I_trace {
         return p_value
     }
 
+    @Override
+    void set_source(String i_source) {
+        p_source = i_source
+    }
+
+    @Override
+    String get_source() {
+        return p_source
+    }
 }

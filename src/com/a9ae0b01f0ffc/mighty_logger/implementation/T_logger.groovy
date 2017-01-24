@@ -126,42 +126,42 @@ class T_logger implements I_logger {
         p_logger_id
     }
 
-    static Boolean method_arguments_exist(Object[] i_method_arguments) {
-        return (i_method_arguments != T_s.c().GC_SKIPPED_ARG && i_method_arguments != T_s.c().GC_NULL_OBJ_REF && i_method_arguments.size() > T_s.c().GC_EMPTY_SIZE)
+    static Boolean method_arguments_exist(Object[] i_traces) {
+        return (i_traces != T_s.c().GC_SKIPPED_ARG && i_traces != T_s.c().GC_NULL_OBJ_REF && i_traces.size() > T_s.c().GC_EMPTY_SIZE)
     }
 
     @Override
-    void log_enter(String i_class_name, String i_method_name, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG) {
+    void log_enter(String i_class_name, String i_method_name, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_method_invocation l_method_invocation = T_s.ioc().instantiate("I_method_invocation") as I_method_invocation
         l_method_invocation.set_class_name(i_class_name)
         l_method_invocation.set_method_name(i_method_name)
-        l_method_invocation.set_method_arguments(objects2traces(i_method_arguments))
+        l_method_invocation.set_method_arguments(objects2traces(i_traces))
         p_method_invocation_stack.push(l_method_invocation)
         I_event l_event = create_event("enter", i_class_name, i_method_name)
-        if (method_arguments_exist(i_method_arguments)) {
-            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        if (method_arguments_exist(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         }
         log_generic(l_event)
     }
 
     @Override
-    void log_exit(String i_class_name, String i_method_name, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
+    void log_exit(String i_class_name, String i_method_name, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
         I_event l_event = create_event("exit", i_class_name, i_method_name)
-        if (method_arguments_exist(i_method_arguments)) {
-            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        if (method_arguments_exist(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         }
         log_generic(l_event)
         pop()
     }
 
     @Override
-    void log_exception(String i_class_name, String i_method_name, Exception i_exception, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG) {
+    void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_event l_event = create_event("error", i_class_name, i_method_name)
         l_event.set_exception(i_exception)
-        l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         l_event.add_traces_runtime(Arrays.asList(get_current_method_invocation().get_method_arguments()))
         if (i_exception instanceof E_application_exception) {
-            if (method_arguments_exist(i_method_arguments)) {
+            if (method_arguments_exist(i_traces)) {
                 l_event.add_traces_runtime(Arrays.asList(objects2traces(((E_application_exception) i_exception).p_supplementary_objects)))
             }
         }
@@ -170,31 +170,31 @@ class T_logger implements I_logger {
     }
 
     @Override
-    void log_debug(T_static_string i_static_string_message, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG) {
+    void log_debug(T_static_string i_static_string_message, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_message)
-        if (method_arguments_exist(i_method_arguments)) {
-            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        if (method_arguments_exist(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         }
         log_generic(l_event)
     }
 
     @Override
-    void log_info(T_static_string i_static_string_info, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG as Object[]) {
+    void log_info(T_static_string i_static_string_info, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
         I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_info)
-        if (method_arguments_exist(i_method_arguments)) {
-            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        if (method_arguments_exist(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         }
         log_generic(l_event)
     }
 
     @Override
-    void log_warning(T_static_string i_static_string_warning, Object... i_method_arguments = T_s.c().GC_SKIPPED_ARG as Object[]) {
+    void log_warning(T_static_string i_static_string_warning, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
         I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_warning)
-        if (method_arguments_exist(i_method_arguments)) {
-            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_method_arguments)))
+        if (method_arguments_exist(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         }
         log_generic(l_event)
     }

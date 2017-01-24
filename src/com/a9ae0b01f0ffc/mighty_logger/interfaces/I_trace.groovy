@@ -26,4 +26,8 @@ interface I_trace {
 
     void set_name(String i_name)
 
+    void set_source(String i_source)
+
+    String get_source()
+
 }
