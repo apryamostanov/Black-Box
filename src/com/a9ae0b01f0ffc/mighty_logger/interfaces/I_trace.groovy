@@ -30,4 +30,12 @@ interface I_trace {
 
     String get_source()
 
+    void set_class(String i_class)
+
+    String get_class()
+
+    String get_search_name_config()
+
+    String get_class_name_ref()
+
 }

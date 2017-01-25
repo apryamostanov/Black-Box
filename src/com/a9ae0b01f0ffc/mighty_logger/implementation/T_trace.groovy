@@ -14,6 +14,7 @@ class T_trace implements I_trace {
     Object p_ref = T_s.c().GC_NULL_OBJ_REF
     String p_value = T_s.c().GC_EMPTY_STRING
     String p_source = T_s.c().GC_EMPTY_STRING
+    String p_class = T_s.c().GC_EMPTY_STRING
 
     @Override
     Boolean is_muted() {
@@ -44,7 +45,8 @@ class T_trace implements I_trace {
         } else if (p_masked) {
             if (p_ref instanceof I_maskable) {
                 if (p_value != T_s.c().GC_EMPTY_STRING) {
-                    return T_s.c().GC_DEFAULT_TRACE_MASKED//there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
+                    return T_s.c().GC_DEFAULT_TRACE_MASKED
+//there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
                 } else {
                     return ((I_maskable) p_ref).to_string_masked()
                 }
@@ -73,6 +75,30 @@ class T_trace implements I_trace {
     @Override
     String get_name() {
         return p_name
+    }
+
+    @Override
+    String get_search_name_config() {
+        String l_result = T_s.c().GC_EMPTY_STRING
+        if (get_ref() != T_s.c().GC_NULL_OBJ_REF && p_class != T_s.c().GC_EMPTY_STRING) {
+            l_result = get_ref().getClass().getCanonicalName()
+        } else if (get_ref() == T_s.c().GC_NULL_OBJ_REF && p_class != T_s.c().GC_EMPTY_STRING) {
+            l_result = p_class
+        } else {
+            l_result = p_name
+        }
+        return l_result
+    }
+
+    @Override
+    String get_class_name_ref() {
+        String l_result = T_s.c().GC_EMPTY_STRING
+        if (get_ref() != T_s.c().GC_NULL_OBJ_REF) {
+            l_result = get_ref().getClass().getCanonicalName()
+        } else {
+            l_result = p_name
+        }
+        return l_result
     }
 
     @Override
@@ -110,4 +136,13 @@ class T_trace implements I_trace {
         return p_source
     }
 
+    @Override
+    void set_class(String i_class) {
+        p_class = i_class
+    }
+
+    @Override
+    String get_class() {
+        return p_class
+    }
 }

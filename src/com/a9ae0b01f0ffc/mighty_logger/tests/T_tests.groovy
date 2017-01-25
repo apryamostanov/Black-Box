@@ -114,4 +114,32 @@ class T_tests {
         assert T_destination_variable.l() == "Trace masked"
     }
 
+    @Test
+    void test_015() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_015.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan_maskable(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Trace masked"
+    }
+
+    @Test
+    void test_016() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_016.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992222)"
+    }
+
+    @Test
+    void test_017() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_017.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Trace masked"
+    }
+
+    @Test
+    void test_018() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_018.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan_maskable(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "444777******2222"
+    }
+
 }
