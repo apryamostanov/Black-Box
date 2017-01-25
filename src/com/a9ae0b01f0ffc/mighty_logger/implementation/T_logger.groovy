@@ -44,22 +44,22 @@ class T_logger implements I_logger {
     }
 
     @Override
-    I_trace spawn_trace(I_trace i_trace, I_trace i_trace_config) {
+    I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
-        l_trace.set_name(i_trace.get_name())
+        l_trace.set_name(i_trace_runtime_or_context.get_name())
         l_trace.set_masked(i_trace_config.is_masked())
         l_trace.set_muted(i_trace_config.is_muted())
         l_trace.set_source(i_trace_config.get_source())
         l_trace.set_formatter(i_trace_config.get_formatter())
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
-            l_trace.set_ref(i_trace.get_ref())
-            l_trace.set_val(i_trace.get_val())
+            l_trace.set_ref(i_trace_runtime_or_context.get_ref())
+            l_trace.set_val(i_trace_runtime_or_context.get_val())
         } else if (p_mode == T_s.c().GC_LOGGER_MODE_DIAGNOSTIC) {
-            l_trace.set_ref(i_trace.get_ref())
-            if (i_trace.get_val() != T_s.c().GC_EMPTY_STRING) {
-                l_trace.set_val(i_trace.get_val())
+            l_trace.set_ref(i_trace_runtime_or_context.get_ref())
+            if (i_trace_runtime_or_context.get_val() != T_s.c().GC_EMPTY_STRING) {
+                l_trace.set_val(i_trace_runtime_or_context.get_val())
             } else {
-                l_trace.set_val(i_trace.toString())
+                l_trace.set_val(i_trace_runtime_or_context.toString())
             }
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_LOGGER_MODE, p_mode)

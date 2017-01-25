@@ -7,6 +7,7 @@ import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_trace
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 
+
 abstract class T_destination implements I_destination {
 
     final static String PC_STATIC_TRACE_NAME_CLASS_NAME = "class"
@@ -18,7 +19,11 @@ abstract class T_destination implements I_destination {
     final static String PC_STATIC_TRACE_NAME_MESSAGE = "message"
     final static String PC_STATIC_TRACE_NAME_THREADID = "thread"
     final static String PC_STATIC_TRACE_NAME_PROCESSID = "process"
+    final static String PC_STATIC_TRACE_NAME_PREDEFINED = "predefined"
+    final static String PC_STATIC_TRACE_NAME_RUNTIME = "runtime"
+    final static String PC_STATIC_TRACE_NAME_CONTEXT = "context"
     final static ArrayList<String> PC_ALL_POSSIBLE_PREDEFINED_TRACES = new ArrayList<String>()
+    final static ArrayList<String> PC_ALL_POSSIBLE_PREDEFINED_TRACE_SOURCES = new ArrayList<String>()
     static Boolean p_is_init = init()
 
     I_event_formatter p_formatter = T_s.c().GC_NULL_OBJ_REF as I_event_formatter
@@ -36,6 +41,9 @@ abstract class T_destination implements I_destination {
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_MESSAGE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_THREADID)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_PROCESSID)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACE_SOURCES.add(PC_STATIC_TRACE_NAME_PREDEFINED)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACE_SOURCES.add(PC_STATIC_TRACE_NAME_RUNTIME)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACE_SOURCES.add(PC_STATIC_TRACE_NAME_CONTEXT)
         return T_s.c().GC_TRUE
     }
 
@@ -57,6 +65,16 @@ abstract class T_destination implements I_destination {
         }
     }
 
+    static I_trace get_config_trace_by_name(I_event i_event_config, String i_trace_config_name) {
+        I_trace l_trace_result = T_s.c().GC_NULL_OBJ_REF as I_trace
+        for (I_trace l_trace_config in i_event_config.get_traces_config()) {
+            if (l_trace_config.get_name() == i_trace_config_name) {
+                l_trace_result = l_trace_config
+            }
+        }
+        return l_trace_result
+    }
+
     static Boolean is_trace_muted_predefined(String i_name, I_event i_event_config) {
         Boolean l_result = T_s.c().GC_FALSE
         for (I_trace l_trace_config in i_event_config.get_traces_config()) {
@@ -68,14 +86,20 @@ abstract class T_destination implements I_destination {
         return l_result
     }
 
-    static Boolean is_trace_muted_context_and_runtime(I_trace i_trace, I_event i_event_config) {
+    static Boolean is_trace_muted_context_and_runtime(I_trace i_trace_runtime_or_context, I_event i_event_config) {
         Boolean l_result = T_s.c().GC_FALSE
-        if (i_trace.get_ref() != T_s.c().GC_NULL_OBJ_REF) {
+        if (i_trace_runtime_or_context.get_ref() != T_s.c().GC_NULL_OBJ_REF) {
             for (I_trace l_trace_config in i_event_config.get_traces_config()) {
-                if (l_trace_config.get_name() == i_trace.get_ref().getClass().getSimpleName() || l_trace_config.get_name() == i_trace.get_ref().getClass().getCanonicalName()) {
+                if (l_trace_config.get_name() == i_trace_runtime_or_context.get_ref().getClass().getSimpleName() || l_trace_config.get_name() == i_trace_runtime_or_context.get_ref().getClass().getCanonicalName()) {
                     l_result = l_trace_config.is_muted()
                     break
                 }
+            }
+        }
+        for (I_trace l_trace_config in i_event_config.get_traces_config()) {
+            if (l_trace_config.get_name() == i_trace_runtime_or_context.get_name()) {
+                l_result = l_trace_config.is_muted()
+                break
             }
         }
         return l_result
@@ -88,7 +112,7 @@ abstract class T_destination implements I_destination {
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL) {
             for (String l_trace_predefined_name in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
                 if (l_trace_config_name == l_trace_predefined_name) {
-                    l_result_trace = build_predefined_trace_by_name_exclusive(l_trace_config_name, i_event_runtime)
+                    l_result_trace = build_predefined_trace_by_name(l_trace_config_name, i_event_runtime)
                     return l_result_trace
                 }
             }
@@ -121,31 +145,51 @@ abstract class T_destination implements I_destination {
         return l_trace_not_found
     }
 
-    static I_trace build_predefined_trace_by_name_exclusive(String i_trace_name, I_event i_event_runtime) {
+    static I_trace build_predefined_trace_by_name(String i_predefined_trace_name, I_event i_event_runtime) {
         I_trace l_result_trace = T_s.ioc().instantiate("I_trace") as I_trace
-        l_result_trace.set_name(i_trace_name)
-        if (i_trace_name == PC_STATIC_TRACE_NAME_CLASS_NAME) {
+        l_result_trace.set_name(i_predefined_trace_name)
+        if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_CLASS_NAME) {
             l_result_trace.set_val(i_event_runtime.get_class_name())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_METHOD_NAME) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_METHOD_NAME) {
             l_result_trace.set_val(i_event_runtime.get_method_name())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_DEPTH) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_DEPTH) {
             l_result_trace.set_val(i_event_runtime.get_depth().toString())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_EVENT_TYPE) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_EVENT_TYPE) {
             l_result_trace.set_val(i_event_runtime.get_event_type())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_DATETIMESTAMP) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_DATETIMESTAMP) {
             l_result_trace.set_val(i_event_runtime.get_datetimestamp())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_EXCEPTION) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_EXCEPTION) {
             l_result_trace.set_ref(i_event_runtime.get_exception())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_MESSAGE) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_MESSAGE) {
             l_result_trace.set_val(i_event_runtime.get_message().toString())
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_THREADID) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_THREADID) {
             l_result_trace.set_val(T_s.c().GC_THREADID)
-        } else if (i_trace_name == PC_STATIC_TRACE_NAME_PROCESSID) {
+        } else if (i_predefined_trace_name == PC_STATIC_TRACE_NAME_PROCESSID) {
             l_result_trace.set_val(T_s.c().GC_PROCESSID)
         } else {
-            throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME, i_trace_name)
+            throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME, i_predefined_trace_name)
         }
         return l_result_trace
+    }
+
+    static ArrayList<I_trace> build_predefined_trace_source_by_name(String i_predefined_trace_source_name, I_event i_event_runtime, I_event i_event_config) {
+        ArrayList<I_trace> l_result_traces = new ArrayList<I_trace>()
+        if (i_predefined_trace_source_name == PC_STATIC_TRACE_NAME_PREDEFINED) {
+            for (String l_trace_predefined_name in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
+                l_result_traces.add(build_predefined_trace_by_name(l_trace_predefined_name, i_event_runtime))
+            }
+        } else if (i_predefined_trace_source_name == PC_STATIC_TRACE_NAME_CONTEXT) {
+            for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
+                l_result_traces.add(T_s.l().spawn_trace(l_trace_context, get_config_trace_by_name(i_event_config, i_predefined_trace_source_name)))
+            }
+        } else if (i_predefined_trace_source_name == PC_STATIC_TRACE_NAME_RUNTIME) {
+            for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
+                l_result_traces.add(T_s.l().spawn_trace(l_trace_runtime, get_config_trace_by_name(i_event_config, i_predefined_trace_source_name)))
+            }
+        } else {
+            throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME, i_predefined_trace_source_name)
+        }
+        return l_result_traces
     }
 
     @Override
@@ -159,21 +203,32 @@ abstract class T_destination implements I_destination {
                 }
             }
         } else if (p_purpose == T_s.c().GC_DESTINATION_PURPOSE_WAREHOUSE) { //exclusive
-            for (String l_trace_predefined_name in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
-                if (!is_trace_muted_predefined(l_trace_predefined_name, l_event_config)) {
-                    l_trace_list.add(build_predefined_trace_by_name_exclusive(l_trace_predefined_name, i_event_runtime))
+            if (!is_trace_muted_predefined(PC_STATIC_TRACE_NAME_PREDEFINED, l_event_config)) {
+                for (String l_trace_predefined_name in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
+                    if (!is_trace_muted_predefined(l_trace_predefined_name, l_event_config)) {
+                        l_trace_list.add(build_predefined_trace_by_name(l_trace_predefined_name, i_event_runtime))
+                    }
                 }
             }
-            for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
-                if (!is_trace_muted_context_and_runtime(l_trace_runtime, l_event_config)) {
-                    l_trace_list.add(l_trace_runtime)
+            if (!is_trace_muted_predefined(PC_STATIC_TRACE_NAME_RUNTIME, l_event_config)) {
+                for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
+                    if (!is_trace_muted_context_and_runtime(l_trace_runtime, l_event_config)) {
+                        l_trace_list.add(T_s.l().spawn_trace(l_trace_runtime, get_config_trace_by_name(l_event_config, l_trace_runtime.get_name())))
+                    }
                 }
             }
-            for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
-                if (!is_trace_muted_context_and_runtime(l_trace_context, l_event_config)) {
-                    l_trace_list.add(l_trace_context)
+            if (!is_trace_muted_predefined(PC_STATIC_TRACE_NAME_CONTEXT, l_event_config)) {
+                for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
+                    if (!is_trace_muted_context_and_runtime(l_trace_context, l_event_config)) {
+                        l_trace_list.add(T_s.l().spawn_trace(l_trace_context, get_config_trace_by_name(l_event_config, l_trace_context.get_name())))
+                    }
                 }
-            }
+            }/*
+            for (String l_trace_predefined_source_name in PC_ALL_POSSIBLE_PREDEFINED_TRACE_SOURCES) {
+                if (!is_trace_muted_predefined(l_trace_predefined_source_name, l_event_config)) {
+                    l_trace_list.addAll(build_predefined_trace_source_by_name(l_trace_predefined_source_name, i_event_runtime, l_event_config))
+                }
+            }*/
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_DESTINATION_PURPOSE, p_purpose)
         }
