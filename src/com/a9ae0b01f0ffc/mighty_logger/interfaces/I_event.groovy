@@ -42,4 +42,8 @@ interface I_event {
 
     void set_exception(Exception i_exception)
 
+    I_trace get_corresponding_trace(I_trace i_trace_config)
+
+    Boolean is_trace_muted(I_trace i_trace)
+
 }

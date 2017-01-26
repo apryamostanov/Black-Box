@@ -36,6 +36,8 @@ interface I_trace {
 
     String get_search_name_config()
 
-    String get_class_name_ref()
+    String get_ref_class_name()
+
+    Boolean match_trace(I_trace i_trace_new)
 
 }

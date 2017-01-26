@@ -91,7 +91,7 @@ class T_trace implements I_trace {
     }
 
     @Override
-    String get_class_name_ref() {
+    String get_ref_class_name() {
         String l_result = T_s.c().GC_EMPTY_STRING
         if (get_ref() != T_s.c().GC_NULL_OBJ_REF) {
             l_result = get_ref().getClass().getCanonicalName()
@@ -145,4 +145,9 @@ class T_trace implements I_trace {
     String get_class() {
         return p_class
     }
+
+    Boolean match_trace(I_trace i_trace_new) {
+        return (get_search_name_config() == i_trace_new.get_ref_class_name() || get_search_name_config() == i_trace_new.get_name())
+    }
+
 }

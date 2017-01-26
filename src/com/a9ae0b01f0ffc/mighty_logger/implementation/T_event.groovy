@@ -111,4 +111,24 @@ class T_event implements I_event {
     void set_exception(Exception i_exception) {
         this.p_exception = i_exception
     }
+
+    @Override
+    I_trace get_corresponding_trace(I_trace i_trace_config) {
+        I_trace l_trace_result = T_s.c().GC_NULL_OBJ_REF as I_trace
+        for (I_trace l_trace_config in get_traces_config()) {
+            if (l_trace_config.match_trace(i_trace_config)) {
+                l_trace_result = l_trace_config
+                break
+            }
+        }
+        return l_trace_result
+    }
+
+    Boolean is_trace_muted(I_trace i_trace) {
+        Boolean l_result
+        I_trace l_trace = get_corresponding_trace(i_trace)
+        l_result = l_trace == T_s.c().GC_NULL_OBJ_REF ? T_s.c().GC_FALSE : l_trace.is_muted()
+        return l_result
+    }
+
 }
