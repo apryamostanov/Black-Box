@@ -46,4 +46,6 @@ interface I_event {
 
     Boolean is_trace_muted(I_trace i_trace)
 
+    Boolean is_trace_masked(I_trace i_trace)
+
 }

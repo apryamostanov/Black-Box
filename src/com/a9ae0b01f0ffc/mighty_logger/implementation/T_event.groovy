@@ -131,4 +131,11 @@ class T_event implements I_event {
         return l_result
     }
 
+    Boolean is_trace_masked(I_trace i_trace) {
+        Boolean l_result
+        I_trace l_trace = get_corresponding_trace(i_trace)
+        l_result = l_trace == T_s.c().GC_NULL_OBJ_REF ? T_s.c().GC_FALSE : l_trace.is_masked()
+        return l_result
+    }
+
 }

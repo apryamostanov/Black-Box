@@ -142,4 +142,12 @@ class T_tests {
         assert T_destination_variable.l() == "444777******2222"
     }
 
+    @Test
+    void test_019() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_019.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan(PC_PAN), "pan"))
+        assert T_destination_variable.l() == "Trace masked|444777******2222"
+    }
+
 }
