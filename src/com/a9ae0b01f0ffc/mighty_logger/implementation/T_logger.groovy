@@ -48,7 +48,7 @@ class T_logger implements I_logger {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         l_trace.set_name(i_trace_runtime_or_context.get_name())
         if (i_trace_config != T_s.c().GC_NULL_OBJ_REF) {
-            l_trace.set_masked(i_trace_config.is_masked())
+            l_trace.set_mask(i_trace_config.get_mask())
             l_trace.set_muted(i_trace_config.is_muted())
             l_trace.set_source(i_trace_config.get_source())
             l_trace.set_formatter(i_trace_config.get_formatter())

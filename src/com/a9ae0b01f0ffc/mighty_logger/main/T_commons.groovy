@@ -37,8 +37,11 @@ class T_commons {
     static final String GC_PROCESSID = ManagementFactory.getRuntimeMXBean().getName().substring(GC_FIRST_CHAR, ManagementFactory.getRuntimeMXBean().getName().indexOf(GC_AT_CHAR))//When Java 9 comes: ProcessHandle.current().getPid()
     static final T_static_string_builder GC_STATIC_STRING_BUILDER = new T_static_string_builder()
     static final String GC_TRACE_SOURCE_ALL = "all"
+    static final String GC_TRACE_SOURCE_PREDEFINED = "predefined"
     static final String GC_TRACE_SOURCE_RUNTIME = "runtime"
     static final String GC_TRACE_SOURCE_CONTEXT = "context"
+    static final String GC_FALSE_STRING = "false"
+    static final String GC_TRUE_STRING = "true"
     static T_conf GC_CONST_CONF = new T_conf(GC_CONST_CONF_FILE_NAME)
     static String GC_LOG_DATETIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
     static String GC_LOG_FILENAME_DATE_FORMAT = "yyyyMMdd"

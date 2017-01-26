@@ -18,8 +18,12 @@ class T_pan_maskable implements I_maskable{
     }
 
     @Override
-    String to_string_masked() {
-        return p_pan.substring(0, 6)+"******"+p_pan.substring(p_pan.size()-4)
+    String to_string_masked(String i_mask_type) {
+        if (i_mask_type=="last4digits") {
+            return "**********" + p_pan.substring(p_pan.size() - 4)
+        } else {
+            return p_pan.substring(0, 6) + "******" + p_pan.substring(p_pan.size() - 4)
+        }
     }
 
 

@@ -1,7 +1,6 @@
 package com.a9ae0b01f0ffc.mighty_logger.main
 
 import com.a9ae0b01f0ffc.implementation.T_class_loader
-import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_destination
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_event
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_event_formatter
@@ -60,7 +59,7 @@ class T_logger_builder implements I_logger_builder {
         I_trace l_trace_config = (I_trace) p_class_loader.instantiate("I_trace")
         l_trace_config.set_name(i_trace_xml.name())
         if (!i_trace_xml.@mask.isEmpty()) {
-            l_trace_config.set_masked(i_trace_xml.@mask.asBoolean())
+            l_trace_config.set_mask(i_trace_xml.@mask.text())
         }
         if (!i_trace_xml.@mute.isEmpty()) {
             l_trace_config.set_muted(i_trace_xml.@mute.asBoolean())

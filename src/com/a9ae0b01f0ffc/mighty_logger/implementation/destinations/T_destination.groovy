@@ -137,26 +137,6 @@ abstract class T_destination implements I_destination {
         return l_traces_to_add
     }
 
-    static ArrayList<I_trace> build_predefined_trace_source_by_name(I_trace i_predefined_trace, I_event i_event_runtime, I_event i_event_config) {
-        ArrayList<I_trace> l_result_traces = new ArrayList<I_trace>()
-        if (PC_TRACE_SOURCE_PREDEFINED.match_trace(i_predefined_trace)) {
-            for (I_trace l_trace_predefined in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
-                l_result_traces.add(build_predefined_trace(l_trace_predefined, i_event_runtime))
-            }
-        } else if (PC_TRACE_SOURCE_CONTEXT.match_trace(i_predefined_trace)) {
-            for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
-                l_result_traces.add(T_s.l().spawn_trace(l_trace_context, i_event_config.get_corresponding_trace(i_predefined_trace)))
-            }
-        } else if (PC_TRACE_SOURCE_RUNTIME.match_trace(i_predefined_trace)) {
-            for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
-                l_result_traces.add(T_s.l().spawn_trace(l_trace_runtime, i_event_config.get_corresponding_trace(i_predefined_trace)))
-            }
-        } else {
-            throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME, i_predefined_trace)
-        }
-        return l_result_traces
-    }
-
     static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, ArrayList<I_trace> i_traces_from_source) {
         ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
         if (!i_event_config.is_trace_muted(i_predefined_source_trace)) {

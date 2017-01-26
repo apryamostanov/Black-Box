@@ -8,7 +8,7 @@ import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 class T_trace implements I_trace {
 
     Boolean p_muted = T_s.c().GC_FALSE
-    Boolean p_masked = T_s.c().GC_FALSE
+    String p_mask = T_s.c().GC_EMPTY_STRING
     I_trace_formatter p_trace_formatter = T_s.c().GC_NULL_OBJ_REF as I_trace_formatter
     String p_name = T_s.c().GC_EMPTY_STRING
     Object p_ref = T_s.c().GC_NULL_OBJ_REF
@@ -23,7 +23,11 @@ class T_trace implements I_trace {
 
     @Override
     Boolean is_masked() {
-        return p_masked
+        if (p_mask == T_s.c().GC_EMPTY_STRING || p_mask == T_s.c().GC_FALSE_STRING) {
+            return T_s.c().GC_TRUE
+        } else {
+            return T_s.c().GC_FALSE
+        }
     }
 
     @Override
@@ -32,8 +36,13 @@ class T_trace implements I_trace {
     }
 
     @Override
-    void set_masked(Boolean i_is_masked) {
-        p_masked = i_is_masked
+    void set_mask(String i_mask) {
+        p_mask = i_mask
+    }
+
+    @Override
+    String get_mask() {
+        return p_mask
     }
 
     @Override
@@ -42,13 +51,13 @@ class T_trace implements I_trace {
             return T_s.c().GC_DEFAULT_TRACE
         } else if (p_muted) {
             return T_s.c().GC_DEFAULT_TRACE_MUTED
-        } else if (p_masked) {
+        } else if (p_mask) {
             if (p_ref instanceof I_maskable) {
                 if (p_value != T_s.c().GC_EMPTY_STRING) {
                     return T_s.c().GC_DEFAULT_TRACE_MASKED
 //there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
                 } else {
-                    return ((I_maskable) p_ref).to_string_masked()
+                    return ((I_maskable) p_ref).to_string_masked(p_mask)
                 }
             } else {
                 return T_s.c().GC_DEFAULT_TRACE_MASKED

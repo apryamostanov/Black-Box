@@ -8,7 +8,9 @@ interface I_trace {
 
     void set_muted(Boolean i_is_muted)
 
-    void set_masked(Boolean i_is_masked)
+    void set_mask(String i_mask)
+
+    String get_mask()
 
     void set_formatter(I_trace_formatter i_trace_formatter)
 
