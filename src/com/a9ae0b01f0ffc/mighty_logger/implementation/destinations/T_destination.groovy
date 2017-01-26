@@ -129,6 +129,14 @@ abstract class T_destination implements I_destination {
         return l_result_trace
     }
 
+    static ArrayList<I_trace> build_predefined_traces(ArrayList<I_trace> i_predefined_traces, I_event i_event_runtime) {
+        ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
+        for (I_trace l_predefined_trace in i_predefined_traces) {
+            l_traces_to_add.add(build_predefined_trace(l_predefined_trace, i_event_runtime))
+        }
+        return l_traces_to_add
+    }
+
     static ArrayList<I_trace> build_predefined_trace_source_by_name(I_trace i_predefined_trace, I_event i_event_runtime, I_event i_event_config) {
         ArrayList<I_trace> l_result_traces = new ArrayList<I_trace>()
         if (PC_TRACE_SOURCE_PREDEFINED.match_trace(i_predefined_trace)) {
@@ -152,10 +160,10 @@ abstract class T_destination implements I_destination {
     static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, ArrayList<I_trace> i_traces_from_source) {
         ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
         if (!i_event_config.is_trace_muted(i_predefined_source_trace)) {
-            for (I_trace l_trace_context in i_traces_from_source) {
-                if (!i_event_config.is_trace_muted(l_trace_context)) {
-                    I_trace l_trace_config = T_s.nvl(i_event_config.get_corresponding_trace(l_trace_context), i_event_config.get_corresponding_trace(i_predefined_source_trace)) as I_trace
-                    l_traces_to_add.add(T_s.l().spawn_trace(l_trace_context, l_trace_config))
+            for (I_trace l_trace_from_source in i_traces_from_source) {
+                if (!i_event_config.is_trace_muted(l_trace_from_source)) {
+                    I_trace l_trace_config = T_s.nvl(i_event_config.get_corresponding_trace(l_trace_from_source), i_event_config.get_corresponding_trace(i_predefined_source_trace)) as I_trace
+                    l_traces_to_add.add(T_s.l().spawn_trace(l_trace_from_source, l_trace_config))
                 }
             }
         }
@@ -173,13 +181,7 @@ abstract class T_destination implements I_destination {
                 }
             }
         } else if (p_purpose == T_s.c().GC_DESTINATION_PURPOSE_WAREHOUSE) { //excluding defined
-            if (!l_event_config.is_trace_muted(PC_TRACE_SOURCE_PREDEFINED)) {
-                for (I_trace l_trace_predefined in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
-                    if (!l_event_config.is_trace_muted(l_trace_predefined)) {
-                        l_trace_list.add(build_predefined_trace(l_trace_predefined, i_event_runtime))
-                    }
-                }
-            }
+            l_trace_list.addAll(build_predefined_traces(process_source_exclusive(PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES), i_event_runtime))
             l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime()))
             l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list()))
         } else {
