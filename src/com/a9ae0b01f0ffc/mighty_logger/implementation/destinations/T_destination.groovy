@@ -7,9 +7,6 @@ import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_trace
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 
-import java.lang.reflect.Array
-
-
 abstract class T_destination implements I_destination {
 
     final static I_trace PC_STATIC_TRACE_NAME_CLASS_NAME = init_predefined_trace("class")
@@ -18,12 +15,14 @@ abstract class T_destination implements I_destination {
     final static I_trace PC_STATIC_TRACE_NAME_EVENT_TYPE = init_predefined_trace("event")
     final static I_trace PC_STATIC_TRACE_NAME_DATETIMESTAMP = init_predefined_trace("datetimestamp")
     final static I_trace PC_STATIC_TRACE_NAME_EXCEPTION = init_predefined_trace("exception")
+    final static I_trace PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE = init_predefined_trace("exception_message")
     final static I_trace PC_STATIC_TRACE_NAME_MESSAGE = init_predefined_trace("message")
     final static I_trace PC_STATIC_TRACE_NAME_THREADID = init_predefined_trace("thread")
     final static I_trace PC_STATIC_TRACE_NAME_PROCESSID = init_predefined_trace("process")
     final static I_trace PC_TRACE_SOURCE_PREDEFINED = init_predefined_trace("predefined")
     final static I_trace PC_TRACE_SOURCE_RUNTIME = init_predefined_trace("runtime")
     final static I_trace PC_TRACE_SOURCE_CONTEXT = init_predefined_trace("context")
+    final static I_trace PC_TRACE_SOURCE_EXCEPTION_TRACES = init_predefined_trace("exception_traces")
     final static ArrayList<I_trace> PC_ALL_POSSIBLE_PREDEFINED_TRACES = new ArrayList<I_trace>()
     final static ArrayList<I_trace> PC_ALL_POSSIBLE_SOURCES = new ArrayList<I_trace>()
     static Boolean p_is_init = init()
@@ -46,12 +45,14 @@ abstract class T_destination implements I_destination {
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_EVENT_TYPE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_DATETIMESTAMP)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_EXCEPTION)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_MESSAGE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_THREADID)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_PROCESSID)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_PREDEFINED)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_RUNTIME)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_CONTEXT)
+        PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_EXCEPTION_TRACES)
         return T_s.c().GC_TRUE
     }
 
@@ -96,6 +97,17 @@ abstract class T_destination implements I_destination {
                 }
             }
         }
+        if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_EXCEPTION_TRACES) {
+            if (i_event_runtime.get_exception() != T_s.c().GC_NULL_OBJ_REF) {
+                if (i_event_runtime.get_exception() instanceof E_application_exception) {
+                    for (I_trace l_trace_from_exception in T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_exception()).get_traces())) {
+                        if (i_trace_config.match_trace(l_trace_from_exception)) {
+                            return T_s.l().spawn_trace(l_trace_from_exception, i_trace_config)
+                        }
+                    }
+                }
+            }
+        }
         I_trace l_trace_not_found = T_s.ioc().instantiate("I_trace") as I_trace
         l_trace_not_found.set_name(i_trace_config.get_name())
         l_trace_not_found.set_val(T_s.c().GC_DEFAULT_TRACE)
@@ -117,6 +129,10 @@ abstract class T_destination implements I_destination {
             l_result_trace.set_val(i_event_runtime.get_datetimestamp())
         } else if (PC_STATIC_TRACE_NAME_EXCEPTION.match_trace(i_predefined_trace)) {
             l_result_trace.set_ref(i_event_runtime.get_exception())
+        } else if (PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.match_trace(i_predefined_trace)) {
+            if (i_event_runtime.get_exception() != T_s.c().GC_NULL_OBJ_REF) {
+                l_result_trace.set_val(i_event_runtime.get_exception().getMessage())
+            }
         } else if (PC_STATIC_TRACE_NAME_MESSAGE.match_trace(i_predefined_trace)) {
             l_result_trace.set_val(i_event_runtime.get_message().toString())
         } else if (PC_STATIC_TRACE_NAME_THREADID.match_trace(i_predefined_trace)) {
@@ -137,10 +153,10 @@ abstract class T_destination implements I_destination {
         return l_traces_to_add
     }
 
-    static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, ArrayList<I_trace> i_traces_from_source) {
+    static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, List<I_trace> i_traces_from_source) {
         ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
-        if (!i_event_config.is_trace_muted(i_predefined_source_trace)) {
-            for (I_trace l_trace_from_source in i_traces_from_source) {
+        for (I_trace l_trace_from_source in i_traces_from_source) {
+            if ((!i_event_config.is_trace_muted(i_predefined_source_trace)) || i_event_config.get_corresponding_trace(l_trace_from_source) != T_s.c().GC_NULL_OBJ_REF) {
                 if (!i_event_config.is_trace_muted(l_trace_from_source)) {
                     I_trace l_trace_config = T_s.nvl(i_event_config.get_corresponding_trace(l_trace_from_source), i_event_config.get_corresponding_trace(i_predefined_source_trace)) as I_trace
                     l_traces_to_add.add(T_s.l().spawn_trace(l_trace_from_source, l_trace_config))
@@ -164,6 +180,9 @@ abstract class T_destination implements I_destination {
             l_trace_list.addAll(build_predefined_traces(process_source_exclusive(PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES), i_event_runtime))
             l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime()))
             l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list()))
+            if (i_event_runtime.get_exception() != T_s.c().GC_NULL_OBJ_REF && i_event_runtime.get_exception() instanceof E_application_exception) {
+                l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_EXCEPTION_TRACES, l_event_config, Arrays.asList(T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_exception()).get_traces()))))
+            }
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_DESTINATION_PURPOSE, p_purpose)
         }

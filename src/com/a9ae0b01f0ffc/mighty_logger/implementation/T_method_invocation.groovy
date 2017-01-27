@@ -8,7 +8,7 @@ class T_method_invocation implements I_method_invocation {
 
     String p_class_name = T_s.c().GC_EMPTY_STRING
     String p_method_name = T_s.c().GC_EMPTY_STRING
-    I_trace[] p_method_arguments = T_s.c().GC_NULL_OBJ_REF as I_trace[]
+    I_trace[] p_method_arguments = T_s.c().GC_SKIPPED_ARG as I_trace[]
 
     @Override
     String get_class_name() {

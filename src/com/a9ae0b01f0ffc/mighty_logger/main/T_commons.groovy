@@ -40,6 +40,7 @@ class T_commons {
     static final String GC_TRACE_SOURCE_PREDEFINED = "predefined"
     static final String GC_TRACE_SOURCE_RUNTIME = "runtime"
     static final String GC_TRACE_SOURCE_CONTEXT = "context"
+    static final String GC_TRACE_SOURCE_EXCEPTION_TRACES = "exception_traces"
     static final String GC_FALSE_STRING = "false"
     static final String GC_TRUE_STRING = "true"
     static T_conf GC_CONST_CONF = new T_conf(GC_CONST_CONF_FILE_NAME)

@@ -1,12 +1,11 @@
 package com.a9ae0b01f0ffc.mighty_logger.tests
 
-import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
+import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.mighty_logger.implementation.destinations.T_destination_variable
 import com.a9ae0b01f0ffc.mighty_logger.main.T_context
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 import com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan
 import com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable
-import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 import org.junit.Test
 
 class T_tests {
@@ -18,7 +17,7 @@ class T_tests {
     void test_001() {
         T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_001.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|Trace missing|HELLO_WORLD"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|Trace missing|Trace missing|HELLO_WORLD"
     }
 
     @Test
@@ -172,6 +171,18 @@ class T_tests {
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.t(new T_pan("4447778899992223"), "pan"))
         assert T_destination_variable.l() == "Trace masked|**********2222"
+    }
+
+    @Test
+    void test_023() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_023.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        try {
+            throw new E_application_exception(T_s.s().TEST_EXCEPTION, T_s.t(new T_pan("4447778899992224"), "pan1"))
+        } catch (Exception e_exception) {
+            T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.t(new T_pan("4447778899992223"), "pan2"))
+        }
+        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|[com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992224)]"
     }
 
 }

@@ -167,11 +167,6 @@ class T_logger implements I_logger {
         l_event.set_exception(i_exception)
         l_event.add_traces_runtime(Arrays.asList(objects2traces(i_traces)))
         l_event.add_traces_runtime(Arrays.asList(get_current_method_invocation().get_method_arguments()))
-        if (i_exception instanceof E_application_exception) {
-            if (method_arguments_exist(i_traces)) {
-                l_event.add_traces_runtime(Arrays.asList(objects2traces(((E_application_exception) i_exception).p_supplementary_objects)))
-            }
-        }
         log_generic(l_event)
         pop()
     }

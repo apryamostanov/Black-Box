@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="application_exception">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../application_exception/out/artifacts/application_exception_jar/application_exception.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
