@@ -77,21 +77,21 @@ abstract class T_destination implements I_destination {
     static I_trace find_and_build_trace_inclusive(I_event i_event_runtime, I_trace i_trace_config) {
         String l_trace_config_source = i_trace_config.get_source()
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL) {
-            for (I_trace l_trace_predefined in PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
+            for (I_trace l_trace_predefined : PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
                 if (i_trace_config.match_trace(l_trace_predefined)) {
                     return build_predefined_trace(l_trace_predefined, i_event_runtime)
                 }
             }
         }
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_RUNTIME) {
-            for (I_trace l_trace_runtime in i_event_runtime.get_traces_runtime()) {
+            for (I_trace l_trace_runtime : i_event_runtime.get_traces_runtime()) {
                 if (i_trace_config.match_trace(l_trace_runtime)) {
                     return T_s.l().spawn_trace(l_trace_runtime, i_trace_config)
                 }
             }
         }
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_CONTEXT) {
-            for (I_trace l_trace_context in T_s.l().get_trace_context_list()) {
+            for (I_trace l_trace_context : T_s.l().get_trace_context_list()) {
                 if (i_trace_config.match_trace(l_trace_context)) {
                     return T_s.l().spawn_trace(l_trace_context, i_trace_config)
                 }
@@ -100,7 +100,7 @@ abstract class T_destination implements I_destination {
         if (l_trace_config_source == T_s.c().GC_EMPTY_STRING || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_ALL || l_trace_config_source == T_s.c().GC_TRACE_SOURCE_EXCEPTION_TRACES) {
             if (i_event_runtime.get_exception() != T_s.c().GC_NULL_OBJ_REF) {
                 if (i_event_runtime.get_exception() instanceof E_application_exception) {
-                    for (I_trace l_trace_from_exception in T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_exception()).get_traces())) {
+                    for (I_trace l_trace_from_exception : T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_exception()).get_traces())) {
                         if (i_trace_config.match_trace(l_trace_from_exception)) {
                             return T_s.l().spawn_trace(l_trace_from_exception, i_trace_config)
                         }
@@ -147,7 +147,7 @@ abstract class T_destination implements I_destination {
 
     static ArrayList<I_trace> build_predefined_traces(ArrayList<I_trace> i_predefined_traces, I_event i_event_runtime) {
         ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
-        for (I_trace l_predefined_trace in i_predefined_traces) {
+        for (I_trace l_predefined_trace : i_predefined_traces) {
             l_traces_to_add.add(build_predefined_trace(l_predefined_trace, i_event_runtime))
         }
         return l_traces_to_add
@@ -155,7 +155,7 @@ abstract class T_destination implements I_destination {
 
     static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, List<I_trace> i_traces_from_source) {
         ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
-        for (I_trace l_trace_from_source in i_traces_from_source) {
+        for (I_trace l_trace_from_source : i_traces_from_source) {
             if ((!i_event_config.is_trace_muted(i_predefined_source_trace)) || i_event_config.get_corresponding_trace(l_trace_from_source) != T_s.c().GC_NULL_OBJ_REF) {
                 if (!i_event_config.is_trace_muted(l_trace_from_source)) {
                     I_trace l_trace_config = T_s.nvl(i_event_config.get_corresponding_trace(l_trace_from_source), i_event_config.get_corresponding_trace(i_predefined_source_trace)) as I_trace
@@ -171,7 +171,7 @@ abstract class T_destination implements I_destination {
         I_event l_event_config = p_configuration_events_by_name.get(i_event_runtime.get_event_type())
         ArrayList<I_trace> l_trace_list = new ArrayList<I_trace>()
         if (p_purpose == T_s.c().GC_DESTINATION_PURPOSE_DISPLAY) { //including only those defined
-            for (I_trace l_trace_config in l_event_config.get_traces_config()) {
+            for (I_trace l_trace_config : l_event_config.get_traces_config()) {
                 if (!l_trace_config.is_muted()) {
                     l_trace_list.add(find_and_build_trace_inclusive(i_event_runtime, l_trace_config))
                 }

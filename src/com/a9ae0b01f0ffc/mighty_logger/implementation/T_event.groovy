@@ -115,7 +115,7 @@ class T_event implements I_event {
     @Override
     I_trace get_corresponding_trace(I_trace i_trace_config) {
         I_trace l_trace_result = T_s.c().GC_NULL_OBJ_REF as I_trace
-        for (I_trace l_trace_config in get_traces_config()) {
+        for (I_trace l_trace_config : get_traces_config()) {
             if (l_trace_config.match_trace(i_trace_config)) {
                 l_trace_result = l_trace_config
                 break

@@ -53,7 +53,9 @@ interface I_logger {
 
     I_trace object2trace(Object i_object)
 
-    ArrayList<I_trace> objects2traces(Object[] i_objects)
+    ArrayList<I_trace> objects2traces(Collection<Object> i_objects)
+
+    ArrayList<I_trace> objects2traces_array(Object[] i_objects)
 
     I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config)
 

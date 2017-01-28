@@ -9,7 +9,7 @@ class T_event_formatter_csv implements I_event_formatter {
     @Override
     String format_traces(ArrayList<I_trace> i_event_traces) {
         String l_result_string = T_s.c().GC_EMPTY_STRING
-        for (l_trace in i_event_traces) {
+        for (I_trace l_trace in i_event_traces) {
             if (l_result_string != T_s.c().GC_EMPTY_STRING) {
                 l_result_string += T_s.c().GC_LOG_CSV_SEPARATOR
             }
