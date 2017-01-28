@@ -34,7 +34,7 @@ class T_event_formatter_html implements I_event_formatter {
     String format_traces(ArrayList<I_trace> i_event_traces) {
         String l_result = T_s.c().GC_EMPTY_STRING
         if (!p_header_was_added) {
-            l_result += "<html><body><table border=1><tr><td>Datetimestamp</td><td>Process</td><td>Event</td><td>Class</td><td>Method</td><td>Depth</td><td>Trace Data</td></tr>"
+            l_result += "<html><head><style type=\"text/css\"></style></head><body><table border=1><tr><td>Datetimestamp</td><td>Process</td><td>Event</td><td>Class</td><td>Method</td><td>Depth</td><td>Trace Data</td></tr>"
             p_header_was_added = T_s.c().GC_TRUE
         }
         l_result += "<tr>"
