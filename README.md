@@ -2,7 +2,7 @@
 
 Logging tool written in Groovy
 
-Work in progress.
+Work in progress. Version: 0.3 Alpha :)
 
 Intended purpose of usage:
 - Credit card processing
