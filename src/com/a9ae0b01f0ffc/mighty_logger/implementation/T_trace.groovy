@@ -14,7 +14,7 @@ class T_trace implements I_trace {
     Object p_ref = T_s.c().GC_NULL_OBJ_REF
     String p_value = T_s.c().GC_EMPTY_STRING
     String p_source = T_s.c().GC_EMPTY_STRING
-    String p_class = T_s.c().GC_EMPTY_STRING
+    String p_config_class = T_s.c().GC_EMPTY_STRING
 
     @Override
     Boolean is_muted() {
@@ -24,9 +24,9 @@ class T_trace implements I_trace {
     @Override
     Boolean is_masked() {
         if (p_mask == T_s.c().GC_EMPTY_STRING || p_mask == T_s.c().GC_FALSE_STRING) {
-            return T_s.c().GC_TRUE
-        } else {
             return T_s.c().GC_FALSE
+        } else {
+            return T_s.c().GC_TRUE
         }
     }
 
@@ -89,10 +89,10 @@ class T_trace implements I_trace {
     @Override
     String get_search_name_config() {
         String l_result = T_s.c().GC_EMPTY_STRING
-        if (get_ref() != T_s.c().GC_NULL_OBJ_REF && p_class != T_s.c().GC_EMPTY_STRING) {
+        if (get_ref() != T_s.c().GC_NULL_OBJ_REF && p_config_class != T_s.c().GC_EMPTY_STRING) {
             l_result = get_ref().getClass().getCanonicalName()
-        } else if (get_ref() == T_s.c().GC_NULL_OBJ_REF && p_class != T_s.c().GC_EMPTY_STRING) {
-            l_result = p_class
+        } else if (get_ref() == T_s.c().GC_NULL_OBJ_REF && p_config_class != T_s.c().GC_EMPTY_STRING) {
+            l_result = p_config_class
         } else {
             l_result = p_name
         }
@@ -147,12 +147,12 @@ class T_trace implements I_trace {
 
     @Override
     void set_class(String i_class) {
-        p_class = i_class
+        p_config_class = i_class
     }
 
     @Override
-    String get_class() {
-        return p_class
+    String get_config_class() {
+        return p_config_class
     }
 
     Boolean match_trace(I_trace i_trace_new) {

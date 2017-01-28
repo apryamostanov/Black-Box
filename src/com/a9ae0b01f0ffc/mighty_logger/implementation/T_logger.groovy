@@ -9,8 +9,6 @@ import com.a9ae0b01f0ffc.mighty_logger.interfaces.I_trace
 import com.a9ae0b01f0ffc.mighty_logger.main.T_s
 import com.a9ae0b01f0ffc.static_string.T_static_string
 
-import java.lang.reflect.Array
-
 class T_logger implements I_logger {
 
     private ArrayList<I_destination> p_destinations = new ArrayList<I_destination>()
@@ -49,12 +47,13 @@ class T_logger implements I_logger {
     I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         l_trace.set_name(i_trace_runtime_or_context.get_name())
+        l_trace.set_source(i_trace_runtime_or_context.get_source())
         if (i_trace_config != T_s.c().GC_NULL_OBJ_REF) {
             l_trace.set_mask(i_trace_config.get_mask())
             l_trace.set_muted(i_trace_config.is_muted())
-            l_trace.set_source(i_trace_config.get_source())
+            l_trace.set_source(T_s.nvl(l_trace.get_source(),i_trace_config.get_source()) as String)
             l_trace.set_formatter(i_trace_config.get_formatter())
-            l_trace.set_class(i_trace_config.get_class())
+            l_trace.set_class(i_trace_config.get_config_class())
         }
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_trace_runtime_or_context.get_ref())
@@ -191,7 +190,7 @@ class T_logger implements I_logger {
     }
 
     @Override
-    void log_info(T_static_string i_static_string_info, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
+    void log_info(T_static_string i_static_string_info, Object... i_traces = T_s.c().GC_SKIPPED_ARG as Object[]) {
         I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_info)
         if (method_arguments_exist(i_traces)) {

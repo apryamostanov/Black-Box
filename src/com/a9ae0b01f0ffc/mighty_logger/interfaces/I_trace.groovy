@@ -34,7 +34,7 @@ interface I_trace {
 
     void set_class(String i_class)
 
-    String get_class()
+    String get_config_class()
 
     String get_search_name_config()
 

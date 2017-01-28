@@ -12,6 +12,7 @@ class T_tests {
 
     static final String PC_TEST_CONF_PATH = "src/com/a9ae0b01f0ffc/mighty_logger/tests/conf/"
     static final String PC_PAN = "4447778899992222"
+    static final String PC_CLASS_NAME = "T_tests"
 
     @Test
     void test_001() {
@@ -196,5 +197,39 @@ class T_tests {
         }
         assert T_destination_variable.l() == "TEST_EXCEPTION|**********2222|**********2224|**********2223"
     }
+
+    @Test
+    void test_025() {
+        final String LC_METHOD_NAME = "test_025"
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_025.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        assert T_destination_variable.l() == "<event><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"class\" source=\"predefined\" config_class=\"\" search_name_config=\"class\" ref_class_name=\"class\" serialized_representation=\"T_tests\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"method\" source=\"predefined\" config_class=\"\" search_name_config=\"method\" ref_class_name=\"method\" serialized_representation=\"test_025\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"depth\" source=\"predefined\" config_class=\"\" search_name_config=\"depth\" ref_class_name=\"depth\" serialized_representation=\"1\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"event\" source=\"predefined\" config_class=\"\" search_name_config=\"event\" ref_class_name=\"event\" serialized_representation=\"enter\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception\" source=\"predefined\" config_class=\"\" search_name_config=\"exception\" ref_class_name=\"exception\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception_message\" source=\"predefined\" config_class=\"\" search_name_config=\"exception_message\" ref_class_name=\"exception_message\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"message\" source=\"predefined\" config_class=\"\" search_name_config=\"message\" ref_class_name=\"message\" serialized_representation=\"null\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"i_pan\" source=\"runtime\" config_class=\"\" search_name_config=\"i_pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992223)\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"pan\" source=\"context\" config_class=\"\" search_name_config=\"pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable(4447778899992222)\" /></event>"
+    }
+
+    @Test
+    void test_026() {
+        final String LC_METHOD_NAME = "test_026"
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_026.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992225"), "result_pan"))
+        assert T_destination_variable.l() == "<event><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"class\" source=\"predefined\" config_class=\"\" search_name_config=\"class\" ref_class_name=\"class\" serialized_representation=\"T_tests\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"method\" source=\"predefined\" config_class=\"\" search_name_config=\"method\" ref_class_name=\"method\" serialized_representation=\"test_026\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"depth\" source=\"predefined\" config_class=\"\" search_name_config=\"depth\" ref_class_name=\"depth\" serialized_representation=\"1\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"event\" source=\"predefined\" config_class=\"\" search_name_config=\"event\" ref_class_name=\"event\" serialized_representation=\"exit\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception\" source=\"predefined\" config_class=\"\" search_name_config=\"exception\" ref_class_name=\"exception\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception_message\" source=\"predefined\" config_class=\"\" search_name_config=\"exception_message\" ref_class_name=\"exception_message\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"message\" source=\"predefined\" config_class=\"\" search_name_config=\"message\" ref_class_name=\"message\" serialized_representation=\"null\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"result_pan\" source=\"runtime\" config_class=\"\" search_name_config=\"result_pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992225)\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"pan\" source=\"context\" config_class=\"\" search_name_config=\"pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable(4447778899992222)\" /></event>"
+    }
+
+    @Test
+    void test_027() {
+        final String LC_METHOD_NAME = "test_026"
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_026.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        try {
+            throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
+        } catch (Exception e_exception) {
+            T_s.l().log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
+        }
+        assert T_destination_variable.l() == "<event><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"class\" source=\"predefined\" config_class=\"\" search_name_config=\"class\" ref_class_name=\"class\" serialized_representation=\"T_tests\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"method\" source=\"predefined\" config_class=\"\" search_name_config=\"method\" ref_class_name=\"method\" serialized_representation=\"test_026\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"depth\" source=\"predefined\" config_class=\"\" search_name_config=\"depth\" ref_class_name=\"depth\" serialized_representation=\"1\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"event\" source=\"predefined\" config_class=\"\" search_name_config=\"event\" ref_class_name=\"event\" serialized_representation=\"exit\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception\" source=\"predefined\" config_class=\"\" search_name_config=\"exception\" ref_class_name=\"exception\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"exception_message\" source=\"predefined\" config_class=\"\" search_name_config=\"exception_message\" ref_class_name=\"exception_message\" serialized_representation=\"Trace missing\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"message\" source=\"predefined\" config_class=\"\" search_name_config=\"message\" ref_class_name=\"message\" serialized_representation=\"null\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"result_pan\" source=\"runtime\" config_class=\"\" search_name_config=\"result_pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992225)\" /><trace muted=\"false\" masked=\"false\" mask=\"\" name=\"pan\" source=\"context\" config_class=\"\" search_name_config=\"pan\" ref_class_name=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable\" serialized_representation=\"com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable(4447778899992222)\" /></event>"
+    }
+
 
 }

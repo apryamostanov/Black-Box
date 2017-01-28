@@ -41,7 +41,7 @@ interface I_logger {
 
     void log_info(
             T_static_string i_static_string_info
-            , I_trace... i_traces
+            , Object... i_traces
     )
 
     void log_warning(
