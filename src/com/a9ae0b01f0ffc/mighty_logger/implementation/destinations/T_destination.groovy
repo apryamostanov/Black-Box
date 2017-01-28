@@ -31,6 +31,26 @@ abstract class T_destination implements I_destination {
     String p_purpose = T_s.c().GC_EMPTY_STRING
     HashMap<String, I_event> p_configuration_events_by_name = new HashMap<String, I_event>()
     String p_location = T_s.c().GC_EMPTY_STRING
+    String p_buffer = T_s.c().GC_EMPTY_STRING
+    Integer p_buffer_size
+    String p_spool_event = T_s.c().GC_EMPTY_STRING
+
+    String get_buffer() {
+        return p_buffer
+    }
+
+    void set_buffer(String i_buffer) {
+        this.p_buffer = i_buffer
+        p_buffer_size = Integer.parseInt(p_buffer)
+    }
+
+    String get_spool_event() {
+        return p_spool_event
+    }
+
+    void set_spool_event(String i_spool_event) {
+        this.p_spool_event = i_spool_event
+    }
 
     static I_trace init_predefined_trace(String i_predefined_trace_name) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace

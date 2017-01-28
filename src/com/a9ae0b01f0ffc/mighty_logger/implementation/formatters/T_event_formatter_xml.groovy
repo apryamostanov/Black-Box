@@ -33,7 +33,7 @@ class T_event_formatter_xml implements I_event_formatter {
         for (I_trace l_trace : i_event_traces) {
             l_result += format_trace(l_trace)
         }
-        l_result += "</event>"
+        l_result += "</event>" + System.lineSeparator()
         return l_result
     }
 }

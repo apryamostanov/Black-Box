@@ -27,11 +27,11 @@ class T_commons {
     static final String GC_DATE_FORMAT_UID = "yyyyMMddHHmmssSSS"
     static final Boolean GC_IS_INIT = init_default()
     static final Boolean GC_FILE_APPEND_YES = GC_TRUE
-    static final String GC_SUBST_PATH_DELIMITER = "/"
     static final String GC_SUBST_USERNAME = "%USERNAME%"
     static final String GC_SUBST_DATE = "%DATE%"
     static final String GC_SUBST_TIME = "%TIME%"
     static final String GC_SUBST_THREADID = "%THREADID%"
+    static final String GC_SUBST_PROCESSID = "%PROCESSID%"
     static final String GC_USERNAME = System.getProperty("user.name")
     static final String GC_THREADID = Long.toString(Thread.currentThread().getId())
     static final String GC_PROCESSID = ManagementFactory.getRuntimeMXBean().getName().substring(GC_FIRST_CHAR, ManagementFactory.getRuntimeMXBean().getName().indexOf(GC_AT_CHAR))//When Java 9 comes: ProcessHandle.current().getPid()

@@ -36,7 +36,15 @@ class T_logger_builder implements I_logger_builder {
         I_destination l_destination = (I_destination) p_class_loader.instantiate(i_destination_xml.name())
         l_destination.set_destination_purpose(i_destination_xml.@purpose.text())
         l_destination.set_formatter((I_event_formatter) p_class_loader.instantiate(i_destination_xml.@formatter.text()))
-        l_destination.set_location(i_destination_xml.@location.text())
+        if (!i_destination_xml.@location.isEmpty()) {
+            l_destination.set_location(i_destination_xml.@location.text())
+        }
+        if (!i_destination_xml.@buffer.isEmpty()) {
+            l_destination.set_buffer(i_destination_xml.@buffer.text())
+        }
+        if (!i_destination_xml.@spool_event.isEmpty()) {
+            l_destination.set_spool_event(i_destination_xml.@spool_event.text())
+        }
         for (l_event_xml in i_destination_xml.children()) {
             l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))
         }

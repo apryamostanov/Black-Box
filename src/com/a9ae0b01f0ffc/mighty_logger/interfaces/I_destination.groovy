@@ -18,4 +18,12 @@ interface I_destination {
 
     void store(ArrayList<I_trace> i_trace_list)
 
+    String get_buffer()
+
+    void set_buffer(String i_buffer)
+
+    String get_spool_event()
+
+    void set_spool_event(String i_spool_event)
+
 }
