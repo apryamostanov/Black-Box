@@ -23,8 +23,8 @@ class T_s {
         return T_context.getInstance().p_logger_thread_local.get()
     }
 
-    static I_trace t(Object i_object, String i_trace_name) {
-        I_trace l_trace = l().object2trace(i_object)
+    static I_trace r(Object i_object, String i_trace_name) {
+        I_trace l_trace = l().object2trace(i_object, c().GC_TRACE_SOURCE_RUNTIME)
         l_trace.set_name(i_trace_name)
         return l_trace
     }

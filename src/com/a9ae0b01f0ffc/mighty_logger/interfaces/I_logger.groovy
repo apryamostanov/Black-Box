@@ -51,11 +51,11 @@ interface I_logger {
 
     I_event create_event(String i_event_type, String i_class_name, String i_method_name)
 
-    I_trace object2trace(Object i_object)
+    I_trace object2trace(Object i_object, String i_source)
 
-    ArrayList<I_trace> objects2traces(Collection<Object> i_objects)
+    ArrayList<I_trace> objects2traces(Collection<Object> i_objects, String i_source)
 
-    ArrayList<I_trace> objects2traces_array(Object[] i_objects)
+    ArrayList<I_trace> objects2traces_array(Object[] i_objects, String i_source)
 
     I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config)
 

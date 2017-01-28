@@ -73,7 +73,7 @@ class T_logger implements I_logger {
     }
 
     @Override
-    I_trace object2trace(Object i_object) {
+    I_trace object2trace(Object i_object, String i_source) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_object)
@@ -83,17 +83,18 @@ class T_logger implements I_logger {
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_LOGGER_MODE, p_mode)
         }
+        l_trace.set_source(i_source)
         return l_trace
     }
 
     @Override
-    ArrayList<I_trace> objects2traces(Collection<Object> i_objects) {
+    ArrayList<I_trace> objects2traces(Collection<Object> i_objects, String i_source) {
         ArrayList<I_trace> l_method_args = new ArrayList<I_trace>()
         for (Object l_object : i_objects) {
             if (l_object instanceof I_trace) {
                 l_method_args.add((I_trace) l_object)
             } else {
-                I_trace l_trace = object2trace(l_object)
+                I_trace l_trace = object2trace(l_object, i_source)
                 l_method_args.add(l_trace)
             }
         }
@@ -101,8 +102,8 @@ class T_logger implements I_logger {
     }
 
     @Override
-    ArrayList<I_trace> objects2traces_array(Object[] i_objects) {
-        return objects2traces(Arrays.asList(i_objects))
+    ArrayList<I_trace> objects2traces_array(Object[] i_objects, String i_source) {
+        return objects2traces(Arrays.asList(i_objects), i_source)
     }
 
     void pop() {
@@ -125,7 +126,7 @@ class T_logger implements I_logger {
 
     @Override
     void put_to_context(Object i_object, String i_name) {
-        I_trace l_trace = object2trace(i_object)
+        I_trace l_trace = object2trace(i_object, T_s.c().GC_TRACE_SOURCE_CONTEXT)
         l_trace.set_name(i_name)
         p_trace_context_list.add(l_trace)
     }
@@ -149,11 +150,12 @@ class T_logger implements I_logger {
         I_method_invocation l_method_invocation = T_s.ioc().instantiate("I_method_invocation") as I_method_invocation
         l_method_invocation.set_class_name(i_class_name)
         l_method_invocation.set_method_name(i_method_name)
-        l_method_invocation.set_method_arguments(objects2traces_array(i_traces))
+        ArrayList<I_trace> l_method_arguments = objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME)
+        l_method_invocation.set_method_arguments(l_method_arguments)
         p_method_invocation_stack.push(l_method_invocation)
         I_event l_event = create_event("enter", i_class_name, i_method_name)
         if (method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces))
+            l_event.add_traces_runtime(l_method_arguments)
         }
         log_generic(l_event)
     }
@@ -162,7 +164,7 @@ class T_logger implements I_logger {
     void log_exit(String i_class_name, String i_method_name, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
         I_event l_event = create_event("exit", i_class_name, i_method_name)
         if (method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces))
+            l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
         pop()
@@ -172,7 +174,7 @@ class T_logger implements I_logger {
     void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_event l_event = create_event("error", i_class_name, i_method_name)
         l_event.set_exception(i_exception)
-        l_event.add_traces_runtime(objects2traces_array(i_traces))
+        l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
         l_event.add_traces_runtime(get_current_method_invocation().get_method_arguments())
         log_generic(l_event)
         pop()
@@ -183,7 +185,7 @@ class T_logger implements I_logger {
         I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_message)
         if (method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces))
+            l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
     }
@@ -193,7 +195,7 @@ class T_logger implements I_logger {
         I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_info)
         if (method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces))
+            l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
     }
@@ -203,7 +205,7 @@ class T_logger implements I_logger {
         I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_warning)
         if (method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces))
+            l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
     }
