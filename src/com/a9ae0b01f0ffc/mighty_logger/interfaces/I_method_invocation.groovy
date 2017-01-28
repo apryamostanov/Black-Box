@@ -5,12 +5,12 @@ interface I_method_invocation {
     String get_class_name()
     String get_method_name()
 
-    I_trace[] get_method_arguments()
+    ArrayList<I_trace> get_method_arguments()
 
     void set_class_name(String i_class_name)
 
     void set_method_name(String i_method_name)
 
-    void set_method_arguments(I_trace[] i_method_arguments)
+    void set_method_arguments(ArrayList<I_trace> i_method_arguments)
 
 }

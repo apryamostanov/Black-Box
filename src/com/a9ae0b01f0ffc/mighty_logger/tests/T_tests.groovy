@@ -178,9 +178,9 @@ class T_tests {
         T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_023.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         try {
-            throw new E_application_exception(T_s.s().TEST_EXCEPTION, T_s.t(new T_pan("4447778899992224"), "pan1"))
+            throw new E_application_exception(T_s.s().TEST_EXCEPTION, T_s.t(new T_pan("4447778899992224"), "pan"))
         } catch (Exception e_exception) {
-            T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.t(new T_pan("4447778899992223"), "pan2"))
+            T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.t(new T_pan("4447778899992223"), "pan"))
         }
         assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|[com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan(4447778899992224)]"
     }

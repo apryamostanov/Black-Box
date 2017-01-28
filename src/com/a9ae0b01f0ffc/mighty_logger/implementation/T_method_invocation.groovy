@@ -8,7 +8,7 @@ class T_method_invocation implements I_method_invocation {
 
     String p_class_name = T_s.c().GC_EMPTY_STRING
     String p_method_name = T_s.c().GC_EMPTY_STRING
-    I_trace[] p_method_arguments = T_s.c().GC_SKIPPED_ARG as I_trace[]
+    ArrayList<I_trace> p_method_arguments = T_s.c().GC_SKIPPED_ARG as ArrayList<I_trace>
 
     @Override
     String get_class_name() {
@@ -21,7 +21,7 @@ class T_method_invocation implements I_method_invocation {
     }
 
     @Override
-    I_trace[] get_method_arguments() {
+    ArrayList<I_trace> get_method_arguments() {
         return p_method_arguments
     }
 
@@ -36,7 +36,7 @@ class T_method_invocation implements I_method_invocation {
     }
 
     @Override
-    void set_method_arguments(I_trace[] i_method_arguments) {
+    void set_method_arguments(ArrayList<I_trace> i_method_arguments) {
         this.p_method_arguments = i_method_arguments
     }
 }
