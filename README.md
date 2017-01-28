@@ -163,8 +163,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -177,8 +177,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -191,8 +191,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -205,8 +205,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -219,8 +219,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -233,8 +233,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -247,8 +247,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -261,8 +261,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 	<event>
 		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
@@ -275,8 +275,8 @@ Sample Warehouse log:
 		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
 		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.mighty_logger.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
+		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
 	</event>
 </traces>
 ```
