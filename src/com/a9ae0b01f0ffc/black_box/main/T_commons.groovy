@@ -18,7 +18,7 @@ class T_commons {
     static final Integer GC_FIRST_INDEX = 0
     static final Integer GC_FIRST_CHAR = 0
     static final String GC_NEW_LINE = System.lineSeparator()
-    static final String GC_PATH_SEPARATOR = File.separator;
+    static final String GC_PATH_SEPARATOR = File.separator
     static final String GC_POINT = "."
     static final Integer GC_ONE_CHAR = 1
     static final Boolean GC_TRUE = true

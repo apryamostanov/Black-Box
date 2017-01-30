@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
+import com.a9ae0b01f0ffc.black_box.tests.mockup.T_sample_class_for_annotation_test
 import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
 import com.a9ae0b01f0ffc.black_box.main.T_context
@@ -253,5 +254,10 @@ class T_tests {
         }
     }
 
+    @Test
+    void test_029() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_029.conf")
+        String w = new T_sample_class_for_annotation_test().do_something("aaa", "bbb")
+    }
 
 }
