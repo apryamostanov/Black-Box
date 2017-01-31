@@ -170,6 +170,12 @@ class T_logger implements I_logger {
     }
 
     @Override
+    Object log_exit_automatic(String i_class_name, String i_method_name, I_trace i_return_object_trace) {
+        log_exit(i_class_name, i_method_name, i_return_object_trace)
+        return i_return_object_trace.get_ref() //wow smart code like a real programmar is doin lol
+    }
+
+    @Override
     void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_event l_event = create_event("error", i_class_name, i_method_name)
         l_event.set_exception(i_exception)

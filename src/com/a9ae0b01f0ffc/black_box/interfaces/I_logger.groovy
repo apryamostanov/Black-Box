@@ -32,6 +32,12 @@ interface I_logger {
             , I_trace... i_traces
     )
 
+    Object log_exit_automatic(
+            String i_class_name
+            , String i_method_name
+            , I_trace i_return_object_trace
+    )
+
     void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces)
 
     void log_debug(

@@ -6,21 +6,10 @@
 package com.a9ae0b01f0ffc.black_box.implementation.annotations
 
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import org.codehaus.groovy.ast.ClassCodeVisitorSupport
-import org.codehaus.groovy.ast.Parameter
+import org.codehaus.groovy.ast.*
 import org.codehaus.groovy.ast.builder.AstBuilder
-import org.codehaus.groovy.ast.expr.ArgumentListExpression
-import org.codehaus.groovy.ast.expr.ConstantExpression
-import org.codehaus.groovy.ast.expr.ConstructorCallExpression
-import org.codehaus.groovy.ast.expr.DeclarationExpression
-import org.codehaus.groovy.ast.expr.MethodCallExpression
-import org.codehaus.groovy.ast.expr.VariableExpression
-import org.codehaus.groovy.ast.ASTNode
-import org.codehaus.groovy.ast.AnnotatedNode
-import org.codehaus.groovy.ast.AnnotationNode
-import org.codehaus.groovy.ast.ClassHelper
-import org.codehaus.groovy.ast.ClassNode
-import org.codehaus.groovy.ast.MethodNode
+import org.codehaus.groovy.ast.builder.AstBuilderTransformation
+import org.codehaus.groovy.ast.expr.*
 import org.codehaus.groovy.ast.stmt.BlockStatement
 import org.codehaus.groovy.ast.stmt.ExpressionStatement
 import org.codehaus.groovy.ast.stmt.ReturnStatement
@@ -35,7 +24,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 @GroovyASTTransformation(
         phase = CompilePhase.SEMANTIC_ANALYSIS
 )
-public class BlackBoxTransformation extends AbstractASTTransformation {
+public class T_black_box_transformation extends AbstractASTTransformation {
     private static final ClassNode CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     File p_compilation_log_file = new File("c:/LOGS/log_file_name")
     FileWriter p_file_writer = new FileWriter(p_compilation_log_file, true)
@@ -45,19 +34,17 @@ public class BlackBoxTransformation extends AbstractASTTransformation {
         p_file_writer.flush()
     }
 
-    public BlackBoxTransformation() {
+    public T_black_box_transformation() {
     }
-
 
 
     public void visit(ASTNode[] nodes, SourceUnit source) {
         if (nodes.length == 2 && nodes[0] instanceof AnnotationNode && nodes[1] instanceof AnnotatedNode) {
             ASTNode node = nodes[1]
-            if (!(node instanceof MethodNode)) {
-                this.addError("@BlackBox must only be applied on test methods!", node)
-            } else {
+            if (node instanceof MethodNode) {
+                CodeVisitorSupport l_return_expression_visitor = new T_black_box_visitor()
                 MethodNode methodNode = (MethodNode) node
-                ArrayList statements = new ArrayList()
+                ArrayList<Statement> statements = new ArrayList<Statement>()
                 Statement statement = methodNode.getCode()
                 if (statement instanceof BlockStatement) {
                     statements.addAll(((BlockStatement) statement).getStatements())
@@ -67,23 +54,14 @@ public class BlackBoxTransformation extends AbstractASTTransformation {
                     rewrittenMethodCode.addStatement(create_shortcut_declaration_statement())
                     rewrittenMethodCode.addStatement(create_logger_declaration_statement())
                     rewrittenMethodCode.addStatement(create_log_enter_statement(methodNode))
-                    for (Object l_return_statement in statements) {
-                        log("processing initial statement: " + l_return_statement + ":" + ((Statement) l_return_statement).getText())
-                        ClassCodeVisitorSupport z
-                        if (l_return_statement instanceof ReturnStatement) {
-                            rewrittenMethodCode.addStatement(create_log_exit_statement(methodNode, l_return_statement))
-                            rewrittenMethodCode.addStatement((Statement) l_return_statement)
-                        } else {
-                            rewrittenMethodCode.addStatement((Statement) l_return_statement)
-                        }
+                    for (Statement l_return_statement in statements) {
+                        l_return_statement.visit(l_return_expression_visitor)
+                        rewrittenMethodCode.addStatement(l_return_statement)
                     }
-                    //rewrittenMethodCode.addStatements(statements)
-
-                    /* rewrittenMethodCode.addStatement*/
-                    //rewrittenMethodCode.addStatement(this.tryCatchAssertionFailedError(annotationNode, methodNode, statements))
-                    //rewrittenMethodCode.addStatement(this.throwAssertionFailedError(annotationNode)) //last statement within Try
                     methodNode.setCode(rewrittenMethodCode)
                 }
+            } else {
+                this.addError("@I_black_box should be applied to Classes and Methods.", node)
             }
         } else {
             throw new RuntimeException("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + Arrays.asList(nodes))
@@ -114,10 +92,10 @@ public class BlackBoxTransformation extends AbstractASTTransformation {
 
     Statement create_log_exit_statement(MethodNode i_method_node, ReturnStatement i_return_statement) {
         //if (!i_return_statement.isReturningNullOrVoid()) {
-          //  log("None-Void/null return")
+        //  log("None-Void/null return")
         log("Processing return statement")
-            MethodCallExpression l_method_call_expression = new MethodCallExpression(new VariableExpression("l_logger"), "log_exit", new ArgumentListExpression(new ConstantExpression(i_method_node.getDeclaringClass().getName()), new ConstantExpression(i_method_node.getName()), new MethodCallExpression(new VariableExpression("l_shortcuts"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText())))))
-            return new ExpressionStatement(l_method_call_expression)
+        MethodCallExpression l_method_call_expression = new MethodCallExpression(new VariableExpression("l_logger"), "log_exit", new ArgumentListExpression(new ConstantExpression(i_method_node.getDeclaringClass().getName()), new ConstantExpression(i_method_node.getName()), new MethodCallExpression(new VariableExpression("l_shortcuts"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText())))))
+        return new ExpressionStatement(l_method_call_expression)
         /*} else {
             log("Void/null return")
             MethodCallExpression l_method_call_expression = new MethodCallExpression(new VariableExpression("l_logger"), "log_exit", new ArgumentListExpression(new ConstantExpression(i_method_node.getDeclaringClass().getName()), new ConstantExpression(i_method_node.getName()), new ArgumentListExpression()))
