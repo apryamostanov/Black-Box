@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
+import com.a9ae0b01f0ffc.black_box.implementation.T_inherited_configurations
 import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
@@ -7,7 +8,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
-abstract class T_destination implements I_destination {
+abstract class T_destination extends T_inherited_configurations implements I_destination {
 
     final static I_trace PC_STATIC_TRACE_NAME_CLASS_NAME = init_predefined_trace("class")
     final static I_trace PC_STATIC_TRACE_NAME_METHOD_NAME = init_predefined_trace("method")
@@ -34,6 +35,7 @@ abstract class T_destination implements I_destination {
     String p_buffer = T_s.c().GC_EMPTY_STRING
     Integer p_buffer_size
     String p_spool_event = T_s.c().GC_EMPTY_STRING
+    String p_mask = T_s.c().GC_EMPTY_STRING
 
     String get_buffer() {
         return p_buffer
@@ -224,5 +226,15 @@ abstract class T_destination implements I_destination {
     @Override
     String get_destination_purpose() {
         return p_purpose
+    }
+
+    @Override
+    String get_mask() {
+        return p_mask
+    }
+
+    @Override
+    void set_mask(String i_mask) {
+        p_mask = i_mask
     }
 }

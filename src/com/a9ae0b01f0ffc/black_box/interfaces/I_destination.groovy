@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-interface I_destination {
+interface I_destination extends I_inherited_configurations{
 
     void log_generic(I_event i_event)
 

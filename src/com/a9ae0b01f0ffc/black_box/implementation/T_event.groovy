@@ -5,7 +5,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.static_string.T_static_string
 
-class T_event implements I_event {
+class T_event extends T_inherited_configurations implements I_event {
 
     private String p_event_type = T_s.c().GC_EMPTY_STRING
     private String p_class_name = T_s.c().GC_EMPTY_STRING
@@ -124,6 +124,7 @@ class T_event implements I_event {
         return l_trace_result
     }
 
+    @Override
     Boolean is_trace_muted(I_trace i_trace) {
         Boolean l_result
         I_trace l_trace = get_corresponding_trace(i_trace)
@@ -131,6 +132,7 @@ class T_event implements I_event {
         return l_result
     }
 
+    @Override
     Boolean is_trace_masked(I_trace i_trace) {
         Boolean l_result
         I_trace l_trace = get_corresponding_trace(i_trace)

@@ -1,14 +1,15 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_maskable
+import com.a9ae0b01f0ffc.black_box.interfaces.I_non_sensitive
+import com.a9ae0b01f0ffc.black_box.interfaces.I_sensitive
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
-class T_trace implements I_trace {
+class T_trace extends T_inherited_configurations implements I_trace {
 
     Boolean p_muted = T_s.c().GC_FALSE
-    String p_mask = T_s.c().GC_EMPTY_STRING
     I_trace_formatter p_trace_formatter = T_s.c().GC_NULL_OBJ_REF as I_trace_formatter
     String p_name = T_s.c().GC_EMPTY_STRING
     Object p_ref = T_s.c().GC_NULL_OBJ_REF
@@ -23,7 +24,7 @@ class T_trace implements I_trace {
 
     @Override
     Boolean is_masked() {
-        if (p_mask == T_s.c().GC_EMPTY_STRING || p_mask == T_s.c().GC_FALSE_STRING) {
+        if (p_mask == T_s.c().GC_EMPTY_STRING || p_mask == T_s.c().GC_FALSE_STRING || p_mask == T_s.c().GC_TRACE_MASK_NONE) {
             return T_s.c().GC_FALSE
         } else {
             return T_s.c().GC_TRUE
@@ -36,38 +37,62 @@ class T_trace implements I_trace {
     }
 
     @Override
-    void set_mask(String i_mask) {
-        p_mask = i_mask
-    }
-
-    @Override
-    String get_mask() {
-        return p_mask
-    }
-
-    @Override
     String toString() {
-        if (p_ref == T_s.c().GC_NULL_OBJ_REF && (p_value == T_s.c().GC_NULL_OBJ_REF || p_value == T_s.c().GC_EMPTY_STRING || p_value == T_s.c().GC_DEFAULT_TRACE)) {
-            return T_s.c().GC_DEFAULT_TRACE
-        } else if (p_muted) {
-            return T_s.c().GC_DEFAULT_TRACE_MUTED
-        } else if (p_mask) {
-            if (p_ref instanceof I_maskable) {
-                if (p_value != T_s.c().GC_EMPTY_STRING) {
-                    return T_s.c().GC_DEFAULT_TRACE_MASKED
-//there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
-                } else {
-                    return ((I_maskable) p_ref).to_string_masked(p_mask)
-                }
-            } else {
+        String l_result_string = T_s.c().GC_EMPTY_STRING
+        if (get_formatter() != T_s.c().GC_NULL_OBJ_REF) {
+            l_result_string += get_formatter().format_trace(this)
+        } else {
+            l_result_string += to_string()
+        }
+        return l_result_string
+    }
+
+    private String unmasked() {
+        return T_s.nvl(p_value, p_ref.toString())
+    }
+
+    private String masked() {
+        if (p_ref instanceof I_maskable) {
+            if (p_value != T_s.c().GC_EMPTY_STRING) {
                 return T_s.c().GC_DEFAULT_TRACE_MASKED
+//there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
+            } else {
+                return ((I_maskable) p_ref).to_string_masked(p_mask)
             }
         } else {
-            if (p_value != T_s.c().GC_EMPTY_STRING) {
-                return p_value
+            return T_s.c().GC_DEFAULT_TRACE_MASKED
+        }
+    }
+
+    private Boolean is_trace_missing() {
+        return (p_ref == T_s.c().GC_NULL_OBJ_REF && (p_value == T_s.c().GC_NULL_OBJ_REF || p_value == T_s.c().GC_EMPTY_STRING || p_value == T_s.c().GC_DEFAULT_TRACE))
+    }
+
+    private String to_string() {
+        if (is_trace_missing()) {
+            return T_s.c().GC_DEFAULT_TRACE
+        } else if (is_muted()) {
+            return T_s.c().GC_DEFAULT_TRACE_MUTED
+        } else if (is_masked()) {
+            if (p_mask == T_s.c().GC_TRACE_MASK_ALL || p_mask == T_s.c().GC_TRUE_STRING) {
+                masked()
+            } else if (p_mask == T_s.c().GC_TRACE_MASK_SENSITIVE) {
+                if (p_ref instanceof I_sensitive) {
+                    masked()
+                } else {
+                    return unmasked()
+                }
+            } else if (p_mask == T_s.c().GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE) {
+                if (!p_ref instanceof I_non_sensitive) {
+                    masked()
+                } else {
+                    return unmasked()
+                }
             } else {
-                return p_ref.toString()
+                return masked() // custom mask parameter, e.g. "last4digits"
             }
+        } else {
+            return unmasked()
         }
     }
 

@@ -41,6 +41,10 @@ class T_commons {
     static final String GC_TRACE_SOURCE_RUNTIME = "runtime"
     static final String GC_TRACE_SOURCE_CONTEXT = "context"
     static final String GC_TRACE_SOURCE_EXCEPTION_TRACES = "exception_traces"
+    static final String GC_TRACE_MASK_ALL = "all"
+    static final String GC_TRACE_MASK_SENSITIVE = "sensitive"
+    static final String GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE = "except_non_sensitive"
+    static final String GC_TRACE_MASK_NONE = "none"
     static final String GC_FALSE_STRING = "false"
     static final String GC_TRUE_STRING = "true"
     static T_conf GC_CONST_CONF = new T_conf(GC_CONST_CONF_FILE_NAME)
@@ -62,7 +66,6 @@ class T_commons {
     static String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
     static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     static String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
-
 
     static Boolean init_default() {
         init_custom(GC_CONST_CONF_FILE_NAME)

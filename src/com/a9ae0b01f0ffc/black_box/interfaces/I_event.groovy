@@ -2,7 +2,7 @@ package com.a9ae0b01f0ffc.black_box.interfaces
 
 import com.a9ae0b01f0ffc.static_string.T_static_string
 
-interface I_event {
+interface I_event extends I_inherited_configurations {
 
     String get_class_name()
 

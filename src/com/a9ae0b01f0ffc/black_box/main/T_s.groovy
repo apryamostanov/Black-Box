@@ -31,7 +31,7 @@ class T_s {
 
     static Object nvl(Object i_primary_object, Object i_backup_object) {
         Object l_result_object
-        if (i_primary_object == c().GC_NULL_OBJ_REF || c().GC_EMPTY_STRING) {
+        if (i_primary_object == c().GC_NULL_OBJ_REF || i_primary_object == c().GC_EMPTY_STRING) {
             l_result_object = i_backup_object
         } else {
             l_result_object = i_primary_object

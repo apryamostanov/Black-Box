@@ -269,8 +269,19 @@ class T_tests {
     @Test
     void test_031() {
         T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_031.conf")
-        String w = new T_sample_class_for_annotation_test().do_something4("aaa", "aaa")
+        try {
+            String w = new T_sample_class_for_annotation_test().do_something4("aaa", "aaa")
+        } catch (Exception e) {
+
+        }
     }
 
+    @Test
+    void test_033() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_033.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
+        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)|**********2222"
+    }
 
 }

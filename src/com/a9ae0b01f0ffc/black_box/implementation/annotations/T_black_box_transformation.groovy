@@ -120,7 +120,7 @@ public class T_black_box_transformation extends AbstractASTTransformation {
         return tryCatchStatement
     }
 
-    private Statement rethrow(AnnotationNode i_annotation_node) {
+    Statement rethrow(AnnotationNode i_annotation_node) {
         ThrowStatement throwStatement = GeneralUtils.throwS(GeneralUtils.varX("e_others"))
         throwStatement.setSourcePosition(i_annotation_node)
         return throwStatement

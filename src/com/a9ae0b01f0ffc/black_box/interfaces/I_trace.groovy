@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-interface I_trace {
+interface I_trace extends I_inherited_configurations {
 
     Boolean is_muted()
 
