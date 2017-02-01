@@ -1,8 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.tests.mockup
 
-import com.a9ae0b01f0ffc.black_box.implementation.annotations.BlackBox
 import com.a9ae0b01f0ffc.black_box.implementation.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.main.T_s
+import com.a9ae0b01f0ffc.exceptions.E_application_exception
 
 class T_sample_class_for_annotation_test {
 
@@ -30,6 +30,39 @@ class T_sample_class_for_annotation_test {
                     }
                 }
                 return "lfdgh"
+            } else {
+                T_s.l().log_info(T_s.s().INSIDE_METHOD8)
+            }
+            return "jrtnxdn"
+        } else {
+            T_s.l().log_info(T_s.s().INSIDE_METHOD6)
+            if (i_argument_one!=i_argument_two) {
+                T_s.l().log_info(T_s.s().INSIDE_METHOD17)
+                return "irtgkjbdf"
+            } else {
+                T_s.l().log_info(T_s.s().INSIDE_METHOD8)
+            }
+        }
+        T_s.l().log_info(T_s.s().INSIDE_METHOD19)
+        T_s.l().log_info(T_s.s().INSIDE_METHOD4)
+        return "dflkgnjdlfk"
+    }
+
+
+    @I_black_box
+    String do_something4(String i_argument_one, String i_argument_two) {
+        T_s.l().log_info(T_s.s().INSIDE_METHOD3)
+        if (i_argument_one==i_argument_two) {
+            T_s.l().log_info(T_s.s().INSIDE_METHOD5)
+            if (i_argument_one==i_argument_two) {
+                for (int z : 1..2) {
+                    if (i_argument_one==i_argument_two) {
+                        T_s.l().log_info(T_s.s().INSIDE_METHODz7)
+                        throw new E_application_exception(T_s.s().SOME_SAMPLE_EXCEPTION1, "some parameter1")
+                        return "xcvcx"
+                    }
+                }
+                return "lfdghsad12"
             } else {
                 T_s.l().log_info(T_s.s().INSIDE_METHOD8)
             }

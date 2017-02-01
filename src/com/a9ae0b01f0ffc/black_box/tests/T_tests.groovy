@@ -266,5 +266,11 @@ class T_tests {
         String w = new T_sample_class_for_annotation_test().do_something3("aaa", "aa2a")
     }
 
+    @Test
+    void test_031() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_031.conf")
+        String w = new T_sample_class_for_annotation_test().do_something4("aaa", "aaa")
+    }
+
 
 }
