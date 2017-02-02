@@ -1,5 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
+import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive
+import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_sample_class_for_annotation_test
 import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
@@ -184,7 +186,7 @@ class T_tests {
         } catch (Exception e_exception) {
             T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
         }
-        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
+        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|Trace masked"
     }
 
     @Test
@@ -277,11 +279,47 @@ class T_tests {
     }
 
     @Test
+    void test_032() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_032.conf")
+        T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|Trace masked"
+    }
+
+    @Test
     void test_033() {
         T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_033.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
-        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)|**********2222"
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|**********2223"
+    }
+
+    @Test
+    void test_034() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_034.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|Trace masked|Trace masked"
+    }
+
+    @Test
+    void test_035() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_035.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
+    }
+
+    @Test
+    void test_036() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_036.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|Trace masked"
+    }
+
+    @Test
+    void test_037() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_037.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
+        assert T_destination_variable.l() == "info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive(4447778899992222)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
     }
 
 }

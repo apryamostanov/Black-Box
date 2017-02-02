@@ -83,10 +83,10 @@ class T_trace extends T_inherited_configurations implements I_trace {
                     return unmasked()
                 }
             } else if (p_mask == T_s.c().GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE) {
-                if (!p_ref instanceof I_non_sensitive) {
-                    masked()
-                } else {
+                if (p_ref instanceof I_non_sensitive) {
                     return unmasked()
+                } else {
+                    return masked()
                 }
             } else {
                 return masked() // custom mask parameter, e.g. "last4digits"

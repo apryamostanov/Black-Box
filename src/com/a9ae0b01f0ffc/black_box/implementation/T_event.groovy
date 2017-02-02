@@ -1,8 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
+import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
+import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.static_string.T_static_string
 
 class T_event extends T_inherited_configurations implements I_event {
@@ -119,6 +121,18 @@ class T_event extends T_inherited_configurations implements I_event {
             if (l_trace_config.match_trace(i_trace_config)) {
                 l_trace_result = l_trace_config
                 break
+            }
+        }
+        if (l_trace_result == T_s.c().GC_NULL_OBJ_REF) {
+            String l_trace_config_source = i_trace_config.get_source()
+            if (l_trace_config_source == T_s.c().GC_TRACE_SOURCE_RUNTIME) {
+                l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
+            }
+            if (l_trace_config_source == T_s.c().GC_TRACE_SOURCE_CONTEXT) {
+                l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
+            }
+            if (l_trace_config_source == T_s.c().GC_TRACE_SOURCE_EXCEPTION_TRACES) {
+                l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
             }
         }
         return l_trace_result
