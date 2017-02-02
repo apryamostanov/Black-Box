@@ -20,6 +20,8 @@ interface I_logger {
 
     I_method_invocation get_current_method_invocation()
 
+    LinkedList<I_method_invocation> get_invocation_stack()
+
     void log_enter(
             String i_class_name
             , String i_method_name

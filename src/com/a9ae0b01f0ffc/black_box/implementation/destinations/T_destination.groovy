@@ -20,6 +20,8 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     final static I_trace PC_STATIC_TRACE_NAME_MESSAGE = init_predefined_trace("message")
     final static I_trace PC_STATIC_TRACE_NAME_THREADID = init_predefined_trace("thread")
     final static I_trace PC_STATIC_TRACE_NAME_PROCESSID = init_predefined_trace("process")
+    final static I_trace PC_STATIC_TRACE_NAME_METHOD_INVOCATION = init_predefined_trace("invocation")
+    final static I_trace PC_STATIC_TRACE_NAME_METHOD_STACK = init_predefined_trace("stack")
     final static I_trace PC_TRACE_SOURCE_PREDEFINED = init_predefined_trace("predefined")
     final static I_trace PC_TRACE_SOURCE_RUNTIME = init_predefined_trace("runtime")
     final static I_trace PC_TRACE_SOURCE_CONTEXT = init_predefined_trace("context")
@@ -72,6 +74,8 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_MESSAGE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_THREADID)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_PROCESSID)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_METHOD_INVOCATION)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_METHOD_STACK)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_PREDEFINED)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_RUNTIME)
         PC_ALL_POSSIBLE_SOURCES.add(PC_TRACE_SOURCE_CONTEXT)
@@ -163,6 +167,10 @@ abstract class T_destination extends T_inherited_configurations implements I_des
             l_result_trace.set_val(T_s.c().GC_THREADID)
         } else if (PC_STATIC_TRACE_NAME_PROCESSID.match_trace(i_predefined_trace)) {
             l_result_trace.set_val(T_s.c().GC_PROCESSID)
+        } else if (PC_STATIC_TRACE_NAME_METHOD_INVOCATION.match_trace(i_predefined_trace)) {
+            l_result_trace.set_ref(T_s.l().get_current_method_invocation())
+        } else if (PC_STATIC_TRACE_NAME_METHOD_STACK.match_trace(i_predefined_trace)) {
+            l_result_trace.set_ref(T_s.l().get_invocation_stack())
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME, i_predefined_trace.get_name())
         }

@@ -228,4 +228,8 @@ class T_logger implements I_logger {
         }
     }
 
+    @Override
+    LinkedList<I_method_invocation> get_invocation_stack() {
+        return p_method_invocation_stack
+    }
 }

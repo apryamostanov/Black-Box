@@ -39,4 +39,14 @@ class T_method_invocation implements I_method_invocation {
     void set_method_arguments(ArrayList<I_trace> i_method_arguments) {
         this.p_method_arguments = i_method_arguments
     }
+
+
+    @Override
+    public String toString() {
+        return "T_method_invocation{" +
+                "p_class_name='" + p_class_name + '\'' +
+                ", p_method_name='" + p_method_name + '\'' +
+                ", p_method_arguments=" + p_method_arguments +
+                '}';
+    }
 }
