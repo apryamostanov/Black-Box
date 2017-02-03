@@ -1,45 +1,56 @@
 package com.a9ae0b01f0ffc.black_box.implementation.formatters
 
+import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
 class T_event_formatter_xml_hierarchical_display extends T_event_formatter implements I_event_formatter {
 
-    static String attr(String i_attr_name, String i_attr_val) {
-        return i_attr_name + "=\"" + i_attr_val + "\" "
-    }
-
-    Boolean p_header_was_added = T_s.c().GC_FALSE
-
-    String format_trace(I_trace i_trace) {
-        String l_result = T_s.c().GC_EMPTY_STRING
-        l_result += "        <trace "
-        l_result += attr("name", i_trace.get_name())
-        l_result += attr("serialized_representation", i_trace.toString())
-        l_result += attr("source", i_trace.get_source())
-        l_result += attr("mask", i_trace.get_mask())
-        l_result += attr("ref_class_name", i_trace.get_ref_class_name())
-        if (is_guid()) {
-            l_result += attr("guid", i_trace.get_guid())
-            l_result += attr("ref_guid", i_trace.get_ref_guid())
+    HashMap<String, HashMap<String, I_trace>> make_traces_by_source_by_name(ArrayList<I_trace> i_event_traces) {
+        HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = new HashMap<String, HashMap<String, I_trace>>()
+        for (I_trace l_trace in i_event_traces) {
+            if (!l_traces_by_source_by_name.containsKey(l_trace.get_source())) {
+                HashMap<String, I_trace> l_traces_by_name = new HashMap<String, I_trace>()
+                l_traces_by_name.put(l_trace.get_name(), l_trace)
+                l_traces_by_source_by_name.put(l_trace.get_source(), l_traces_by_name)
+            } else {
+                HashMap<String, I_trace> l_traces_by_name = l_traces_by_source_by_name.get(l_trace.get_source())
+                l_traces_by_name.put(l_trace.get_name(), l_trace)
+            }
         }
-        l_result += attr("masked", i_trace.is_masked().toString())
-        l_result += "/>" + System.lineSeparator()
-        return l_result
     }
 
     @Override
     String format_traces(ArrayList<I_trace> i_event_traces) {
         String l_result = T_s.c().GC_EMPTY_STRING
-        if (!p_header_was_added) {
-            p_header_was_added = T_s.c().GC_TRUE
+        HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = make_traces_by_source_by_name(i_event_traces)
+        I_trace l_event_type_trace = l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name())
+        if (l_event_type_trace.get_val() == "enter") {
+            l_result += "<invocation class=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_CLASS_NAME.get_name())}\" method=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_METHOD_NAME.get_name())}\">" + System.lineSeparator()
+            if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
+                l_result += "    <arguments>" + System.lineSeparator()
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
+                    l_result += "        <argument class=\"${l_runtime_trace.get_ref_class_name()}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</argument>" + System.lineSeparator()
+                }
+                l_result += "    </arguments>" + System.lineSeparator()
+                l_result += "    <execution>" + System.lineSeparator()
+            }
+        } else if (l_event_type_trace.get_val() == "exit") {
+            for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
+                l_result += "    <result class=\"${l_runtime_trace.get_ref_class_name()}\">${l_runtime_trace.toString()}</result>"
+            }
+        } else if (l_event_type_trace.get_val() == "info") {
+            process_log_info()
+        } else if (l_event_type_trace.get_val() == "warning") {
+            process_log_warning()
+        } else if (l_event_type_trace.get_val() == "debug") {
+            process_log_debug()
+        } else if (l_event_type_trace.get_val() == "error") {
+            process_log_error()
+        } else {
+            process_other()
         }
-        l_result += "    <event>" + System.lineSeparator()
-        for (I_trace l_trace : i_event_traces) {
-            l_result += format_trace(l_trace)
-        }
-        l_result += "    </event>" + System.lineSeparator()
         return l_result
     }
 }
