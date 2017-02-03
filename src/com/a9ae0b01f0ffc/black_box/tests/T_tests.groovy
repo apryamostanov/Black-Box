@@ -362,4 +362,16 @@ class T_tests {
         assert T_destination_variable.l() == "info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive(4447778899992222)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
     }
 
+    @Test
+    void test_038() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_038.conf")
+        String w = new T_sample_class_for_annotation_test().do_something5("aaa", "a1aa")
+    }
+
+    @Test
+    void test_039() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_038.conf")
+        String w = new T_sample_class_for_annotation_test().reissue_card("555555555555555")
+    }
+
 }
