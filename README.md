@@ -1,12 +1,13 @@
 # Black Box
 
-Logging tool written in Groovy
+1. Experimental runtime prototyping and diagnostic framework
+2. Next-generation logging and tracing framework
 
-Work in progress. Version: 0.3 Alpha :)
+Work in progress. Version: 0.7
 
 Intended purpose of usage:
 - Credit card processing
-- Financial server applications
+- Financial software
 - Batch processing
 - OLTP
 - PCI DSS, PA DSS applications
