@@ -44,26 +44,28 @@ class T_logger implements I_logger {
     }
 
     @Override
-    I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config) {
+    I_trace spawn_trace(I_trace i_trace_new, I_trace i_trace_config) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
-        l_trace.set_name(i_trace_runtime_or_context.get_name())
-        l_trace.set_source(i_trace_runtime_or_context.get_source())
+        l_trace.set_name(i_trace_new.get_name())
+        l_trace.set_source(i_trace_new.get_source())
         if (i_trace_config != T_s.c().GC_NULL_OBJ_REF) {
             l_trace.set_mask(i_trace_config.get_mask())
             l_trace.set_muted(i_trace_config.is_muted())
             l_trace.set_source(T_s.nvl(l_trace.get_source(),i_trace_config.get_source()) as String)
             l_trace.set_formatter(i_trace_config.get_formatter())
             l_trace.set_class(i_trace_config.get_config_class())
+            l_trace.set_config_xml_portion(i_trace_config.get_config_xml_portion())
         }
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
-            l_trace.set_ref(i_trace_runtime_or_context.get_ref())
-            l_trace.set_val(i_trace_runtime_or_context.get_val())
+            l_trace.set_ref(i_trace_new.get_ref())
+            l_trace.set_val(i_trace_new.get_val())
+
         } else if (p_mode == T_s.c().GC_LOGGER_MODE_DIAGNOSTIC) {
-            l_trace.set_ref(i_trace_runtime_or_context.get_ref())
-            if (i_trace_runtime_or_context.get_val() != T_s.c().GC_EMPTY_STRING) {
-                l_trace.set_val(i_trace_runtime_or_context.get_val())
+            l_trace.set_ref(i_trace_new.get_ref())
+            if (i_trace_new.get_val() != T_s.c().GC_EMPTY_STRING) {
+                l_trace.set_val(i_trace_new.get_val())
             } else {
-                l_trace.set_val(i_trace_runtime_or_context.toString())
+                l_trace.set_val(i_trace_new.toString())
             }
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_LOGGER_MODE, p_mode)

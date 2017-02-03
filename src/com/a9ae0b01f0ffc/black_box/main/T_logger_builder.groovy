@@ -42,7 +42,11 @@ class T_logger_builder implements I_logger_builder {
             throw new E_application_exception(T_s.s().PURPOSE_IS_MANDATORY_FOR_DESTINATIONS, i_destination_xml.name())
         }
         if (!i_destination_xml.@formatter.isEmpty()) {
-            l_destination.set_formatter((I_event_formatter) p_class_loader.instantiate(i_destination_xml.@formatter.text()))
+            I_event_formatter l_event_formatter = p_class_loader.instantiate(i_destination_xml.@formatter.text()) as I_event_formatter
+            if (!i_destination_xml.@guid.isEmpty()) {
+                l_event_formatter.set_print_trace_guid(i_destination_xml.@guid.text())
+            }
+            l_destination.set_formatter(l_event_formatter)
         } else {
             throw new E_application_exception(T_s.s().FORMATTER_IS_MANDATORY_FOR_DESTINATIONS, i_destination_xml.name())
         }
@@ -101,6 +105,7 @@ class T_logger_builder implements I_logger_builder {
         if (!i_trace_xml.@class.isEmpty()) {
             l_trace_config.set_class(i_trace_xml.@class.text())
         }
+        l_trace_config.set_config_xml_portion(i_trace_xml)
         return l_trace_config
     }
 

@@ -1,11 +1,12 @@
 package com.a9ae0b01f0ffc.black_box.implementation.formatters
 
+import com.a9ae0b01f0ffc.black_box.implementation.T_inherited_configurations
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
-class T_event_formatter_html implements I_event_formatter {
+class T_event_formatter_html extends T_event_formatter implements I_event_formatter {
 
     Boolean p_header_was_added = T_s.c().GC_FALSE
 
@@ -58,7 +59,7 @@ class T_event_formatter_html implements I_event_formatter {
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_DEPTH.get_name()) {
                 l_depth = l_trace.toString()
             } else {
-                l_trace_data += (T_event_formatter_xml.format_trace(l_trace) + "<br/>")
+                l_trace_data += (format_trace(l_trace) + "<br/>")
             }
         }
         l_result += "<td>" + l_datetimestamp + "</td>"

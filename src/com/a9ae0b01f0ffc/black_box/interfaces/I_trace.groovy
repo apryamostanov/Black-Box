@@ -1,6 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-interface I_trace extends I_inherited_configurations {
+import groovy.util.slurpersupport.GPathResult
+
+interface I_trace extends I_inherited_configurations, I_object_with_guid {
 
     Boolean is_muted()
 
@@ -41,5 +43,11 @@ interface I_trace extends I_inherited_configurations {
     String get_ref_class_name()
 
     Boolean match_trace(I_trace i_trace_new)
+
+    String get_ref_guid()
+
+    GPathResult get_config_xml_portion()
+
+    void set_config_xml_portion(GPathResult i_config_xml_portion)
 
 }

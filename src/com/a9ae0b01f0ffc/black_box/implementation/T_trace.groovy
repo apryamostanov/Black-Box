@@ -2,10 +2,12 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_maskable
 import com.a9ae0b01f0ffc.black_box.interfaces.I_non_sensitive
+import com.a9ae0b01f0ffc.black_box.interfaces.I_object_with_guid
 import com.a9ae0b01f0ffc.black_box.interfaces.I_sensitive
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
 import com.a9ae0b01f0ffc.black_box.main.T_s
+import groovy.util.slurpersupport.GPathResult
 
 class T_trace extends T_inherited_configurations implements I_trace {
 
@@ -16,6 +18,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
     String p_value = T_s.c().GC_EMPTY_STRING
     String p_source = T_s.c().GC_EMPTY_STRING
     String p_config_class = T_s.c().GC_EMPTY_STRING
+    GPathResult p_config_xml_portion = T_s.c().GC_NULL_OBJ_REF as GPathResult
 
     @Override
     Boolean is_muted() {
@@ -129,8 +132,6 @@ class T_trace extends T_inherited_configurations implements I_trace {
         String l_result = T_s.c().GC_EMPTY_STRING
         if (get_ref() != T_s.c().GC_NULL_OBJ_REF) {
             l_result = get_ref().getClass().getCanonicalName()
-        } else {
-            l_result = p_name
         }
         return l_result
     }
@@ -181,7 +182,25 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     Boolean match_trace(I_trace i_trace_new) {
-        return (get_search_name_config() == i_trace_new.get_ref_class_name() || get_search_name_config() == i_trace_new.get_name())
+        return (get_search_name_config() == T_s.nvl(i_trace_new.get_ref_class_name(), i_trace_new.get_name()) || get_search_name_config() == i_trace_new.get_name())
     }
 
+    @Override
+    String get_ref_guid() {
+        if (p_ref instanceof I_object_with_guid) {
+            return p_ref.get_guid()
+        } else {
+            return T_s.c().GC_EMPTY_STRING
+        }
+    }
+
+    @Override
+    GPathResult get_config_xml_portion() {
+        return p_config_xml_portion
+    }
+
+    @Override
+    void set_config_xml_portion(GPathResult i_config_xml_portion) {
+        p_config_xml_portion = i_config_xml_portion
+    }
 }
