@@ -33,251 +33,122 @@ Features:
 - Lightweight with small number dependenices (note: Groovy runtime is required)
 - Event-based spooling - a mode when debug is bufferred (up to configurable # of lines) and spooled only in case when error is encountered
 - Trackable sources of debug data
-⋅⋅*Runtime data (whatever programmer or annotation passes to logger)
-⋅⋅*Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
-⋅⋅*Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
-⋅⋅*Compile-time Meta-data (line number, file name, CVS version)
+-- Runtime data (whatever programmer or annotation passes to logger)
+-- Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
+-- Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
+-- Compile-time Meta-data (line number, file name, CVS version)
+- Hierarchical invocation logging
 
 Sample usage:
 ```Groovy
-T_s.l().log_info(T_s.s().HELLO_WORLD)
+    @Test
+    void test_039() {
+        T_context.getInstance().init_custom(PC_TEST_CONF_PATH + "main_038.conf")
+        String w = new T_sample_class_for_annotation_test().reissue_card("555555555555555")
+    }
+```
+```Groovy
+package com.a9ae0b01f0ffc.black_box.tests.mockup
+import com.a9ae0b01f0ffc.black_box.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box.main.T_s
+import com.a9ae0b01f0ffc.exceptions.E_application_exception
+class T_sample_class_for_annotation_test {
+    @I_black_box
+    Boolean check_card_for_reissue(T_pan_maskable i_pan) {
+        T_pan l_validation_pan = new T_pan(i_pan.get_pan())
+        T_s.l().log_debug(T_s.s().THE_PAN_IS_ELIGIBLE_FOR_REISSUE, T_s.t(l_validation_pan, T_s.s().l_validation_pan))
+        return true
+    }
+    @I_black_box
+    T_pan_maskable create_new_pan(T_pan_maskable i_old_pan, Boolean i_is_create_new_pan, Integer i_duration) {
+        T_s.l().log_info(T_s.s().IGNORING_DURATION_FOR_NEW_PAN)
+        T_pan_maskable l_new_pan = new T_pan_maskable("44444444444444444")
+        check_card_for_reissue(l_new_pan)
+        return l_new_pan
+    }
+    @I_black_box
+    T_pan_maskable reissue_card(String i_old_pan) {
+        T_pan_maskable l_pan = new T_pan_maskable(i_old_pan)
+        T_pan_maskable l_new_pan
+        if (check_card_for_reissue(l_pan)) {
+            l_new_pan = create_new_pan(l_pan, true, 2)
+        }
+        return l_new_pan
+    }
+}
 ```
 
 Sample configuration:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <logger mode="diagnostic">
-    <file_buffer location="c:/LOGS/WAREHOUSE/LOG_%DATE%_%TIME%_%USERNAME%_%PROCESSID%.xml" formatter="xml" purpose="warehouse" buffer="300" spool_event="error">
+    <file location="c:/LOGS/WAREHOUSE/LOG_%DATE%_%TIME%_%USERNAME%_%PROCESSID%.xml" formatter="xml_hierarchical" purpose="warehouse" mask="sensitive">
         <enter>
-            <context mask="true"/>
-            <runtime mask="true"/>
+            <this mute="true"/>
         </enter>
-        <exit>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </exit>
-        <debug>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </debug>
-        <info>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </info>
-        <warning>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </warning>
-        <error>
-            <context mask="true"/>
-            <runtime mask="true"/>
-            <exception_traces mask="true"/>
-        </error>
-    </file_buffer>
-    <file location="c:/LOGS/DISPLAY/LOG_%DATE%_%TIME%_%USERNAME%_%PROCESSID%.html" formatter="html" purpose="display">
-        <enter>
-            <datetimestamp/>
-            <process/>
-            <event/>
-            <class/>
-            <method/>
-            <depth/>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </enter>
-        <exit>
-            <datetimestamp/>
-            <process/>
-            <event/>
-            <class/>
-            <method/>
-            <depth/>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </exit>
-        <info>
-            <datetimestamp/>
-            <process/>
-            <event/>
-            <class/>
-            <method/>
-            <depth/>
-            <message/>
-            <runtime mask="true"/>
-        </info>
-        <warning>
-            <datetimestamp/>
-            <process/>
-            <event/>
-            <class/>
-            <method/>
-            <depth/>
-            <message/>
-            <runtime mask="true"/>
-        </warning>
-        <error>
-            <datetimestamp/>
-            <process/>
-            <event/>
-            <class/>
-            <method/>
-            <depth/>
-            <exception_message/>
-            <exception_traces mask="true"/>
-            <context mask="true"/>
-            <runtime mask="true"/>
-        </error>
+        <exit/>
+        <debug/>
+        <info/>
+        <warning/>
+        <error/>
     </file>
-    <shell formatter="csv" purpose="display">
+    <shell formatter="csv" purpose="display" mask="sensitive">
         <info>
             <event/>
             <message/>
-            <runtime mask="true"/>
+            <runtime/>
         </info>
         <warning>
             <event/>
             <message/>
-            <runtime mask="true"/>
+            <runtime/>
         </warning>
         <error>
             <event/>
             <exception_message/>
-            <exception_traces mask="true"/>
+            <exception_traces/>
         </error>
     </shell>
 </logger>
 ```
 
-Sample Warehouse log:
+Sample output:
 ```xml
-<?xml version="1.0"?>
-<?xml-stylesheet type="text/xml" href="z.xml"?>
-<traces>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="enter" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:466" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="info" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:521" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="2" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="enter" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:531" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="2" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="info" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:535" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="2" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="info" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:539" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="HELLO_WORLD" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="3" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="enter" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:543" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="3" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="exit" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:547" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="3" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="enter" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:551" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="i_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="i_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-	<event>
-		<trace config_class="" mask="" masked="false" muted="false" name="class" ref_class_name="class" search_name_config="class" serialized_representation="T_tests" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="method" ref_class_name="method" search_name_config="method" serialized_representation="test_028" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="depth" ref_class_name="depth" search_name_config="depth" serialized_representation="3" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="event" ref_class_name="event" search_name_config="event" serialized_representation="exit" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="datetimestamp" ref_class_name="datetimestamp" search_name_config="datetimestamp" serialized_representation="2017-01-28 21:09:58:555" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception" ref_class_name="exception" search_name_config="exception" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="exception_message" ref_class_name="exception_message" search_name_config="exception_message" serialized_representation="Trace missing" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="message" ref_class_name="message" search_name_config="message" serialized_representation="null" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="thread" ref_class_name="thread" search_name_config="thread" serialized_representation="1" source="predefined"/>
-		<trace config_class="" mask="" masked="false" muted="false" name="process" ref_class_name="process" search_name_config="process" serialized_representation="12500" source="predefined"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="result_pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan" search_name_config="result_pan" serialized_representation="Trace masked" source="runtime"/>
-		<trace config_class="" mask="true" masked="true" muted="false" name="pan" ref_class_name="com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable" search_name_config="pan" serialized_representation="Trace masked" source="context"/>
-	</event>
-</traces>
+<invocation class="T_sample_class_for_annotation_test" method="reissue_card">
+    <arguments>
+        <argument class="String" name="i_old_pan">555555555555555</argument>
+    </arguments>
+    <execution>
+        <invocation class="T_sample_class_for_annotation_test" method="check_card_for_reissue">
+            <arguments>
+                <argument class="T_pan_maskable" name="i_pan">com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(555555555555555)</argument>
+            </arguments>
+            <execution>
+                <debug message="THE_PAN_IS_ELIGIBLE_FOR_REISSUE">
+                    <trace class="T_pan" name="l_validation_pan">com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(555555555555555)</trace>
+                </debug>
+            </execution>
+        </invocation>
+        <invocation class="T_sample_class_for_annotation_test" method="create_new_pan">
+            <arguments>
+                <argument class="T_pan_maskable" name="i_old_pan">com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(555555555555555)</argument>
+                <argument class="Integer" name="i_duration">2</argument>
+                <argument class="Boolean" name="i_is_create_new_pan">true</argument>
+            </arguments>
+            <execution>
+                <info message="IGNORING_DURATION_FOR_NEW_PAN"/>
+                <invocation class="T_sample_class_for_annotation_test" method="check_card_for_reissue">
+                    <arguments>
+                        <argument class="T_pan_maskable" name="i_pan">com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(44444444444444444)</argument>
+                    </arguments>
+                    <execution>
+                        <debug message="THE_PAN_IS_ELIGIBLE_FOR_REISSUE">
+                            <trace class="T_pan" name="l_validation_pan">com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(44444444444444444)</trace>
+                        </debug>
+                    </execution>
+                </invocation>
+            </execution>
+        </invocation>
+    </execution>
+</invocation>
 ```
