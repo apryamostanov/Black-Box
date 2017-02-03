@@ -46,8 +46,4 @@ interface I_trace extends I_inherited_configurations, I_object_with_guid {
 
     String get_ref_guid()
 
-    GPathResult get_config_xml_portion()
-
-    void set_config_xml_portion(GPathResult i_config_xml_portion)
-
 }

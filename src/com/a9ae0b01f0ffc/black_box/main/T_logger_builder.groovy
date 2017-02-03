@@ -105,7 +105,6 @@ class T_logger_builder implements I_logger_builder {
         if (!i_trace_xml.@class.isEmpty()) {
             l_trace_config.set_class(i_trace_xml.@class.text())
         }
-        l_trace_config.set_config_xml_portion(i_trace_xml)
         return l_trace_config
     }
 

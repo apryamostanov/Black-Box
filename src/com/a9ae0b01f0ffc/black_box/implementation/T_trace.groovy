@@ -18,7 +18,6 @@ class T_trace extends T_inherited_configurations implements I_trace {
     String p_value = T_s.c().GC_EMPTY_STRING
     String p_source = T_s.c().GC_EMPTY_STRING
     String p_config_class = T_s.c().GC_EMPTY_STRING
-    GPathResult p_config_xml_portion = T_s.c().GC_NULL_OBJ_REF as GPathResult
 
     @Override
     Boolean is_muted() {
@@ -194,13 +193,4 @@ class T_trace extends T_inherited_configurations implements I_trace {
         }
     }
 
-    @Override
-    GPathResult get_config_xml_portion() {
-        return p_config_xml_portion
-    }
-
-    @Override
-    void set_config_xml_portion(GPathResult i_config_xml_portion) {
-        p_config_xml_portion = i_config_xml_portion
-    }
 }

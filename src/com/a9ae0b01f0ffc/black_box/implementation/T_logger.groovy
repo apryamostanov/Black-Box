@@ -54,7 +54,6 @@ class T_logger implements I_logger {
             l_trace.set_source(T_s.nvl(l_trace.get_source(),i_trace_config.get_source()) as String)
             l_trace.set_formatter(i_trace_config.get_formatter())
             l_trace.set_class(i_trace_config.get_config_class())
-            l_trace.set_config_xml_portion(i_trace_config.get_config_xml_portion())
         }
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_trace_new.get_ref())

@@ -1,11 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.implementation.formatters
 
-import com.a9ae0b01f0ffc.black_box.implementation.T_inherited_configurations
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
-class T_event_formatter_xml extends T_event_formatter implements I_event_formatter {
+class T_event_formatter_xml_hierarchical_display extends T_event_formatter implements I_event_formatter {
 
     static String attr(String i_attr_name, String i_attr_val) {
         return i_attr_name + "=\"" + i_attr_val + "\" "
