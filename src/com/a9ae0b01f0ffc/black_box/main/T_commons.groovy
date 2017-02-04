@@ -58,8 +58,8 @@ class T_commons {
     static String GC_DEFAULT_TRACE_MASKED = "Trace masked"
     static String GC_DEFAULT_TRACE_MUTED = "Trace muted"
     static Boolean GC_DEDUPLICATE_TRACES = GC_FALSE
-    static String GC_DEFAULT_LOGGER_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/black_box/conf/main.conf"
-    static String GC_CLASS_LOADER_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/black_box/conf/classes.conf"
+    static String GC_DEFAULT_LOGGER_CONF_FILE_NAME = GC_EMPTY_STRING
+    static String GC_CLASS_LOADER_CONF_FILE_NAME = GC_EMPTY_STRING
     static String GC_LOGGER_MODE_PRODUCTION = "production"
     static String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
     static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
