@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="BlackBox.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BlackBox.jar</output-path>
+    <root id="archive" name="BlackBox.jar">
+      <element id="module-output" name="black_box" />
+      <element id="file-copy" path="$PROJECT_DIR$/../class_loader/out/artifacts/ioc_jar/ioc.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../static_string/out/artifacts/static_string_jar/static_string.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../application_exception/out/artifacts/application_exception_jar/application_exception.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/../mighty_config/out/artifacts/jar/configuration_utility.jar" />
+    </root>
+  </artifact>
+</component>

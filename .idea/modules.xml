@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/mighty_logger2.iml" filepath="$PROJECT_DIR$/mighty_logger2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/black_box.iml" filepath="$PROJECT_DIR$/black_box.iml" />
     </modules>
   </component>
 </project>

@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
+import com.a9ae0b01f0ffc.configuration_utility.implementation.T_conf
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 
@@ -25,7 +25,6 @@ class T_commons {
     static final Boolean GC_FALSE = false
     static final Integer GC_ZERO = 0
     static final String GC_DATE_FORMAT_UID = "yyyyMMddHHmmssSSS"
-    static final Boolean GC_IS_INIT = init_default()
     static final Boolean GC_FILE_APPEND_YES = GC_TRUE
     static final String GC_SUBST_USERNAME = "%USERNAME%"
     static final String GC_SUBST_DATE = "%DATE%"
@@ -47,7 +46,7 @@ class T_commons {
     static final String GC_TRACE_MASK_NONE = "none"
     static final String GC_FALSE_STRING = "false"
     static final String GC_TRUE_STRING = "true"
-    static T_conf GC_CONST_CONF = new T_conf(GC_CONST_CONF_FILE_NAME)
+    static T_conf GC_CONST_CONF = GC_NULL_OBJ_REF as T_conf
     static String GC_LOG_DATETIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
     static String GC_LOG_FILENAME_DATE_FORMAT = "yyyyMMdd"
     static String GC_LOG_FILENAME_TIME_FORMAT = "HHmmssSSS"
@@ -67,9 +66,8 @@ class T_commons {
     static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     static String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
 
-    static Boolean init_default() {
+    static void init_default() {
         init_custom(GC_CONST_CONF_FILE_NAME)
-        return GC_TRUE
     }
 
     static void init_custom(String i_conf_file_name) {
@@ -92,5 +90,8 @@ class T_commons {
         GC_CONST_CONF.GC_LOGGER_MODE_DIAGNOSTIC(GC_LOGGER_MODE_DIAGNOSTIC)
         GC_CONST_CONF.GC_DESTINATION_PURPOSE_DISPLAY(GC_DESTINATION_PURPOSE_DISPLAY)
         GC_CONST_CONF.GC_DESTINATION_PURPOSE_WAREHOUSE(GC_DESTINATION_PURPOSE_WAREHOUSE)
+        System.out.println("Init logger conf: "+i_conf_file_name)
+        System.out.println("GC_DEFAULT_LOGGER_CONF_FILE_NAME: "+GC_DEFAULT_LOGGER_CONF_FILE_NAME)
+        System.out.println("GC_CLASS_LOADER_CONF_FILE_NAME: "+GC_CLASS_LOADER_CONF_FILE_NAME)
     }
 }

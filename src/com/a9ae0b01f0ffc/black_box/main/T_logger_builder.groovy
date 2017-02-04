@@ -19,7 +19,6 @@ class T_logger_builder implements I_logger_builder {
 
     T_logger_builder(String i_class_conf_file_name) {
         p_class_loader = new T_class_loader(i_class_conf_file_name)
-
     }
 
     I_logger create_logger(String i_conf_file_name) {

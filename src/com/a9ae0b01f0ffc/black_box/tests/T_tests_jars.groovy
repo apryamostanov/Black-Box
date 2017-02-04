@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
-import com.a9ae0b01f0ffc.mighty_conf.implementation.T_conf
+import com.a9ae0b01f0ffc.configuration_utility.implementation.T_conf
 import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 import org.junit.Test
 
