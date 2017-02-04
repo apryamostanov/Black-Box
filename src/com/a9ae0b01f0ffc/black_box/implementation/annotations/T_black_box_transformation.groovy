@@ -64,9 +64,14 @@ public class T_black_box_transformation extends AbstractASTTransformation {
                         l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
                         l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                         BlockStatement l_inside_try = new BlockStatement()
-                        for (Statement l_return_statement in l_statements) {
-                            l_return_statement.visit(l_return_expression_visitor)
-                            l_inside_try.addStatement(l_return_statement)
+                        if (!l_method_node.isVoidMethod()) {
+                            for (Statement l_return_statement in l_statements) {
+                                l_return_statement.visit(l_return_expression_visitor)
+                                l_inside_try.addStatement(l_return_statement)
+                            }
+                        } else {
+                            l_inside_try.addStatements(l_statements)
+                            l_inside_try.addStatement(create_log_exit_statement(l_method_node))
                         }
                         l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) nodes[0], l_method_node))
                         l_method_node.setCode(l_changed_block_statement)
@@ -109,6 +114,14 @@ public class T_black_box_transformation extends AbstractASTTransformation {
             }
         }
         String l_log_enter_code = "l_logger.log_enter(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\"" + l_serialized_parameters + ", l_shortcuts.r(this, \"this\"))"
+        log(l_log_enter_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
+        return (Statement) l_resulting_statements.first()
+    }
+
+    Statement create_log_exit_statement(MethodNode i_method_node) {
+        Parameter[] l_arguments = i_method_node.getParameters()
+        String l_log_enter_code = "l_logger.log_exit(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\"))"
         log(l_log_enter_code)
         List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
         return (Statement) l_resulting_statements.first()

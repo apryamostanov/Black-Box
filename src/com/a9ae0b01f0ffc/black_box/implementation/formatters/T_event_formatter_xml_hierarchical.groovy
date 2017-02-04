@@ -50,43 +50,43 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
         if (l_event_type_trace.get_val() == "enter") {
             l_result += make_line("<invocation class=\"${get_short_name(l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_CLASS_NAME.get_name()).get_val())}\" method=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_METHOD_NAME.get_name()).get_val()}\">", l_depth)
             if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
-                l_result += make_line("    <arguments>", l_depth)
+                l_result += make_line("  <arguments>", l_depth)
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += make_line("        <argument class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</argument>", l_depth)
+                    l_result += make_line("    <argument class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</argument>", l_depth)
                 }
-                l_result += make_line("    </arguments>", l_depth)
+                l_result += make_line("  </arguments>", l_depth)
             }
-            l_result += make_line("    <execution>", l_depth)
+            l_result += make_line("  <execution>", l_depth)
         } else if (l_event_type_trace.get_val() == "exit") {
-            l_result += make_line("    </execution>", l_depth)
+            l_result += make_line("  </execution>", l_depth)
             if (!l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += make_line("    <result class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${l_runtime_trace.toString()}</result>", l_depth)
+                    l_result += make_line("  <result class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${l_runtime_trace.toString()}</result>", l_depth)
                 }
             }
             l_result += make_line("</invocation>", l_depth)
         } else if (l_event_type_trace.get_val() == "error") {
             if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_EXCEPTION_TRACES)) {
-                l_result += make_line("    <exception class=\"class=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref().getClass().getSimpleName()}\" message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.get_name()).get_val()}\" stack_trace=\"${Arrays.toString(new StackTraceUtils().sanitizeRootCause((Throwable) l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref()).getStackTrace()).replace(",", System.lineSeparator())}\">", l_depth)
-                l_result += make_line("        <exception_traces>", l_depth)
+                l_result += make_line("  <exception class=\"class=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref().getClass().getSimpleName()}\" message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.get_name()).get_val()}\" stack_trace=\"${Arrays.toString(new StackTraceUtils().sanitizeRootCause((Throwable) l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref()).getStackTrace()).replace(",", System.lineSeparator())}\">", l_depth)
+                l_result += make_line("    <exception_traces>", l_depth)
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_EXCEPTION_TRACES).values()) {
-                    l_result += make_line("            <exception_trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${l_runtime_trace.toString()}</result>", l_depth)
+                    l_result += make_line("      <exception_trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${l_runtime_trace.toString()}</result>", l_depth)
                 }
-                l_result += make_line("        </exception_traces>", l_depth)
-                l_result += make_line("    <exception>", l_depth)
+                l_result += make_line("    </exception_traces>", l_depth)
+                l_result += make_line("  <exception>", l_depth)
             } else {
-                l_result += make_line("    <exception class=\"class=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref().getClass().getSimpleName()}\" message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.get_name()).get_val()}\" stack_trace=\"${Arrays.toString(new StackTraceUtils().sanitizeRootCause((Throwable) l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref()).getStackTrace()).replace(",", System.lineSeparator())}\"/>", l_depth)
+                l_result += make_line("  <exception class=\"class=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref().getClass().getSimpleName()}\" message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.get_name()).get_val()}\" stack_trace=\"${Arrays.toString(new StackTraceUtils().sanitizeRootCause((Throwable) l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EXCEPTION.get_name()).get_ref()).getStackTrace()).replace(",", System.lineSeparator())}\"/>", l_depth)
             }
             l_result += make_line("</invocation>", l_depth)
         } else {
             if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
                 l_result += make_line("    <${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()} message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_MESSAGE.get_name()).get_val()}\">", l_depth)
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += make_line("        <trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</trace>", l_depth)
+                    l_result += make_line("    <trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</trace>", l_depth)
                 }
-                l_result += make_line("    </${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()}>", l_depth)
+                l_result += make_line("  </${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()}>", l_depth)
             } else {
-                l_result += make_line("    <${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()} message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_MESSAGE.get_name()).get_val()}\"/>", l_depth)
+                l_result += make_line("  <${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()} message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_MESSAGE.get_name()).get_val()}\"/>", l_depth)
             }
         }
         return l_result

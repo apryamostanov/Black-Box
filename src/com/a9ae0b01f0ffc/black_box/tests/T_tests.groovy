@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
+import com.a9ae0b01f0ffc.black_box.tests.mockup.T_case_investigations
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_sample_class_for_annotation_test
@@ -371,8 +372,14 @@ class T_tests {
 
     @Test
     void test_039() {
-        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_038.conf")
+        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_039.conf")
         String w = new T_sample_class_for_annotation_test().reissue_card("555555555555555")
+    }
+
+    @Test
+    void test_040() {
+        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_040.conf")
+        assert 41==new T_case_investigations().get_value_position()
     }
 
 }
