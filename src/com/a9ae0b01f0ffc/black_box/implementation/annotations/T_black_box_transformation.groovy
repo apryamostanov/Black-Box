@@ -121,7 +121,7 @@ public class T_black_box_transformation extends AbstractASTTransformation {
 
     Statement create_log_exit_statement(MethodNode i_method_node) {
         Parameter[] l_arguments = i_method_node.getParameters()
-        String l_log_enter_code = "l_logger.log_exit(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\"))"
+        String l_log_enter_code = "l_logger.log_exit(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\")"
         log(l_log_enter_code)
         List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
         return (Statement) l_resulting_statements.first()
