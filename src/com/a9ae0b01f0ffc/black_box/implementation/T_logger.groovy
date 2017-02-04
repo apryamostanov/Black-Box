@@ -18,6 +18,7 @@ class T_logger implements I_logger {
     private I_method_invocation PC_DEFAULT_METHOD_INVOCATION = T_s.c().GC_NULL_OBJ_REF as I_method_invocation
     private String p_mode = T_s.c().GC_EMPTY_STRING
     private Boolean p_is_init = init()
+    private HashMap<String, Integer> p_statistics_method_calls = new HashMap<String, Integer>()
 
     @Override
     Boolean init() {
@@ -51,7 +52,7 @@ class T_logger implements I_logger {
         if (i_trace_config != T_s.c().GC_NULL_OBJ_REF) {
             l_trace.set_mask(i_trace_config.get_mask())
             l_trace.set_muted(i_trace_config.is_muted())
-            l_trace.set_source(T_s.nvl(l_trace.get_source(),i_trace_config.get_source()) as String)
+            l_trace.set_source(T_s.nvl(l_trace.get_source(), i_trace_config.get_source()) as String)
             l_trace.set_formatter(i_trace_config.get_formatter())
             l_trace.set_class(i_trace_config.get_config_class())
         }
@@ -146,6 +147,17 @@ class T_logger implements I_logger {
     }
 
     @Override
+    void print_stats() {
+        TreeMap<Integer, String> l_sorted_statistics_method_calls = new TreeMap<Integer, String>()
+        for (String l_key in p_statistics_method_calls.keySet()) {
+            l_sorted_statistics_method_calls.put(p_statistics_method_calls.get(l_key), l_key)
+        }
+        for (Map.Entry<Float, String> l_entry : l_sorted_statistics_method_calls.entrySet()) {
+            System.out.println(l_entry.getValue() + ":" + l_entry.getKey())
+        }
+    }
+
+    @Override
     void log_enter(String i_class_name, String i_method_name, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
         I_method_invocation l_method_invocation = T_s.ioc().instantiate("I_method_invocation") as I_method_invocation
         l_method_invocation.set_class_name(i_class_name)
@@ -158,6 +170,12 @@ class T_logger implements I_logger {
             l_event.add_traces_runtime(l_method_arguments)
         }
         log_generic(l_event)
+        String l_stat_key = i_class_name + "->" + i_method_name
+        if (p_statistics_method_calls.containsKey(l_stat_key)) {
+            p_statistics_method_calls.put(l_stat_key, p_statistics_method_calls.get(l_stat_key) + 1)
+        } else {
+            p_statistics_method_calls.put(l_stat_key, 1)
+        }
     }
 
     @Override

@@ -82,9 +82,9 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
                 l_result += make_line("    <${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()} message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_MESSAGE.get_name()).get_val()}\">", l_depth)
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += make_line("    <trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</trace>", l_depth)
+                    l_result += make_line("      <trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\" name=\"${l_runtime_trace.get_name()}\">${l_runtime_trace.toString()}</trace>", l_depth)
                 }
-                l_result += make_line("  </${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()}>", l_depth)
+                l_result += make_line("    </${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()}>", l_depth)
             } else {
                 l_result += make_line("  <${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()).get_val()} message=\"${l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_PREDEFINED).get(T_destination.PC_STATIC_TRACE_NAME_MESSAGE.get_name()).get_val()}\"/>", l_depth)
             }

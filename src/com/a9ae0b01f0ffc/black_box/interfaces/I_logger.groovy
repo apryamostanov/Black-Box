@@ -22,6 +22,8 @@ interface I_logger {
 
     LinkedList<I_method_invocation> get_invocation_stack()
 
+    void print_stats()
+
     void log_enter(
             String i_class_name
             , String i_method_name
