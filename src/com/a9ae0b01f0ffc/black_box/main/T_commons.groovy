@@ -7,7 +7,6 @@ import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 import java.lang.management.ManagementFactory
 
 class T_commons {
-    static final String GC_CONST_CONF_FILE_NAME = "src/com/a9ae0b01f0ffc/black_box/conf/commons.conf"
     static final Object GC_NULL_OBJ_REF = null
     static final Collection<I_trace> GC_SKIPPED_ARG = new ArrayList<I_trace>()
     static final String GC_EMPTY_STRING = ""
@@ -66,10 +65,6 @@ class T_commons {
     static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     static String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
 
-    static void init_default() {
-        init_custom(GC_CONST_CONF_FILE_NAME)
-    }
-
     static void init_custom(String i_conf_file_name) {
         GC_CONST_CONF = new T_conf(i_conf_file_name)
         GC_CONST_CONF.GC_LOG_DATETIMESTAMP_FORMAT(GC_LOG_DATETIMESTAMP_FORMAT)
@@ -91,7 +86,5 @@ class T_commons {
         GC_CONST_CONF.GC_DESTINATION_PURPOSE_DISPLAY(GC_DESTINATION_PURPOSE_DISPLAY)
         GC_CONST_CONF.GC_DESTINATION_PURPOSE_WAREHOUSE(GC_DESTINATION_PURPOSE_WAREHOUSE)
         System.out.println("Init logger conf: "+i_conf_file_name)
-        System.out.println("GC_DEFAULT_LOGGER_CONF_FILE_NAME: "+GC_DEFAULT_LOGGER_CONF_FILE_NAME)
-        System.out.println("GC_CLASS_LOADER_CONF_FILE_NAME: "+GC_CLASS_LOADER_CONF_FILE_NAME)
     }
 }
