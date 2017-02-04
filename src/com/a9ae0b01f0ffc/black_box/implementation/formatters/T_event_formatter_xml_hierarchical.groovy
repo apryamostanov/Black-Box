@@ -59,7 +59,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             l_result += make_line("  <execution>", l_depth)
         } else if (l_event_type_trace.get_val() == "exit") {
             l_result += make_line("  </execution>", l_depth)
-            if (!l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
+            if (l_traces_by_source_by_name.containsKey(T_s.c().GC_TRACE_SOURCE_RUNTIME)) {
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_s.c().GC_TRACE_SOURCE_RUNTIME).values()) {
                     l_result += make_line("  <result class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${l_runtime_trace.toString()}</result>", l_depth)
                 }

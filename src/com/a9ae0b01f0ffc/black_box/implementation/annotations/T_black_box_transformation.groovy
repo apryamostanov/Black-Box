@@ -50,7 +50,7 @@ public class T_black_box_transformation extends AbstractASTTransformation {
                 if (node instanceof MethodNode) {
                     CodeVisitorSupport l_return_expression_visitor = new T_black_box_visitor()
                     MethodNode l_method_node = (MethodNode) node
-                    log("Processing method: "+l_method_node.getName())
+                    log("Processing method: " + l_method_node.getName())
                     ArrayList<Statement> l_statements = new ArrayList<Statement>()
                     Statement statement = l_method_node.getCode()
                     if (statement instanceof BlockStatement) {
@@ -64,18 +64,17 @@ public class T_black_box_transformation extends AbstractASTTransformation {
                         l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
                         l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                         BlockStatement l_inside_try = new BlockStatement()
-                        if (!l_method_node.isVoidMethod()) {
-                            for (Statement l_return_statement in l_statements) {
-                                l_return_statement.visit(l_return_expression_visitor)
-                                l_inside_try.addStatement(l_return_statement)
-                            }
-                        } else {
-                            l_inside_try.addStatements(l_statements)
+                        l_return_expression_visitor.p_is_return_added = false
+                        for (Statement l_return_statement in l_statements) {
+                            l_return_statement.visit(l_return_expression_visitor)
+                            l_inside_try.addStatement(l_return_statement)
+                        }
+                        if (!l_return_expression_visitor.p_is_return_added) {
                             l_inside_try.addStatement(create_log_exit_statement(l_method_node))
                         }
                         l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) nodes[0], l_method_node))
                         l_method_node.setCode(l_changed_block_statement)
-                        log("Finished Processing method: "+l_method_node.getName())
+                        log("Finished Processing method: " + l_method_node.getName())
                     }
                 } else {
                     this.addError("@I_black_box should be applied to Methods.", node)
