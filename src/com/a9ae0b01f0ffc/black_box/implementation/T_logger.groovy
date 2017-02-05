@@ -150,10 +150,14 @@ class T_logger implements I_logger {
     void print_stats() {
         TreeMap<Integer, String> l_sorted_statistics_method_calls = new TreeMap<Integer, String>()
         for (String l_key in p_statistics_method_calls.keySet()) {
-            l_sorted_statistics_method_calls.put(p_statistics_method_calls.get(l_key), l_key)
+            if (l_sorted_statistics_method_calls.containsKey(p_statistics_method_calls.get(l_key))) {
+                l_sorted_statistics_method_calls.put(p_statistics_method_calls.get(l_key), l_sorted_statistics_method_calls.get(p_statistics_method_calls.get(l_key)) + System.lineSeparator() + l_key)
+            } else {
+                l_sorted_statistics_method_calls.put(p_statistics_method_calls.get(l_key), l_key)
+            }
         }
-        for (Map.Entry<Float, String> l_entry : l_sorted_statistics_method_calls.entrySet()) {
-            System.out.println(l_entry.getValue() + ":" + l_entry.getKey())
+        for (Map.Entry<Float, String> l_entry in l_sorted_statistics_method_calls.entrySet()) {
+            System.out.println(l_entry.getValue() + " : " + l_entry.getKey())
         }
     }
 

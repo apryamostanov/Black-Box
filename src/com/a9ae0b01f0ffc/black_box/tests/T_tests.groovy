@@ -382,4 +382,12 @@ class T_tests {
         assert 41==new T_case_investigations().get_value_position()
     }
 
+    @Test
+    void test_041() {
+        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_041.conf")
+        new T_case_investigations().process_line("test")
+        T_s.l().print_stats()
+    }
+
+
 }

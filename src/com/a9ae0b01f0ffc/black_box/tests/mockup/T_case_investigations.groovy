@@ -9,6 +9,7 @@ class T_case_investigations {
     private static final Integer PC_VTS_LOG_VALUE_POSITION_SENT = 41
     private static final Integer PC_VTS_LOG_VALUE_POSITION_RECEIVED = 66
     private String p_current_direction = T_s.c().GC_EMPTY_STRING
+    Integer z
 
     @I_black_box
     private Integer get_value_position() {
@@ -17,6 +18,11 @@ class T_case_investigations {
         } else {
             return PC_VTS_LOG_VALUE_POSITION_RECEIVED
         }
+    }
+
+    @I_black_box
+    void process_line(String i_line) {
+        z = get_value_position()
     }
 
 }
