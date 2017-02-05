@@ -1,9 +1,11 @@
 # Black Box
 
-1. Experimental runtime prototyping and diagnostic framework
-2. Next-generation logging and tracing framework
+Example of integrating this JAR into another project: https://github.com/apryamostanov/CardProcessing
 
-Work in progress. Version: 0.7
+1. Experimental runtime prototyping and diagnostic framework
+2. Next-generation logging, tracing and profiling framework
+
+Work in progress. Version: 0.85
 
 Intended purpose of usage:
 - Credit card processing
@@ -37,7 +39,8 @@ Features:
 -- Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
 -- Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
 -- Compile-time Meta-data (line number, file name, CVS version)
-- Hierarchical invocation logging
+- Hierarchical method invocation logging
+- Future support of performance profiling
 
 Sample usage:
 ```Groovy
