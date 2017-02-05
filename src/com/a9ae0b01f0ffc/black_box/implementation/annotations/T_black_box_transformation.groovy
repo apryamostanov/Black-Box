@@ -43,13 +43,19 @@ public class T_black_box_transformation extends AbstractASTTransformation {
     }
 
 
-    public void visit(ASTNode[] nodes, SourceUnit source) {
+    public void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         try {
-            if (nodes.length == 2 && nodes[0] instanceof AnnotationNode && nodes[1] instanceof AnnotatedNode) {
-                ASTNode node = nodes[1]
-                if (node instanceof MethodNode) {
+            if (i_ast_nodes.length == 2 && i_ast_nodes[0] instanceof AnnotationNode && i_ast_nodes[1] instanceof AnnotatedNode) {
+                ASTNode l_first_node = i_ast_nodes[1]
+                Expression l_type_member = ((AnnotationNode) i_ast_nodes[0]).getMember("value")
+                String l_black_box_type = "full"
+                if (l_type_member != null) {
+                    l_black_box_type = l_type_member.getText()
+                }
+                log(l_black_box_type)
+                if (l_first_node instanceof MethodNode) {
                     CodeVisitorSupport l_return_expression_visitor = new T_black_box_visitor()
-                    MethodNode l_method_node = (MethodNode) node
+                    MethodNode l_method_node = (MethodNode) l_first_node
                     log("Processing method: " + l_method_node.getName())
                     ArrayList<Statement> l_statements = new ArrayList<Statement>()
                     Statement statement = l_method_node.getCode()
@@ -62,25 +68,35 @@ public class T_black_box_transformation extends AbstractASTTransformation {
                         l_changed_block_statement.addStatement(create_logger_declaration_statement())
                         l_changed_block_statement.addStatement(create_l_methodname_declaration_statement(l_method_node.getName()))
                         l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
-                        l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
+                        if (l_black_box_type != "error") {
+                            l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
+                        }
                         BlockStatement l_inside_try = new BlockStatement()
                         l_return_expression_visitor.p_is_return_added = false
                         for (Statement l_return_statement in l_statements) {
-                            l_return_statement.visit(l_return_expression_visitor)
+                            if (l_black_box_type != "error") {
+                                l_return_statement.visit(l_return_expression_visitor)
+                            }
                             l_inside_try.addStatement(l_return_statement)
                         }
                         if (!l_return_expression_visitor.p_is_return_added) {
-                            l_inside_try.addStatement(create_log_exit_statement(l_method_node))
+                            if (l_black_box_type != "error") {
+                                l_inside_try.addStatement(create_log_exit_statement(l_method_node))
+                            }
                         }
-                        l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) nodes[0], l_method_node))
+                        if (l_black_box_type != "error") {
+                            l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[0], l_method_node))
+                        } else {
+                            l_changed_block_statement.addStatement(create_try_catch_statement_error_only(l_inside_try, (AnnotationNode) i_ast_nodes[0], l_method_node))
+                        }
                         l_method_node.setCode(l_changed_block_statement)
                         log("Finished Processing method: " + l_method_node.getName())
                     }
                 } else {
-                    this.addError("@I_black_box should be applied to Methods.", node)
+                    this.addError("@I_black_box should be applied to Methods.", l_first_node)
                 }
             } else {
-                throw new RuntimeException("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + Arrays.asList(nodes))
+                throw new RuntimeException("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + Arrays.asList(i_ast_nodes))
             }
         } catch (Exception e) {
             log(e.toString())
@@ -140,11 +156,36 @@ public class T_black_box_transformation extends AbstractASTTransformation {
         return (Statement) l_resulting_statements.first()
     }
 
+    Statement create_log_error_statement_error_only(MethodNode i_method_node) {
+        Parameter[] l_arguments = i_method_node.getParameters()
+        String l_serialized_parameters = ""
+        if (l_arguments.size() != 0) {
+            for (l_argument in l_arguments) {
+                l_serialized_parameters += "," + "l_shortcuts.r(" + l_argument.getName() + ",\"" + l_argument.getName() + "\")"
+            }
+        }
+        String l_log_enter_code = "l_logger.log_error(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\", e_others" + l_serialized_parameters + ")"
+        log(l_log_enter_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
+        return (Statement) l_resulting_statements.first()
+    }
+
     TryCatchStatement create_try_catch_statement(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
         log("create_try_catch_statement")
         TryCatchStatement tryCatchStatement = new TryCatchStatement(i_block_statement, EmptyStatement.INSTANCE)
         BlockStatement l_throw_block = new BlockStatement()
         l_throw_block.addStatement(create_log_error_statement(i_method_node))
+        l_throw_block.addStatement(rethrow(i_annotation_node))
+        tryCatchStatement.addCatch(GeneralUtils.catchS(GeneralUtils.param(PC_CATCHED_THROWABLE_TYPE, "e_others"), l_throw_block))
+        log("finished create_try_catch_statement")
+        return tryCatchStatement
+    }
+
+    TryCatchStatement create_try_catch_statement_error_only(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
+        log("create_try_catch_statement")
+        TryCatchStatement tryCatchStatement = new TryCatchStatement(i_block_statement, EmptyStatement.INSTANCE)
+        BlockStatement l_throw_block = new BlockStatement()
+        l_throw_block.addStatement(create_log_error_statement_error_only(i_method_node))
         l_throw_block.addStatement(rethrow(i_annotation_node))
         tryCatchStatement.addCatch(GeneralUtils.catchS(GeneralUtils.param(PC_CATCHED_THROWABLE_TYPE, "e_others"), l_throw_block))
         log("finished create_try_catch_statement")

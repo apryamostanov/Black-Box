@@ -203,9 +203,16 @@ class T_logger implements I_logger {
         I_event l_event = create_event("error", i_class_name, i_method_name)
         l_event.set_exception(i_exception)
         l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
-        l_event.add_traces_runtime(get_current_method_invocation().get_method_arguments())
         log_generic(l_event)
         pop()
+    }
+
+    @Override
+    void log_error(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
+        I_event l_event = create_event("error", i_class_name, i_method_name)
+        l_event.set_exception(i_exception)
+        l_event.add_traces_runtime(objects2traces_array(i_traces, T_s.c().GC_TRACE_SOURCE_RUNTIME))
+        log_generic(l_event)
     }
 
     @Override

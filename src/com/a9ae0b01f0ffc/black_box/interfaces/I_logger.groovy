@@ -44,6 +44,8 @@ interface I_logger {
 
     void log_exception(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces)
 
+    void log_error(String i_class_name, String i_method_name, Exception i_exception, I_trace... i_traces)
+
     void log_debug(
             T_static_string i_static_string_message
             , I_trace... i_traces

@@ -8,8 +8,14 @@ import com.a9ae0b01f0ffc.static_string.T_static_string_builder
 
 class T_s {
 
+    static T_commons p_commons = null
+
     static T_commons c() {
-        return T_context.getInstance().p_commons_thread_local.get()
+        if (p_commons == null) {
+            p_commons = T_context.getInstance().p_commons_thread_local.get()
+        }
+        return p_commons
+        //return T_context.getInstance().p_commons_thread_local.get()
     }
 
     static T_class_loader ioc() {

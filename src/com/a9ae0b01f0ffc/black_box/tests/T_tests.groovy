@@ -15,7 +15,8 @@ import org.junit.Test
 class T_tests {
 
     static final String PC_TEST_CONF_PATH = "src/com/a9ae0b01f0ffc/black_box/tests/conf/"
-    static final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton\\IdeaProjects\\mighty_logger2\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
+    static
+    final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton\\IdeaProjects\\mighty_logger2\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
 
@@ -269,7 +270,6 @@ class T_tests {
                 "        <trace name=\"invocation\" serialized_representation=\"T_method_invocation{p_class_name='T_tests', p_method_name='test_027', p_method_arguments=[com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)]}\" source=\"predefined\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.implementation.T_method_invocation\" masked=\"false\" />\n" +
                 "        <trace name=\"stack\" serialized_representation=\"[T_method_invocation{p_class_name='T_tests', p_method_name='test_027', p_method_arguments=[com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)]}]\" source=\"predefined\" mask=\"\" ref_class_name=\"java.util.LinkedList\" masked=\"false\" />\n" +
                 "        <trace name=\"exception_pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
-                "        <trace name=\"i_pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan\" masked=\"false\" />\n" +
                 "        <trace name=\"pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "        <trace name=\"\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992224)\" source=\"exception_traces\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
@@ -379,7 +379,7 @@ class T_tests {
     @Test
     void test_040() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_040.conf")
-        assert 41==new T_case_investigations().get_value_position()
+        assert 41 == new T_case_investigations().get_value_position()
     }
 
     @Test
@@ -389,5 +389,16 @@ class T_tests {
         T_s.l().print_stats()
     }
 
+    @Test
+    void test_042() {
+        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_042.conf")
+        try {
+            String w = new T_case_investigations().test_error()
+        } catch (Exception e_others) {
+            assert T_destination_variable.l() == "error|SOME_ERROR"
+            return
+        }
+        assert false
+    }
 
 }

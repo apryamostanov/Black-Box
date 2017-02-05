@@ -11,5 +11,5 @@ import java.lang.annotation.Target
 @Retention(RetentionPolicy.SOURCE)
 @GroovyASTTransformationClass("com.a9ae0b01f0ffc.black_box.implementation.annotations.T_black_box_transformation")
 @interface I_black_box {
-    Class value() default {true}
+    String value() default ""
 }
