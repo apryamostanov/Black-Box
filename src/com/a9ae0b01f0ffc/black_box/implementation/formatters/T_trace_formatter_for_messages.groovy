@@ -17,7 +17,7 @@ class T_trace_formatter_for_messages implements I_trace_formatter {
         Integer l_trace_seqno = T_s.c().GC_ZERO
         for (I_trace l_runtime_trace in i_parent_event.get_traces_runtime()) {
             l_trace_seqno ++
-            l_formatted_trace.replace(T_s.c().GC_MESSAGE_FORMAT_TOKEN_TRACE + l_trace_seqno.toString(), l_runtime_trace.toString())
+            l_formatted_trace = l_formatted_trace.replace((T_s.c().GC_MESSAGE_FORMAT_TOKEN_TRACE + l_trace_seqno.toString()), l_runtime_trace.toString())
         }
         return l_formatted_trace
     }

@@ -402,5 +402,11 @@ class T_tests {
         assert false
     }
 
+    @Test
+    void test_043() {
+        T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_043.conf")
+        T_s.l().log_info(T_s.s().HELLO_WORLD_Z1, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
+        assert T_destination_variable.l() == "info|HELLO WORLD com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)"
+    }
 
 }
