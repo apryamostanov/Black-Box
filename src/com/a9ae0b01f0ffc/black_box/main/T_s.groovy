@@ -11,11 +11,7 @@ class T_s {
     static T_commons p_commons = null
 
     static T_commons c() {
-        if (p_commons == null) {
-            p_commons = T_context.getInstance().p_commons_thread_local.get()
-        }
-        return p_commons
-        //return T_context.getInstance().p_commons_thread_local.get()
+        return T_context.getInstance().p_commons_thread_local.get()
     }
 
     static T_class_loader ioc() {

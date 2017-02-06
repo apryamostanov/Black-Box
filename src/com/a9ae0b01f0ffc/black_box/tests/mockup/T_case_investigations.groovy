@@ -13,7 +13,7 @@ class T_case_investigations {
     Integer z
 
     @I_black_box
-    private Integer get_value_position() {
+    public Integer get_value_position() {
         if (p_current_direction != PC_VTS_TO_HOST) {
             return PC_VTS_LOG_VALUE_POSITION_SENT
         } else {

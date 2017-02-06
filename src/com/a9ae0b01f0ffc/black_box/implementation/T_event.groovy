@@ -4,7 +4,6 @@ import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.static_string.T_static_string
 
 class T_event extends T_inherited_configurations implements I_event {
@@ -17,7 +16,7 @@ class T_event extends T_inherited_configurations implements I_event {
     private ArrayList<I_trace> p_traces_runtime = new ArrayList<I_trace>()
     private ArrayList<I_trace> p_traces_config = new ArrayList<I_trace>()
     private T_static_string p_message = T_s.c().GC_NULL_OBJ_REF as T_static_string
-    private Exception p_exception = T_s.c().GC_NULL_OBJ_REF as Exception
+    private Throwable p_throwable = T_s.c().GC_NULL_OBJ_REF as Throwable
 
     @Override
     String get_class_name() {
@@ -65,8 +64,8 @@ class T_event extends T_inherited_configurations implements I_event {
     }
 
     @Override
-    Exception get_exception() {
-        return p_exception
+    Throwable get_throwable() {
+        return p_throwable
     }
 
     @Override
@@ -110,8 +109,8 @@ class T_event extends T_inherited_configurations implements I_event {
     }
 
     @Override
-    void set_exception(Exception i_exception) {
-        this.p_exception = i_exception
+    void set_throwable(Throwable i_throwable) {
+        this.p_throwable = i_throwable
     }
 
     @Override

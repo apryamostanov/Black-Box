@@ -22,7 +22,7 @@ interface I_event extends I_inherited_configurations {
 
     T_static_string get_message()
 
-    Exception get_exception()
+    Throwable get_throwable()
 
     String get_event_type()
 
@@ -40,7 +40,7 @@ interface I_event extends I_inherited_configurations {
 
     void set_message(T_static_string i_message)
 
-    void set_exception(Exception i_exception)
+    void set_throwable(Throwable i_throwable)
 
     I_trace get_corresponding_trace(I_trace i_trace_config)
 
