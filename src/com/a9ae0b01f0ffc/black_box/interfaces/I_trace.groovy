@@ -46,4 +46,6 @@ interface I_trace extends I_inherited_configurations, I_object_with_guid {
 
     String get_ref_guid()
 
+    String format_trace(I_event i_source_event)
+
 }

@@ -97,7 +97,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     void log_generic(I_event i_event) {
         if (p_configuration_events_by_name.containsKey(i_event.get_event_type())) {
             ArrayList<I_trace> l_trace_list = prepare_trace_list(i_event)
-            store(l_trace_list)
+            store(l_trace_list, i_event)
         }
     }
 

@@ -2,6 +2,7 @@ package com.a9ae0b01f0ffc.black_box.implementation.formatters
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_inherited_configurations
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
+import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
@@ -31,7 +32,7 @@ class T_event_formatter_html extends T_event_formatter implements I_event_format
     }
 
     @Override
-    String format_traces(ArrayList<I_trace> i_event_traces) {
+    String format_traces(ArrayList<I_trace> i_event_traces, I_event i_source_event) {
         String l_result = T_s.c().GC_EMPTY_STRING
         if (!p_header_was_added) {
             l_result += "<html><head><style type=\"text/css\"></style></head><body><table border=1><tr><td>Datetimestamp</td><td>Process</td><td>Event</td><td>Class</td><td>Method</td><td>Depth</td><td>Trace Data</td></tr>"
@@ -47,17 +48,17 @@ class T_event_formatter_html extends T_event_formatter implements I_event_format
         String l_trace_data = T_s.c().GC_EMPTY_STRING
         for (I_trace l_trace in i_event_traces) {
             if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_DATETIMESTAMP.get_name()) {
-                l_datetimestamp = l_trace.toString()
+                l_datetimestamp = l_trace.format_trace(i_source_event)
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_PROCESSID.get_name()) {
-                l_processid = l_trace.toString()
+                l_processid = l_trace.format_trace(i_source_event)
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_EVENT_TYPE.get_name()) {
-                l_event_type = l_trace.toString()
+                l_event_type = l_trace.format_trace(i_source_event)
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_CLASS_NAME.get_name()) {
-                l_class_name = l_trace.toString()
+                l_class_name = l_trace.format_trace(i_source_event)
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_METHOD_NAME.get_name()) {
-                l_method_name = l_trace.toString()
+                l_method_name = l_trace.format_trace(i_source_event)
             } else if (l_trace.get_name() == T_destination.PC_STATIC_TRACE_NAME_DEPTH.get_name()) {
-                l_depth = l_trace.toString()
+                l_depth = l_trace.format_trace(i_source_event)
             } else {
                 l_trace_data += (format_trace(l_trace) + "<br/>")
             }

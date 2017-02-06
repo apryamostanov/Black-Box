@@ -216,7 +216,7 @@ class T_logger implements I_logger {
     }
 
     @Override
-    void log_debug(T_static_string i_static_string_message, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG) {
+    void log_debug(T_static_string i_static_string_message, Object... i_traces = T_s.c().GC_SKIPPED_ARG as Object[]) {
         I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_message)
         if (method_arguments_exist(i_traces)) {
@@ -236,7 +236,7 @@ class T_logger implements I_logger {
     }
 
     @Override
-    void log_warning(T_static_string i_static_string_warning, I_trace... i_traces = T_s.c().GC_SKIPPED_ARG as I_trace[]) {
+    void log_warning(T_static_string i_static_string_warning, Object... i_traces = T_s.c().GC_SKIPPED_ARG as Object[]) {
         I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_warning)
         if (method_arguments_exist(i_traces)) {

@@ -16,7 +16,7 @@ interface I_destination extends I_inherited_configurations{
 
     String get_destination_purpose()
 
-    void store(ArrayList<I_trace> i_trace_list)
+    void store(ArrayList<I_trace> i_trace_list, I_event i_source_event)
 
     String get_buffer()
 

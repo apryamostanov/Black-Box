@@ -48,7 +48,7 @@ interface I_logger {
 
     void log_debug(
             T_static_string i_static_string_message
-            , I_trace... i_traces
+            , Object... i_traces
     )
 
     void log_info(
@@ -58,7 +58,7 @@ interface I_logger {
 
     void log_warning(
             T_static_string i_static_string_warning
-            , I_trace... i_traces
+            , Object... i_traces
     )
 
     I_event create_event(String i_event_type, String i_class_name, String i_method_name)

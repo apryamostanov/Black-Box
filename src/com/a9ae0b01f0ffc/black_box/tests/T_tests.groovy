@@ -16,7 +16,8 @@ class T_tests {
 
     static final String PC_TEST_CONF_PATH = "src/com/a9ae0b01f0ffc/black_box/tests/conf/"
     static
-    final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton\\IdeaProjects\\mighty_logger2\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
+    final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton.pryamostanov\\IdeaProjects\\Black-Box\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
+    //final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton\\IdeaProjects\\mighty_logger2\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
 

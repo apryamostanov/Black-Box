@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
+import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
@@ -10,9 +11,9 @@ class T_destination_file extends T_destination {
     Boolean p_is_file_init = T_s.c().GC_FALSE
 
     @Override
-    void store(ArrayList<I_trace> i_trace_list) {
+    void store(ArrayList<I_trace> i_trace_list, I_event i_source_event) {
         init_file()
-        p_file_writer.write(p_formatter.format_traces(i_trace_list))
+        p_file_writer.write(p_formatter.format_traces(i_trace_list, i_source_event))
         p_file_writer.flush()
     }
 

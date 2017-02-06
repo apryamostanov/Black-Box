@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
+import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_maskable
 import com.a9ae0b01f0ffc.black_box.interfaces.I_non_sensitive
 import com.a9ae0b01f0ffc.black_box.interfaces.I_object_with_guid
@@ -39,13 +40,20 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Override
-    String toString() {
+    String format_trace(I_event i_source_event) {
         String l_result_string = T_s.c().GC_EMPTY_STRING
         if (get_formatter() != T_s.c().GC_NULL_OBJ_REF) {
-            l_result_string += get_formatter().format_trace(this)
+            l_result_string += get_formatter().format_trace(this, i_source_event)
         } else {
             l_result_string += to_string()
         }
+        return l_result_string
+    }
+
+    @Override
+    String toString() {
+        String l_result_string = T_s.c().GC_EMPTY_STRING
+        l_result_string += to_string()
         return l_result_string
     }
 

@@ -64,6 +64,9 @@ class T_commons {
     static String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
     static String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     static String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
+    static String GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_BEFORE = "_"
+    static String GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_AFTER = " "
+    static String GC_MESSAGE_FORMAT_TOKEN_TRACE = "Z"
 
     static void init_custom(String i_conf_file_name) {
         GC_CONST_CONF = new T_conf(i_conf_file_name)
