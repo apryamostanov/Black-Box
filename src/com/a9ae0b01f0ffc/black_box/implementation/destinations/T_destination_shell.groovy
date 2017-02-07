@@ -7,7 +7,7 @@ class T_destination_shell extends T_destination {
 
     @Override
     void store(ArrayList<I_trace> i_trace_list, I_event i_source_event) {
-        System.out.println(p_formatter.format_traces(i_trace_list, i_source_event))
+        System.out.print(p_formatter.format_traces(i_trace_list, i_source_event))
     }
 
 }

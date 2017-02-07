@@ -17,6 +17,6 @@ class T_event_formatter_csv extends T_event_formatter implements I_event_formatt
             }
             l_result_string += l_trace.format_trace(i_source_event)
         }
-        return l_result_string
+        return l_result_string + System.lineSeparator()
     }
 }

@@ -45,6 +45,7 @@ class T_commons {
     static final String GC_TRACE_MASK_NONE = "none"
     static final String GC_FALSE_STRING = "false"
     static final String GC_TRUE_STRING = "true"
+    static final String GC_SPACE = " "
     static T_conf GC_CONST_CONF = GC_NULL_OBJ_REF as T_conf
     static String GC_LOG_DATETIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
     static String GC_LOG_FILENAME_DATE_FORMAT = "yyyyMMdd"

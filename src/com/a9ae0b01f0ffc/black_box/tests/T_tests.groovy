@@ -25,14 +25,14 @@ class T_tests {
     void test_001() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_001.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|T_method_invocation{p_class_name='Unknown Class', p_method_name='Unknown Method', p_method_arguments=[]}|[]"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|T_method_invocation{p_class_name='Unknown Class', p_method_name='Unknown Method', p_method_arguments=[]}|[]" + System.lineSeparator()
     }
 
     @Test
     void test_002() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_002.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD" + System.lineSeparator()
     }
 
     @Test
@@ -40,7 +40,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_003.conf")
         T_s.l().put_to_context(new T_pan(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)" + System.lineSeparator()
     }
 
     @Test
@@ -48,105 +48,105 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_004.conf")
         T_s.l().put_to_context(new T_pan(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace missing"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace missing" + System.lineSeparator()
     }
 
     @Test
     void test_005() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_005.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)" + System.lineSeparator()
     }
 
     @Test
     void test_006() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_006.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace missing"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace missing" + System.lineSeparator()
     }
 
     @Test
     void test_007() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_007.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_008() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_008.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_009() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_009.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|444777******2222"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|444777******2222" + System.lineSeparator()
     }
 
     @Test
     void test_010() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_010.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked"
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_011() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_011.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)"
+        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)" + System.lineSeparator()
     }
 
     @Test
     void test_012() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_012.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked"
+        assert T_destination_variable.l() == "Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_013() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_013.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "444777******2222"
+        assert T_destination_variable.l() == "444777******2222" + System.lineSeparator()
     }
 
     @Test
     void test_014() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_014.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked"
+        assert T_destination_variable.l() == "Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_015() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_015.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked"
+        assert T_destination_variable.l() == "Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_016() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_016.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)"
+        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992222)" + System.lineSeparator()
     }
 
     @Test
     void test_017() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_017.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked"
+        assert T_destination_variable.l() == "Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_018() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_018.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "444777******2222"
+        assert T_destination_variable.l() == "444777******2222" + System.lineSeparator()
     }
 
     @Test
@@ -154,7 +154,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_019.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked|444777******2222"
+        assert T_destination_variable.l() == "Trace masked|444777******2222" + System.lineSeparator()
     }
 
     @Test
@@ -162,7 +162,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_020.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan(PC_PAN), "pan"))
-        assert T_destination_variable.l() == "Trace masked|444777******2222"
+        assert T_destination_variable.l() == "Trace masked|444777******2222" + System.lineSeparator()
     }
 
     @Test
@@ -170,7 +170,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_021.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)|**********2222"
+        assert T_destination_variable.l() == "com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)|**********2222" + System.lineSeparator()
     }
 
     @Test
@@ -178,7 +178,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_022.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        assert T_destination_variable.l() == "Trace masked|**********2222"
+        assert T_destination_variable.l() == "Trace masked|**********2222" + System.lineSeparator()
     }
 
     @Test
@@ -190,7 +190,7 @@ class T_tests {
         } catch (Exception e_exception) {
             T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
         }
-        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|Trace masked"
+        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|Trace masked" + System.lineSeparator()
     }
 
     @Test
@@ -202,7 +202,7 @@ class T_tests {
         } catch (Exception e_exception) {
             T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
         }
-        assert T_destination_variable.l() == "TEST_EXCEPTION|**********2222|**********2224|**********2223"
+        assert T_destination_variable.l() == "TEST_EXCEPTION|**********2222|**********2224|**********2223" + System.lineSeparator()
     }
 
     @Test
@@ -326,7 +326,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_032.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|Trace masked"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|Trace masked" + System.lineSeparator()
     }
 
     @Test
@@ -334,35 +334,35 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_033.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|**********2223"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|**********2223" + System.lineSeparator()
     }
 
     @Test
     void test_034() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_034.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|Trace masked|Trace masked"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|Trace masked|Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_035() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_035.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)" + System.lineSeparator()
     }
 
     @Test
     void test_036() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_036.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|Trace masked"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|444777******2221|Trace masked|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|Trace masked" + System.lineSeparator()
     }
 
     @Test
     void test_037() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_037.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
-        assert T_destination_variable.l() == "info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive(4447778899992222)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)"
+        assert T_destination_variable.l() == "info|HELLO_WORLD|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive(4447778899992222)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive(4447778899992223)|com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992224)" + System.lineSeparator()
     }
 
     @Test
@@ -396,7 +396,7 @@ class T_tests {
         try {
             String w = new T_case_investigations().test_error()
         } catch (Exception e_others) {
-            assert T_destination_variable.l() == "error|SOME_ERROR"
+            assert T_destination_variable.l() == "error|SOME_ERROR" + System.lineSeparator()
             return
         }
         assert false
@@ -406,7 +406,7 @@ class T_tests {
     void test_043() {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_043.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD_Z1, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
-        assert T_destination_variable.l() == "info|HELLO WORLD com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)"
+        assert T_destination_variable.l() == "info|HELLO WORLD com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)" + System.lineSeparator()
     }
 
 }
