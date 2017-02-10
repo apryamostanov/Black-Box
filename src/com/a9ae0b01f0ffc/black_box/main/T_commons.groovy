@@ -1,8 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.configuration_utility.implementation.T_conf
+import a9ae0b01f0ffc.commons.config_helper.T_conf
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.static_string.T_static_string_builder
+import a9ae0b01f0ffc.commons.static_string.T_static_string_builder
 
 import java.lang.management.ManagementFactory
 

@@ -8,7 +8,6 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_sensitive
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import groovy.util.slurpersupport.GPathResult
 
 class T_trace extends T_inherited_configurations implements I_trace {
 

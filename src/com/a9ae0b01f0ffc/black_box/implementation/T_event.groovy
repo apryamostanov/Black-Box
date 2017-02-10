@@ -4,7 +4,7 @@ import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.static_string.T_static_string
+import a9ae0b01f0ffc.commons.static_string.T_static_string
 
 class T_event extends T_inherited_configurations implements I_event {
 

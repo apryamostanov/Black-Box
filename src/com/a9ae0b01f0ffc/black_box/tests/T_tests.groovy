@@ -1,10 +1,11 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
+import a9ae0b01f0ffc.commons.main.T_const
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_case_investigations
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive
 import com.a9ae0b01f0ffc.black_box.tests.mockup.T_sample_class_for_annotation_test
-import com.a9ae0b01f0ffc.exceptions.E_application_exception
+import a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
 import com.a9ae0b01f0ffc.black_box.main.T_context
 import com.a9ae0b01f0ffc.black_box.main.T_s
@@ -14,10 +15,9 @@ import org.junit.Test
 
 class T_tests {
 
-    static final String PC_TEST_CONF_PATH = "src/com/a9ae0b01f0ffc/black_box/tests/conf/"
+    static final String PC_TEST_CONF_PATH = "./src/com/a9ae0b01f0ffc/black_box/tests/conf/"
     static
-    final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton.pryamostanov\\IdeaProjects\\Black-Box\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
-    //final String PC_COMMONS_CONF_NAME = "C:\\Users\\anton\\IdeaProjects\\mighty_logger2\\src\\com\\a9ae0b01f0ffc\\black_box\\conf\\commons.conf"
+    final String PC_COMMONS_CONF_NAME = "./src/com/a9ae0b01f0ffc/black_box/conf/commons.conf"
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
 
@@ -190,7 +190,7 @@ class T_tests {
         } catch (Exception e_exception) {
             T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
         }
-        assert T_destination_variable.l() == "TEST_EXCEPTION|Trace masked|**********2222|Trace masked" + System.lineSeparator()
+        assert T_destination_variable.l() == "TEST EXCEPTION|Trace masked|**********2222|Trace masked" + System.lineSeparator()
     }
 
     @Test
@@ -202,7 +202,7 @@ class T_tests {
         } catch (Exception e_exception) {
             T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
         }
-        assert T_destination_variable.l() == "TEST_EXCEPTION|**********2222|**********2224|**********2223" + System.lineSeparator()
+        assert T_destination_variable.l() == "TEST EXCEPTION|**********2222|**********2224|**********2223" + System.lineSeparator()
     }
 
     @Test
@@ -211,6 +211,7 @@ class T_tests {
         T_context.getInstance().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_025.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        E_application_exception.set_is_tokenization_enabled(T_const.GC_FALSE)
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"method\" serialized_representation=\"test_025\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -224,6 +225,7 @@ class T_tests {
                 "        <trace name=\"i_pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan\" masked=\"false\" />\n" +
                 "        <trace name=\"pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
+        E_application_exception.set_is_tokenization_enabled(T_const.GC_TRUE)
         assert T_destination_variable.l() == l_expected.replaceAll("\n", "\r\n")
     }
 
@@ -266,7 +268,7 @@ class T_tests {
                 "        <trace name=\"method\" serialized_representation=\"test_027\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"depth\" serialized_representation=\"1\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"event\" serialized_representation=\"error\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
-                "        <trace name=\"exception_message\" serialized_representation=\"TEST_EXCEPTION\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
+                "        <trace name=\"exception_message\" serialized_representation=\"TEST EXCEPTION\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"message\" serialized_representation=\"null\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"invocation\" serialized_representation=\"T_method_invocation{p_class_name='T_tests', p_method_name='test_027', p_method_arguments=[com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)]}\" source=\"predefined\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.implementation.T_method_invocation\" masked=\"false\" />\n" +
                 "        <trace name=\"stack\" serialized_representation=\"[T_method_invocation{p_class_name='T_tests', p_method_name='test_027', p_method_arguments=[com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)]}]\" source=\"predefined\" mask=\"\" ref_class_name=\"java.util.LinkedList\" masked=\"false\" />\n" +
@@ -396,7 +398,7 @@ class T_tests {
         try {
             String w = new T_case_investigations().test_error()
         } catch (Exception e_others) {
-            assert T_destination_variable.l() == "error|SOME_ERROR" + System.lineSeparator()
+            assert T_destination_variable.l() == "error|SOME ERROR" + System.lineSeparator()
             return
         }
         assert false

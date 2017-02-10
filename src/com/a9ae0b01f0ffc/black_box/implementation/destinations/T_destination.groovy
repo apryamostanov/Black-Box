@@ -1,7 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_inherited_configurations
-import com.a9ae0b01f0ffc.exceptions.E_application_exception
+import a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter

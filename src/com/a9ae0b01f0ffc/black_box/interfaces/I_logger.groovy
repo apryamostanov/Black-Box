@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-import com.a9ae0b01f0ffc.static_string.T_static_string
+import a9ae0b01f0ffc.commons.static_string.T_static_string
 
 interface I_logger {
 

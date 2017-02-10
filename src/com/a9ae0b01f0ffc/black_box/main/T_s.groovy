@@ -1,10 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.implementation.T_class_loader
+import a9ae0b01f0ffc.commons.ioc.T_class_loader
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.static_string.T_static_string
-import com.a9ae0b01f0ffc.static_string.T_static_string_builder
+import a9ae0b01f0ffc.commons.static_string.T_static_string
+import a9ae0b01f0ffc.commons.static_string.T_static_string_builder
 
 class T_s {
 
