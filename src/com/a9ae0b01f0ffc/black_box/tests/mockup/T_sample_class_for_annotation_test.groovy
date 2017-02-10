@@ -2,7 +2,7 @@ package com.a9ae0b01f0ffc.black_box.tests.mockup
 
 import com.a9ae0b01f0ffc.black_box.implementation.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import a9ae0b01f0ffc.commons.exceptions.E_application_exception
+import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 
 class T_sample_class_for_annotation_test {
 

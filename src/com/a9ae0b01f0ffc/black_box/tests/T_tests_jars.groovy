@@ -1,7 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
-import a9ae0b01f0ffc.commons.config_helper.T_conf
-import a9ae0b01f0ffc.commons.static_string.T_static_string_builder
+import com.a9ae0b01f0ffc.commons.config_helper.T_conf
+import com.a9ae0b01f0ffc.commons.static_string.T_static_string_builder
 import org.junit.Test
 
 class T_tests_jars {

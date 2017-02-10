@@ -2,13 +2,14 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
+import com.a9ae0b01f0ffc.black_box.main.T_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 
 class T_method_invocation implements I_method_invocation {
 
-    String p_class_name = T_s.c().GC_EMPTY_STRING
-    String p_method_name = T_s.c().GC_EMPTY_STRING
-    ArrayList<I_trace> p_method_arguments = T_s.c().GC_SKIPPED_ARG as ArrayList<I_trace>
+    String p_class_name = T_const.GC_EMPTY_STRING
+    String p_method_name = T_const.GC_EMPTY_STRING
+    ArrayList<I_trace> p_method_arguments = T_const.GC_SKIPPED_ARGS as ArrayList<I_trace>
 
     @Override
     String get_class_name() {

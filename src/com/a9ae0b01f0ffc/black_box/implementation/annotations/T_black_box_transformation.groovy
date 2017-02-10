@@ -1,19 +1,12 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package com.a9ae0b01f0ffc.black_box.implementation.annotations
 
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import jdk.nashorn.internal.ir.Block
 import org.codehaus.groovy.ast.*
 import org.codehaus.groovy.ast.builder.AstBuilder
 import org.codehaus.groovy.ast.expr.*
 import org.codehaus.groovy.ast.stmt.BlockStatement
 import org.codehaus.groovy.ast.stmt.EmptyStatement
 import org.codehaus.groovy.ast.stmt.ExpressionStatement
-import org.codehaus.groovy.ast.stmt.ReturnStatement
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.ast.stmt.ThrowStatement
 import org.codehaus.groovy.ast.stmt.TryCatchStatement

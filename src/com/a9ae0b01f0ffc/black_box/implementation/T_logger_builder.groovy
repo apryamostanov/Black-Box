@@ -1,8 +1,9 @@
-package com.a9ae0b01f0ffc.black_box.main
+package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_inherited_configurations
-import a9ae0b01f0ffc.commons.exceptions.E_application_exception
-import a9ae0b01f0ffc.commons.ioc.T_class_loader
+import com.a9ae0b01f0ffc.black_box.main.T_const
+import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
+import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
@@ -10,20 +11,16 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
+import com.a9ae0b01f0ffc.black_box.main.T_s
 import groovy.util.slurpersupport.GPathResult
 
 class T_logger_builder implements I_logger_builder {
 
-    T_class_loader p_class_loader = T_s.c().GC_NULL_OBJ_REF as T_class_loader
-    GPathResult p_conf = T_s.c().GC_NULL_OBJ_REF as GPathResult
-
-    T_logger_builder(String i_class_conf_file_name) {
-        p_class_loader = new T_class_loader(i_class_conf_file_name)
-    }
+    GPathResult p_conf = T_const.GC_NULL_OBJ_REF as GPathResult
 
     I_logger create_logger(String i_conf_file_name) {
         p_conf = (GPathResult) new XmlSlurper().parse(i_conf_file_name)
-        I_logger l_logger = (I_logger) p_class_loader.instantiate("I_logger")
+        I_logger l_logger = (I_logger) T_s.ioc().instantiate("I_logger")
         if (!p_conf.@mode.isEmpty()) {
             l_logger.set_mode(p_conf.@mode.text())
         }
@@ -34,14 +31,14 @@ class T_logger_builder implements I_logger_builder {
     }
 
     I_destination init_destination(GPathResult i_destination_xml) {
-        I_destination l_destination = (I_destination) p_class_loader.instantiate(i_destination_xml.name())
+        I_destination l_destination = (I_destination) T_s.ioc().instantiate(i_destination_xml.name())
         if (!i_destination_xml.@purpose.isEmpty()) {
             l_destination.set_destination_purpose(i_destination_xml.@purpose.text())
         } else {
             throw new E_application_exception(T_s.s().PURPOSE_IS_MANDATORY_FOR_DESTINATIONS, i_destination_xml.name())
         }
         if (!i_destination_xml.@formatter.isEmpty()) {
-            I_event_formatter l_event_formatter = p_class_loader.instantiate(i_destination_xml.@formatter.text()) as I_event_formatter
+            I_event_formatter l_event_formatter = T_s.ioc().instantiate(i_destination_xml.@formatter.text()) as I_event_formatter
             if (!i_destination_xml.@guid.isEmpty()) {
                 l_event_formatter.set_print_trace_guid(i_destination_xml.@guid.text())
             }
@@ -71,7 +68,7 @@ class T_logger_builder implements I_logger_builder {
     }
 
     I_event init_event(GPathResult i_event_xml, I_inherited_configurations i_inherited_configurations) {
-        I_event l_event = (I_event) p_class_loader.instantiate(i_event_xml.name())
+        I_event l_event = (I_event) T_s.ioc().instantiate(i_event_xml.name())
         l_event.set_event_type(i_event_xml.name())
         if (!i_event_xml.@mask.isEmpty()) {
             l_event.set_mask(i_event_xml.@mask.text())
@@ -85,7 +82,7 @@ class T_logger_builder implements I_logger_builder {
     }
 
     I_trace init_trace(GPathResult i_trace_xml, I_inherited_configurations i_inherited_configurations) {
-        I_trace l_trace_config = (I_trace) p_class_loader.instantiate("I_trace")
+        I_trace l_trace_config = (I_trace) T_s.ioc().instantiate("I_trace")
         l_trace_config.set_name(i_trace_xml.name())
         if (!i_trace_xml.@mask.isEmpty()) {
             l_trace_config.set_mask(i_trace_xml.@mask.text())
@@ -96,7 +93,7 @@ class T_logger_builder implements I_logger_builder {
             l_trace_config.set_muted(i_trace_xml.@mute.asBoolean())
         }
         if (!i_trace_xml.@formatter.isEmpty()) {
-            l_trace_config.set_formatter((I_trace_formatter) p_class_loader.instantiate(i_trace_xml.@formatter.text()))
+            l_trace_config.set_formatter((I_trace_formatter) T_s.ioc().instantiate(i_trace_xml.@formatter.text()))
         }
         if (!i_trace_xml.@source.isEmpty()) {
             l_trace_config.set_source(i_trace_xml.@source.text())
@@ -108,6 +105,6 @@ class T_logger_builder implements I_logger_builder {
     }
 
     T_class_loader get_class_loader() {
-        return p_class_loader
+        return T_s.ioc()
     }
 }
