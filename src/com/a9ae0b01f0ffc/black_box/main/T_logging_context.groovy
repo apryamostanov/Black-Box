@@ -20,16 +20,16 @@ final class T_logging_context {
     }
 
     T_class_loader get_ioc() {
-        return p_ioc
+        return p_context_thread_local.get().p_ioc
     }
 
     void init_logger(String i_logger_conf_file_name) {
-        p_logger = ((I_logger_builder) get_ioc().instantiate(T_logging_const.GC_LOGGER_BUILDER_INTERFACE)).create_logger(i_logger_conf_file_name)
+        p_context_thread_local.get().p_logger = ((I_logger_builder) get_ioc().instantiate(T_logging_const.GC_LOGGER_BUILDER_INTERFACE)).create_logger(i_logger_conf_file_name)
     }
 
     void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name) {
-        p_commons = new T_logging_commons(i_commons_conf_file_name)
-        p_ioc = new T_class_loader(T_s.c().GC_CLASS_LOADER_CONF_FILE_NAME)
+        p_context_thread_local.get().p_commons = new T_logging_commons(i_commons_conf_file_name)
+        p_context_thread_local.get().p_ioc = new T_class_loader(T_s.c().GC_CLASS_LOADER_CONF_FILE_NAME)
         init_logger(i_logger_conf_file_name)
     }
 
