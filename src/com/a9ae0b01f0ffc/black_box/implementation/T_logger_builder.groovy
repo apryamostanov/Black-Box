@@ -1,22 +1,15 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
-import com.a9ae0b01f0ffc.black_box.interfaces.I_inherited_configurations
-import com.a9ae0b01f0ffc.black_box.main.T_const
+import com.a9ae0b01f0ffc.black_box.interfaces.*
+import com.a9ae0b01f0ffc.black_box.main.T_logging_const
+import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
-import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
-import com.a9ae0b01f0ffc.black_box.interfaces.I_event
-import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
-import com.a9ae0b01f0ffc.black_box.main.T_s
 import groovy.util.slurpersupport.GPathResult
 
 class T_logger_builder implements I_logger_builder {
 
-    GPathResult p_conf = T_const.GC_NULL_OBJ_REF as GPathResult
+    GPathResult p_conf = T_logging_const.GC_NULL_OBJ_REF as GPathResult
 
     I_logger create_logger(String i_conf_file_name) {
         p_conf = (GPathResult) new XmlSlurper().parse(i_conf_file_name)

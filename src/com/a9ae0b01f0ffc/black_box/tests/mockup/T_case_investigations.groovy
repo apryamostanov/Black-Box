@@ -1,7 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.tests.mockup
 
 import com.a9ae0b01f0ffc.black_box.implementation.annotations.I_black_box
-import com.a9ae0b01f0ffc.black_box.main.T_const
+import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 
@@ -10,11 +10,11 @@ class T_case_investigations {
     private static final String PC_VTS_TO_HOST = "VTS to Host"
     private static final Integer PC_VTS_LOG_VALUE_POSITION_SENT = 41
     private static final Integer PC_VTS_LOG_VALUE_POSITION_RECEIVED = 66
-    private String p_current_direction = T_const.GC_EMPTY_STRING
+    private String p_current_direction = T_logging_const.GC_EMPTY_STRING
     Integer z
 
     @I_black_box
-    public Integer get_value_position() {
+    Integer get_value_position() {
         if (p_current_direction != PC_VTS_TO_HOST) {
             return PC_VTS_LOG_VALUE_POSITION_SENT
         } else {

@@ -1,25 +1,19 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
-import com.a9ae0b01f0ffc.black_box.interfaces.I_event
-import com.a9ae0b01f0ffc.black_box.interfaces.I_maskable
-import com.a9ae0b01f0ffc.black_box.interfaces.I_non_sensitive
-import com.a9ae0b01f0ffc.black_box.interfaces.I_object_with_guid
-import com.a9ae0b01f0ffc.black_box.interfaces.I_sensitive
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
-import com.a9ae0b01f0ffc.black_box.main.T_const
+import com.a9ae0b01f0ffc.black_box.interfaces.*
+import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
 
 class T_trace extends T_inherited_configurations implements I_trace {
 
-    Boolean p_muted = T_const.GC_FALSE
-    I_trace_formatter p_trace_formatter = T_const.GC_NULL_OBJ_REF as I_trace_formatter
-    String p_name = T_const.GC_EMPTY_STRING
-    Object p_ref = T_const.GC_NULL_OBJ_REF
-    String p_value = T_const.GC_EMPTY_STRING
-    String p_source = T_const.GC_EMPTY_STRING
-    String p_config_class = T_const.GC_EMPTY_STRING
+    Boolean p_muted = T_logging_const.GC_FALSE
+    I_trace_formatter p_trace_formatter = T_logging_const.GC_NULL_OBJ_REF as I_trace_formatter
+    String p_name = T_logging_const.GC_EMPTY_STRING
+    Object p_ref = T_logging_const.GC_NULL_OBJ_REF
+    String p_value = T_logging_const.GC_EMPTY_STRING
+    String p_source = T_logging_const.GC_EMPTY_STRING
+    String p_config_class = T_logging_const.GC_EMPTY_STRING
 
     @Override
     Boolean is_muted() {
@@ -28,10 +22,10 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     @Override
     Boolean is_masked() {
-        if (p_mask == T_const.GC_EMPTY_STRING || p_mask == T_const.GC_FALSE_STRING || p_mask == T_const.GC_TRACE_MASK_NONE) {
-            return T_const.GC_FALSE
+        if (p_mask == T_logging_const.GC_EMPTY_STRING || p_mask == T_logging_const.GC_FALSE_STRING || p_mask == T_logging_const.GC_TRACE_MASK_NONE) {
+            return T_logging_const.GC_FALSE
         } else {
-            return T_const.GC_TRUE
+            return T_logging_const.GC_TRUE
         }
     }
 
@@ -42,8 +36,8 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     @Override
     String format_trace(I_event i_source_event) {
-        String l_result_string = T_const.GC_EMPTY_STRING
-        if (get_formatter() != T_const.GC_NULL_OBJ_REF) {
+        String l_result_string = T_logging_const.GC_EMPTY_STRING
+        if (get_formatter() != T_logging_const.GC_NULL_OBJ_REF) {
             l_result_string += get_formatter().format_trace(this, i_source_event)
         } else {
             l_result_string += to_string()
@@ -53,7 +47,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     @Override
     String toString() {
-        String l_result_string = T_const.GC_EMPTY_STRING
+        String l_result_string = T_logging_const.GC_EMPTY_STRING
         l_result_string += to_string()
         return l_result_string
     }
@@ -64,7 +58,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     private String masked() {
         if (p_ref instanceof I_maskable) {
-            if (p_value != T_const.GC_EMPTY_STRING) {
+            if (p_value != T_logging_const.GC_EMPTY_STRING) {
                 return T_s.c().GC_DEFAULT_TRACE_MASKED
 //there is no control on how objects are serialized, thus it is unknown how to mask their serialized representation.
             } else {
@@ -76,7 +70,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     private Boolean is_trace_missing() {
-        return (p_ref == T_const.GC_NULL_OBJ_REF && (p_value == T_const.GC_NULL_OBJ_REF || p_value == T_const.GC_EMPTY_STRING || p_value == T_s.c().GC_DEFAULT_TRACE))
+        return (p_ref == T_logging_const.GC_NULL_OBJ_REF && (p_value == T_logging_const.GC_NULL_OBJ_REF || p_value == T_logging_const.GC_EMPTY_STRING || p_value == T_s.c().GC_DEFAULT_TRACE))
     }
 
     private String to_string() {
@@ -85,15 +79,15 @@ class T_trace extends T_inherited_configurations implements I_trace {
         } else if (is_muted()) {
             return T_s.c().GC_DEFAULT_TRACE_MUTED
         } else if (is_masked()) {
-            if (p_mask == T_const.GC_TRACE_MASK_ALL || p_mask == T_const.GC_TRUE_STRING) {
+            if (p_mask == T_logging_const.GC_TRACE_MASK_ALL || p_mask == T_logging_const.GC_TRUE_STRING) {
                 masked()
-            } else if (p_mask == T_const.GC_TRACE_MASK_SENSITIVE) {
+            } else if (p_mask == T_logging_const.GC_TRACE_MASK_SENSITIVE) {
                 if (p_ref instanceof I_sensitive) {
                     masked()
                 } else {
                     return unmasked()
                 }
-            } else if (p_mask == T_const.GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE) {
+            } else if (p_mask == T_logging_const.GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE) {
                 if (p_ref instanceof I_non_sensitive) {
                     return unmasked()
                 } else {
@@ -124,10 +118,10 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     @Override
     String get_search_name_config() {
-        String l_result = T_const.GC_EMPTY_STRING
-        if (get_ref() != T_const.GC_NULL_OBJ_REF && p_config_class != T_const.GC_EMPTY_STRING) {
+        String l_result = T_logging_const.GC_EMPTY_STRING
+        if (get_ref() != T_logging_const.GC_NULL_OBJ_REF && p_config_class != T_logging_const.GC_EMPTY_STRING) {
             l_result = get_ref().getClass().getCanonicalName()
-        } else if (get_ref() == T_const.GC_NULL_OBJ_REF && p_config_class != T_const.GC_EMPTY_STRING) {
+        } else if (get_ref() == T_logging_const.GC_NULL_OBJ_REF && p_config_class != T_logging_const.GC_EMPTY_STRING) {
             l_result = p_config_class
         } else {
             l_result = p_name
@@ -137,8 +131,8 @@ class T_trace extends T_inherited_configurations implements I_trace {
 
     @Override
     String get_ref_class_name() {
-        String l_result = T_const.GC_EMPTY_STRING
-        if (get_ref() != T_const.GC_NULL_OBJ_REF) {
+        String l_result = T_logging_const.GC_EMPTY_STRING
+        if (get_ref() != T_logging_const.GC_NULL_OBJ_REF) {
             l_result = get_ref().getClass().getCanonicalName()
         }
         return l_result
@@ -198,7 +192,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
         if (p_ref instanceof I_object_with_guid) {
             return p_ref.get_guid()
         } else {
-            return T_const.GC_EMPTY_STRING
+            return T_logging_const.GC_EMPTY_STRING
         }
     }
 

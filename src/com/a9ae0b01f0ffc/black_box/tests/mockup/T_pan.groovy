@@ -1,13 +1,12 @@
 package com.a9ae0b01f0ffc.black_box.tests.mockup
 
-import com.a9ae0b01f0ffc.black_box.main.T_const
-import com.a9ae0b01f0ffc.black_box.main.T_s
+import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import groovy.transform.Canonical
 
 @Canonical
 class T_pan {
 
-    String p_pan = T_const.GC_EMPTY_STRING
+    String p_pan = T_logging_const.GC_EMPTY_STRING
 
     String get_pan() {
         return p_pan

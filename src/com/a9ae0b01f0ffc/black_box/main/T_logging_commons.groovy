@@ -1,10 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.commons.main.T_abstract_commons
+import com.a9ae0b01f0ffc.commons.main.T_common_commons
 
-class T_commons extends T_abstract_commons {
+class T_logging_commons extends T_common_commons {
 
-    String GC_DEFAULT_LOGGER_CONF_FILE_NAME = T_const.GC_EMPTY_STRING
+    String GC_DEFAULT_LOGGER_CONF_FILE_NAME = T_logging_const.GC_EMPTY_STRING
     String GC_LOG_CSV_SEPARATOR = "|"
     String GC_ARGUMENT_POSITIONAL_NAME = "Argument#"
     String GC_DEFAULT_CLASS_NAME = "Unknown Class"
@@ -13,13 +13,13 @@ class T_commons extends T_abstract_commons {
     String GC_DEFAULT_TRACE = "Trace missing"
     String GC_DEFAULT_TRACE_MASKED = "Trace masked"
     String GC_DEFAULT_TRACE_MUTED = "Trace muted"
-    Boolean GC_DEDUPLICATE_TRACES = T_const.GC_FALSE
+    Boolean GC_DEDUPLICATE_TRACES = T_logging_const.GC_FALSE
     String GC_LOGGER_MODE_PRODUCTION = "production"
     String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
     String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
 
-    T_commons(String i_conf_file_name) {
+    T_logging_commons(String i_conf_file_name) {
         super(i_conf_file_name)
         GC_DEFAULT_LOGGER_CONF_FILE_NAME = GC_CONST_CONF.GC_DEFAULT_LOGGER_CONF_FILE_NAME(GC_DEFAULT_LOGGER_CONF_FILE_NAME)
         GC_LOG_CSV_SEPARATOR = GC_CONST_CONF.GC_LOG_CSV_SEPARATOR(GC_LOG_CSV_SEPARATOR)

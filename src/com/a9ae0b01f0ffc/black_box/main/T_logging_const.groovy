@@ -1,8 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.commons.main.T_abstract_const
+import com.a9ae0b01f0ffc.commons.main.T_common_const
 
-class T_const extends T_abstract_const {
+class T_logging_const extends T_common_const {
 
     static final String GC_LOGGER_BUILDER_INTERFACE = "I_logger_builder"
     static final String GC_DATE_FORMAT_UID = "yyyyMMddHHmmssSSS"

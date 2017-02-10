@@ -1,17 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
-import com.a9ae0b01f0ffc.black_box.implementation.T_trace
-import com.a9ae0b01f0ffc.black_box.main.T_const
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_case_investigations
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_non_sensitive
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_sensitive
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_sample_class_for_annotation_test
-import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
-import com.a9ae0b01f0ffc.black_box.main.T_context
+import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan
-import com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable
+import com.a9ae0b01f0ffc.black_box.tests.mockup.*
+import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import org.junit.Test
 
 class T_tests {
@@ -213,7 +206,7 @@ class T_tests {
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_025.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
         T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
-        E_application_exception.set_is_tokenization_enabled(T_const.GC_FALSE)
+        E_application_exception.set_is_tokenization_enabled(T_logging_const.GC_FALSE)
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"method\" serialized_representation=\"test_025\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -227,7 +220,7 @@ class T_tests {
                 "        <trace name=\"i_pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan\" masked=\"false\" />\n" +
                 "        <trace name=\"pan\" serialized_representation=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
-        E_application_exception.set_is_tokenization_enabled(T_const.GC_TRUE)
+        E_application_exception.set_is_tokenization_enabled(T_logging_const.GC_TRUE)
         assert T_destination_variable.l() == l_expected.replaceAll("\n", "\r\n")
     }
 
