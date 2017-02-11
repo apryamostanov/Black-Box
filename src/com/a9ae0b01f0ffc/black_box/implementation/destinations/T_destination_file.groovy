@@ -4,6 +4,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 
 class T_destination_file extends T_destination {
 
@@ -12,12 +13,14 @@ class T_destination_file extends T_destination {
     Boolean p_is_file_init = T_logging_const.GC_FALSE
 
     @Override
+    @I_black_box("error")
     void store(ArrayList<I_trace> i_trace_list, I_event i_source_event) {
         init_file()
         p_file_writer.write(p_formatter.format_traces(i_trace_list, i_source_event))
         p_file_writer.flush()
     }
 
+    @I_black_box("error")
     static String process_location(String i_location) {
         Date l_current_date = new Date()
         String l_location = i_location
@@ -29,6 +32,7 @@ class T_destination_file extends T_destination {
         return l_location
     }
 
+    @I_black_box("error")
     void init_file() {
         if (!p_is_file_init) {
             String l_location = process_location(p_location)

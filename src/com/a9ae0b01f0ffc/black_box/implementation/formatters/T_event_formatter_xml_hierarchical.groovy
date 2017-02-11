@@ -6,10 +6,12 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_u
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_event_formatter {
 
+    @I_black_box("error")
     HashMap<String, HashMap<String, I_trace>> make_traces_by_source_by_name(ArrayList<I_trace> i_event_traces) {
         HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = new HashMap<String, HashMap<String, I_trace>>()
         for (I_trace l_trace in i_event_traces) {
@@ -25,19 +27,23 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
         return l_traces_by_source_by_name
     }
 
+    @I_black_box("error")
     String get_short_name(String i_class_name) {
         return T_u.get_short_name(i_class_name)
     }
 
+    @I_black_box("error")
     String make_line(String i_source_line, Integer i_depth) {
         return " ".padLeft(i_depth*4, " ") + i_source_line + System.lineSeparator()
     }
 
+    @I_black_box("error")
     String indent(String i_source_line, Integer i_depth) {
         return " ".padLeft(i_depth*4, " ") + i_source_line
     }
 
     @Override
+    @I_black_box("error")
     String format_traces(ArrayList<I_trace> i_event_traces, I_event i_source_event) {
         String l_result = T_logging_const.GC_EMPTY_STRING
         HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = make_traces_by_source_by_name(i_event_traces)

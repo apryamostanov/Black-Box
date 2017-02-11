@@ -1,7 +1,5 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-import groovy.util.slurpersupport.GPathResult
-
 interface I_trace extends I_inherited_configurations, I_object_with_guid {
 
     Boolean is_muted()

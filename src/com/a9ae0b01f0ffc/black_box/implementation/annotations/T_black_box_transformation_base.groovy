@@ -25,7 +25,8 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
     private T_black_box_visitor_base p_return_expression_visitor = new T_black_box_visitor_base()
 
     static {
-        T_s.x().init_custom("C:/COMPILE/commons.conf")
+        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
+        T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
     }
 
     T_black_box_visitor_base get_return_expression_visitor() {

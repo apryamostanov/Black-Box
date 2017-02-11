@@ -3,6 +3,7 @@ package com.a9ae0b01f0ffc.black_box.implementation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 
 class T_method_invocation implements I_method_invocation {
 
@@ -14,52 +15,62 @@ class T_method_invocation implements I_method_invocation {
 
 
     @Override
+    @I_black_box("error")
     String get_class_name() {
         return p_class_name
     }
 
     @Override
+    @I_black_box("error")
     String get_method_name() {
         return p_method_name
     }
 
     @Override
+    @I_black_box("error")
     ArrayList<I_trace> get_method_arguments() {
         return p_method_arguments
     }
 
     @Override
+    @I_black_box("error")
     void set_class_name(String i_class_name) {
         this.p_class_name = i_class_name
     }
 
     @Override
+    @I_black_box("error")
     void set_method_name(String i_method_name) {
         this.p_method_name = i_method_name
     }
 
     @Override
+    @I_black_box("error")
     void set_method_arguments(ArrayList<I_trace> i_method_arguments) {
         this.p_method_arguments = i_method_arguments
     }
 
     @Override
+    @I_black_box("error")
     void stop_timing() {
         p_end_time = System.currentTimeMillis()
     }
 
     @Override
+    @I_black_box("error")
     void start_timing() {
         p_start_time = System.currentTimeMillis()
     }
 
 
     @Override
+    @I_black_box("error")
     Long get_elapsed_time() {
         return p_end_time - p_start_time
     }
 
     @Override
+    @I_black_box("error")
     String toString() {
         return "T_method_invocation{" +
                 "p_class_name='" + p_class_name + '\'' +

@@ -400,4 +400,11 @@ class T_tests {
         assert T_destination_variable.l() == "info|HELLO WORLD com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable(4447778899992221)" + System.lineSeparator()
     }
 
+    @Test
+    void test_044() {
+        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
+        com.a9ae0b01f0ffc.black_box_base.main.T_s.l().profile_enter("classname", "methodname")
+        com.a9ae0b01f0ffc.black_box_base.main.T_s.l().log_debug(T_s.s().ZZZ)
+    }
+
 }
