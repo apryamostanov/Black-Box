@@ -16,6 +16,7 @@ final class T_logging_context {
     }
 
     void init_custom(String i_commons_conf_file_name) {
+        p_context_thread_local.get().p_commons = new T_logging_commons(i_commons_conf_file_name)
         init_custom_with_custom_logger(i_commons_conf_file_name, get_commons().GC_DEFAULT_LOGGER_CONF_FILE_NAME)
     }
 
@@ -28,7 +29,9 @@ final class T_logging_context {
     }
 
     void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name) {
-        p_context_thread_local.get().p_commons = new T_logging_commons(i_commons_conf_file_name)
+        if (get_commons() == T_logging_const.GC_NULL_OBJ_REF) {
+            p_context_thread_local.get().p_commons = new T_logging_commons(i_commons_conf_file_name)
+        }
         p_context_thread_local.get().p_ioc = new T_class_loader(T_s.c().GC_CLASS_LOADER_CONF_FILE_NAME)
         init_logger(i_logger_conf_file_name)
     }

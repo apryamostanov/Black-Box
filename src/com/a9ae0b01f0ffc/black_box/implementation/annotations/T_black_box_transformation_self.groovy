@@ -16,7 +16,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 @GroovyASTTransformation(
         phase = CompilePhase.SEMANTIC_ANALYSIS
 )
-class T_black_box_transformation extends AbstractASTTransformation {
+class T_black_box_transformation_self extends AbstractASTTransformation {
 
     private static final ClassNode PC_CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     File p_compilation_log_file = new File("c:/LOGS/log_file_name")
@@ -31,11 +31,10 @@ class T_black_box_transformation extends AbstractASTTransformation {
         p_file_writer.flush()
     }
 
-    T_black_box_transformation() {
+    T_black_box_transformation_self() {
     }
 
 
-    @I_black_box_self
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         try {
             if (i_ast_nodes.length == 2 && i_ast_nodes[0] instanceof AnnotationNode && i_ast_nodes[1] instanceof AnnotatedNode) {
@@ -97,27 +96,22 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    @I_black_box_self
     Statement create_l_methodname_declaration_statement(String i_methodname) {
         return new ExpressionStatement(new DeclarationExpression(new VariableExpression("l_methodname"), Token.newSymbol(Types.EQUAL, 0, 0), new ConstantExpression(i_methodname)))
     }
 
-    @I_black_box_self
     Statement create_l_classname_declaration_statement(String i_classname) {
         return new ExpressionStatement(new DeclarationExpression(new VariableExpression("l_classname"), Token.newSymbol(Types.EQUAL, 0, 0), new ConstantExpression(i_classname)))
     }
 
-    @I_black_box_self
     Statement create_logger_declaration_statement() {
         return new ExpressionStatement(new DeclarationExpression(new VariableExpression("l_logger"), Token.newSymbol(Types.EQUAL, 0, 0), new MethodCallExpression(new VariableExpression("l_shortcuts"), "l", new ArgumentListExpression())))
     }
 
-    @I_black_box_self
     Statement create_shortcut_declaration_statement() {
         return new ExpressionStatement(new DeclarationExpression(new VariableExpression("l_shortcuts"), Token.newSymbol(Types.EQUAL, 0, 0), new ConstructorCallExpression(new ClassNode(T_s.class), new ArgumentListExpression())))
     }
 
-    @I_black_box_self
     Statement create_log_enter_statement(MethodNode i_method_node) {
         Parameter[] l_arguments = i_method_node.getParameters()
         String l_serialized_parameters = ""
@@ -132,7 +126,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return (Statement) l_resulting_statements.first()
     }
 
-    @I_black_box_self
     Statement create_log_exit_statement(MethodNode i_method_node) {
         Parameter[] l_arguments = i_method_node.getParameters()
         String l_log_enter_code = "l_logger.log_exit(\"" + i_method_node.getDeclaringClass().getName() + "\",\"" + i_method_node.getName() + "\")"
@@ -141,7 +134,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return (Statement) l_resulting_statements.first()
     }
 
-    @I_black_box_self
     Statement create_log_error_statement(MethodNode i_method_node) {
         Parameter[] l_arguments = i_method_node.getParameters()
         String l_serialized_parameters = ""
@@ -156,7 +148,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return (Statement) l_resulting_statements.first()
     }
 
-    @I_black_box_self
     Statement create_log_error_statement_error_only(MethodNode i_method_node) {
         Parameter[] l_arguments = i_method_node.getParameters()
         String l_serialized_parameters = ""
@@ -171,7 +162,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return (Statement) l_resulting_statements.first()
     }
 
-    @I_black_box_self
     TryCatchStatement create_try_catch_statement(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
         log("create_try_catch_statement")
         TryCatchStatement tryCatchStatement = new TryCatchStatement(i_block_statement, EmptyStatement.INSTANCE)
@@ -183,7 +173,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return tryCatchStatement
     }
 
-    @I_black_box_self
     TryCatchStatement create_try_catch_statement_error_only(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
         log("create_try_catch_statement")
         TryCatchStatement tryCatchStatement = new TryCatchStatement(i_block_statement, EmptyStatement.INSTANCE)
@@ -195,7 +184,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         return tryCatchStatement
     }
 
-    @I_black_box_self
     Statement rethrow(AnnotationNode i_annotation_node) {
         log("rethrow")
         ThrowStatement throwStatement = GeneralUtils.throwS(GeneralUtils.varX("e_others"))
