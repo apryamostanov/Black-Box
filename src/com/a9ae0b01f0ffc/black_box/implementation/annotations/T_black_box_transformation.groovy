@@ -67,26 +67,14 @@ class T_black_box_transformation extends T_black_box_transformation_base {
 
     @Override
     @I_black_box_base
-    Statement create_log_error_statement(MethodNode i_method_node) {
-        return super.create_log_error_statement(i_method_node)
+    Statement create_log_error_statement(MethodNode i_method_node, String i_log_function_name) {
+        return super.create_log_error_statement(i_method_node, i_log_function_name)
     }
 
     @Override
     @I_black_box_base
-    Statement create_log_error_statement_error_only(MethodNode i_method_node) {
-        return super.create_log_error_statement_error_only(i_method_node)
-    }
-
-    @Override
-    @I_black_box_base
-    TryCatchStatement create_try_catch_statement(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
-        return super.create_try_catch_statement(i_block_statement, i_annotation_node, i_method_node)
-    }
-
-    @Override
-    @I_black_box_base
-    TryCatchStatement create_try_catch_statement_error_only(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node) {
-        return super.create_try_catch_statement_error_only(i_block_statement, i_annotation_node, i_method_node)
+    TryCatchStatement create_try_catch_statement(BlockStatement i_block_statement, AnnotationNode i_annotation_node, MethodNode i_method_node, String i_log_function_name) {
+        return super.create_try_catch_statement(i_block_statement, i_annotation_node, i_method_node, i_log_function_name)
     }
 
     @Override
