@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation.annotations
 
+import groovy.transform.ToString
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.MethodNode
@@ -10,6 +11,7 @@ import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
+@ToString(includeNames = true, includeFields = true)
 @GroovyASTTransformation(
         phase = CompilePhase.SEMANTIC_ANALYSIS
 )

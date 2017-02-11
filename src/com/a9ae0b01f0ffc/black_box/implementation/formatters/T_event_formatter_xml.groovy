@@ -5,7 +5,9 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import groovy.transform.ToString
 
+@ToString(includeNames = true, includeFields = true)
 class T_event_formatter_xml extends T_event_formatter implements I_event_formatter {
 
     @I_black_box("error")

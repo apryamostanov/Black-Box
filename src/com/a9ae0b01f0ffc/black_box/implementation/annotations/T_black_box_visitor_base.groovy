@@ -1,6 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.implementation.annotations
 
 import com.a9ae0b01f0ffc.commons.main.T_common_const
+import groovy.transform.ToString
 import org.codehaus.groovy.ast.CodeVisitorSupport
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
 import org.codehaus.groovy.ast.expr.ConstantExpression
@@ -8,6 +9,7 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.expr.VariableExpression
 import org.codehaus.groovy.ast.stmt.ReturnStatement
 
+@ToString(includeNames = true, includeFields = true)
 class T_black_box_visitor_base extends CodeVisitorSupport {
 
     Boolean p_is_return_added = T_common_const.GC_FALSE

@@ -7,8 +7,10 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import groovy.transform.ToString
 import org.codehaus.groovy.runtime.StackTraceUtils
 
+@ToString(includeNames = true, includeFields = true)
 class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_event_formatter {
 
     @I_black_box("error")

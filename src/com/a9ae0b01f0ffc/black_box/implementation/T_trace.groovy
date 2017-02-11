@@ -5,6 +5,7 @@ import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import groovy.transform.Memoized
 
 class T_trace extends T_inherited_configurations implements I_trace {
 
@@ -129,12 +130,12 @@ class T_trace extends T_inherited_configurations implements I_trace {
         return p_name
     }
 
-    @Override
+    @Memoized
     @I_black_box("error")
     String get_search_name_config() {
         String l_result = T_logging_const.GC_EMPTY_STRING
         if (get_ref() != T_logging_const.GC_NULL_OBJ_REF && p_config_class != T_logging_const.GC_EMPTY_STRING) {
-            l_result = get_ref().getClass().getCanonicalName()
+            l_result = get_ref_class_name()
         } else if (get_ref() == T_logging_const.GC_NULL_OBJ_REF && p_config_class != T_logging_const.GC_EMPTY_STRING) {
             l_result = p_config_class
         } else {
@@ -143,7 +144,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
         return l_result
     }
 
-    @Override
+    @Memoized
     @I_black_box("error")
     String get_ref_class_name() {
         String l_result = T_logging_const.GC_EMPTY_STRING
@@ -207,9 +208,10 @@ class T_trace extends T_inherited_configurations implements I_trace {
         return p_config_class
     }
 
+    @Memoized
     @I_black_box("error")
-    Boolean match_trace(I_trace i_trace_new) {
-        return (get_search_name_config() == T_u.nvl(i_trace_new.get_ref_class_name(), i_trace_new.get_name()) || get_search_name_config() == i_trace_new.get_name())
+    Boolean match_trace(String i_ref_class_name, String i_name) {
+        return (get_search_name_config() == T_u.nvl(i_ref_class_name, i_name) || get_search_name_config() == i_name)
     }
 
     @Override
@@ -220,6 +222,18 @@ class T_trace extends T_inherited_configurations implements I_trace {
         } else {
             return T_logging_const.GC_EMPTY_STRING
         }
+    }
+
+    String unsecure_serialize() {
+        return "T_trace{" +
+                "p_muted=" + p_muted +
+                ", p_trace_formatter=" + p_trace_formatter +
+                ", p_name='" + p_name + '\'' +
+                ", p_ref=" + p_ref +
+                ", p_value='" + p_value + '\'' +
+                ", p_source='" + p_source + '\'' +
+                ", p_config_class='" + p_config_class + '\'' +
+                '}'
     }
 
 }

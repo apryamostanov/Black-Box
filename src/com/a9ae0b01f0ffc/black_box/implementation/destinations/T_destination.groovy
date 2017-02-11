@@ -118,21 +118,21 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         String l_trace_config_source = i_trace_config.get_source()
         if (l_trace_config_source == T_logging_const.GC_EMPTY_STRING || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_ALL) {
             for (I_trace l_trace_predefined : PC_ALL_POSSIBLE_PREDEFINED_TRACES) {
-                if (i_trace_config.match_trace(l_trace_predefined)) {
+                if (i_trace_config.match_trace(l_trace_predefined.get_ref_class_name(), l_trace_predefined.get_name())) {
                     return build_predefined_trace(l_trace_predefined, i_event_runtime, i_trace_config)
                 }
             }
         }
         if (l_trace_config_source == T_logging_const.GC_EMPTY_STRING || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_ALL || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_RUNTIME) {
             for (I_trace l_trace_runtime : i_event_runtime.get_traces_runtime()) {
-                if (i_trace_config.match_trace(l_trace_runtime)) {
+                if (i_trace_config.match_trace(l_trace_runtime.get_ref_class_name(), l_trace_runtime.get_name())) {
                     return T_s.l().spawn_trace(l_trace_runtime, i_trace_config)
                 }
             }
         }
         if (l_trace_config_source == T_logging_const.GC_EMPTY_STRING || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_ALL || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_CONTEXT) {
             for (I_trace l_trace_context : T_s.l().get_trace_context_list()) {
-                if (i_trace_config.match_trace(l_trace_context)) {
+                if (i_trace_config.match_trace(l_trace_context.get_ref_class_name(), l_trace_context.get_name())) {
                     return T_s.l().spawn_trace(l_trace_context, i_trace_config)
                 }
             }
@@ -141,7 +141,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
             if (i_event_runtime.get_throwable() != T_logging_const.GC_NULL_OBJ_REF) {
                 if (i_event_runtime.get_throwable() instanceof E_application_exception) {
                     for (I_trace l_trace_from_exception : T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_throwable()).get_traces(), T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES)) {
-                        if (i_trace_config.match_trace(l_trace_from_exception)) {
+                        if (i_trace_config.match_trace(l_trace_from_exception.get_ref_class_name(), l_trace_from_exception.get_name())) {
                             return T_s.l().spawn_trace(l_trace_from_exception, i_trace_config)
                         }
                     }
@@ -161,31 +161,31 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         l_result_trace.set_source(T_logging_const.GC_TRACE_SOURCE_PREDEFINED)
         l_result_trace.set_name(i_predefined_trace.get_name())
         l_result_trace.set_mask(T_logging_const.GC_EMPTY_STRING)
-        if (PC_STATIC_TRACE_NAME_CLASS_NAME.match_trace(i_predefined_trace)) {
+        if (PC_STATIC_TRACE_NAME_CLASS_NAME.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_class_name())
-        } else if (PC_STATIC_TRACE_NAME_METHOD_NAME.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_METHOD_NAME.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_method_name())
-        } else if (PC_STATIC_TRACE_NAME_DEPTH.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_DEPTH.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_depth().toString())
-        } else if (PC_STATIC_TRACE_NAME_EVENT_TYPE.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_EVENT_TYPE.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_event_type())
-        } else if (PC_STATIC_TRACE_NAME_DATETIMESTAMP.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_DATETIMESTAMP.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_datetimestamp())
-        } else if (PC_STATIC_TRACE_NAME_EXCEPTION.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_EXCEPTION.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_ref(i_event_runtime.get_throwable())
-        } else if (PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_EXCEPTION_MESSAGE.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             if (i_event_runtime.get_throwable() != T_logging_const.GC_NULL_OBJ_REF) {
                 l_result_trace.set_val(i_event_runtime.get_throwable().getMessage())
             }
-        } else if (PC_STATIC_TRACE_NAME_MESSAGE.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_MESSAGE.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_message().toString())
-        } else if (PC_STATIC_TRACE_NAME_THREADID.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_THREADID.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(T_logging_const.GC_THREADID)
-        } else if (PC_STATIC_TRACE_NAME_PROCESSID.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_PROCESSID.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(T_logging_const.GC_PROCESSID)
-        } else if (PC_STATIC_TRACE_NAME_METHOD_INVOCATION.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_METHOD_INVOCATION.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_ref(T_s.l().get_current_method_invocation())
-        } else if (PC_STATIC_TRACE_NAME_METHOD_STACK.match_trace(i_predefined_trace)) {
+        } else if (PC_STATIC_TRACE_NAME_METHOD_STACK.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_ref(T_s.l().get_invocation_stack())
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_STATIC_TRACE_NAME_Z1, i_predefined_trace.get_name())
@@ -194,25 +194,22 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     }
 
     @I_black_box("error")
-    static ArrayList<I_trace> build_predefined_traces(ArrayList<I_trace> i_predefined_traces, I_event i_event_runtime, I_trace i_trace_config) {
-        ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
+    static void build_predefined_traces(ArrayList<I_trace> i_predefined_traces, I_event i_event_runtime, I_trace i_trace_config, ArrayList<I_trace> i_result_traces) {
         for (I_trace l_predefined_trace : i_predefined_traces) {
-            l_traces_to_add.add(build_predefined_trace(l_predefined_trace, i_event_runtime, i_trace_config))
+            i_result_traces.add(build_predefined_trace(l_predefined_trace, i_event_runtime, i_trace_config))
         }
-        return l_traces_to_add
     }
 
-    static ArrayList<I_trace> process_source_exclusive(I_trace i_predefined_source_trace, I_event i_event_config, List<I_trace> i_traces_from_source) {
-        ArrayList<I_trace> l_traces_to_add = new ArrayList<I_trace>()
+    @I_black_box("error")
+    static void process_source_exclusive(ArrayList<I_trace> i_traces_to_add, I_trace i_predefined_source_trace, I_event i_event_config, List<I_trace> i_traces_from_source) {
         for (I_trace l_trace_from_source : i_traces_from_source) {
             if ((!i_event_config.is_trace_muted(i_predefined_source_trace)) || i_event_config.get_corresponding_trace(l_trace_from_source) != T_logging_const.GC_NULL_OBJ_REF) {
                 if (!i_event_config.is_trace_muted(l_trace_from_source)) {
                     I_trace l_trace_config = T_u.nvl(i_event_config.get_corresponding_trace(l_trace_from_source), i_event_config.get_corresponding_trace(i_predefined_source_trace)) as I_trace
-                    l_traces_to_add.add(T_s.l().spawn_trace(l_trace_from_source, l_trace_config))
+                    i_traces_to_add.add(T_s.l().spawn_trace(l_trace_from_source, l_trace_config))
                 }
             }
         }
-        return l_traces_to_add
     }
 
     @Override
@@ -223,15 +220,17 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         if (p_purpose == T_s.c().GC_DESTINATION_PURPOSE_DISPLAY) { //including only those defined
             for (I_trace l_trace_config : l_event_config.get_traces_config()) {
                 if (!l_trace_config.is_muted()) {
-                    if (l_trace_config.match_trace(PC_TRACE_SOURCE_PREDEFINED)) {
-                        l_trace_list.addAll(build_predefined_traces(process_source_exclusive(PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES), i_event_runtime, l_trace_config))
-                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_RUNTIME)) {
-                        l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime()))
-                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_CONTEXT)) {
-                        l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list()))
-                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_EXCEPTION_TRACES)) {
+                    if (l_trace_config.match_trace(PC_TRACE_SOURCE_PREDEFINED.get_ref_class_name(), PC_TRACE_SOURCE_PREDEFINED.get_name())) {
+                        ArrayList<I_trace> l_trace_list_predefined = new ArrayList<I_trace>()
+                        process_source_exclusive(l_trace_list_predefined, PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES)
+                        build_predefined_traces(l_trace_list_predefined, i_event_runtime, l_trace_config, l_trace_list)
+                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_RUNTIME.get_ref_class_name(), PC_TRACE_SOURCE_RUNTIME.get_name())) {
+                        process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime())
+                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_CONTEXT.get_ref_class_name(), PC_TRACE_SOURCE_CONTEXT.get_name())) {
+                        process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list())
+                    } else if (l_trace_config.match_trace(PC_TRACE_SOURCE_EXCEPTION_TRACES.get_ref_class_name(), PC_TRACE_SOURCE_EXCEPTION_TRACES.get_name())) {
                         if (i_event_runtime.get_throwable() != T_logging_const.GC_NULL_OBJ_REF && i_event_runtime.get_throwable() instanceof E_application_exception) {
-                            l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_EXCEPTION_TRACES, l_event_config, T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_throwable()).get_traces(), T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES)))
+                            process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_EXCEPTION_TRACES, l_event_config, T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_throwable()).get_traces(), T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES))
                         }
                     } else {
                         l_trace_list.add(find_and_build_trace_inclusive(i_event_runtime, l_trace_config))
@@ -239,11 +238,13 @@ abstract class T_destination extends T_inherited_configurations implements I_des
                 }
             }
         } else if (p_purpose == T_s.c().GC_DESTINATION_PURPOSE_WAREHOUSE) { //excluding defined
-            l_trace_list.addAll(build_predefined_traces(process_source_exclusive(PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES), i_event_runtime, PC_TRACE_SOURCE_PREDEFINED))
-            l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime()))
-            l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list()))
+            ArrayList<I_trace> l_trace_list_predefined = new ArrayList<I_trace>()
+            process_source_exclusive(l_trace_list_predefined, PC_TRACE_SOURCE_PREDEFINED, l_event_config, PC_ALL_POSSIBLE_PREDEFINED_TRACES)
+            build_predefined_traces(l_trace_list_predefined, i_event_runtime, PC_TRACE_SOURCE_PREDEFINED, l_trace_list)
+            process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_RUNTIME, l_event_config, i_event_runtime.get_traces_runtime())
+            process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_CONTEXT, l_event_config, T_s.l().get_trace_context_list())
             if (i_event_runtime.get_throwable() != T_logging_const.GC_NULL_OBJ_REF && i_event_runtime.get_throwable() instanceof E_application_exception) {
-                l_trace_list.addAll(process_source_exclusive(PC_TRACE_SOURCE_EXCEPTION_TRACES, l_event_config, T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_throwable()).get_traces(), T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES)))
+                process_source_exclusive(l_trace_list, PC_TRACE_SOURCE_EXCEPTION_TRACES, l_event_config, T_s.l().objects2traces(((E_application_exception) i_event_runtime.get_throwable()).get_traces(), T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES))
             }
         } else {
             throw new E_application_exception(T_s.s().UNSUPPORTED_DESTINATION_PURPOSE_Z1, p_purpose)

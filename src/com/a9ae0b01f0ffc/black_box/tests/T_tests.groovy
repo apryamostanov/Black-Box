@@ -14,6 +14,9 @@ class T_tests {
     final String PC_COMMONS_CONF_NAME = "./src/com/a9ae0b01f0ffc/black_box/conf/commons.conf"
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
+    static {
+        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("./src/com/a9ae0b01f0ffc/black_box/conf/logger_debug/logger_commons.conf")
+    }
 
 
     @Test

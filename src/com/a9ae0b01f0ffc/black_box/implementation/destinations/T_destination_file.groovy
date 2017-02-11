@@ -5,7 +5,9 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import groovy.transform.ToString
 
+@ToString(includeNames = true, includeFields = true)
 class T_destination_file extends T_destination {
 
     File p_file = T_logging_const.GC_NULL_OBJ_REF as File

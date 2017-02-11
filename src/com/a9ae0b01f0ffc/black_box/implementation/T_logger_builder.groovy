@@ -6,8 +6,10 @@ import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
+import groovy.transform.ToString
 import groovy.util.slurpersupport.GPathResult
 
+@ToString(includeNames = true, includeFields = true)
 class T_logger_builder implements I_logger_builder {
 
     GPathResult p_conf = T_logging_const.GC_NULL_OBJ_REF as GPathResult

@@ -7,7 +7,9 @@ import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string
+import groovy.transform.ToString
 
+@ToString(includeNames = true, includeFields = true)
 class T_logger implements I_logger {
 
     private ArrayList<I_destination> p_destinations = new ArrayList<I_destination>()

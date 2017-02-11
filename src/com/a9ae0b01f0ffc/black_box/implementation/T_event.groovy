@@ -7,7 +7,9 @@ import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string
+import groovy.transform.ToString
 
+@ToString(includeNames = true, includeFields = true)
 class T_event extends T_inherited_configurations implements I_event {
 
     private String p_event_type = T_logging_const.GC_EMPTY_STRING
@@ -139,7 +141,7 @@ class T_event extends T_inherited_configurations implements I_event {
     I_trace get_corresponding_trace(I_trace i_trace_config) {
         I_trace l_trace_result = T_logging_const.GC_NULL_OBJ_REF as I_trace
         for (I_trace l_trace_config : get_traces_config()) {
-            if (l_trace_config.match_trace(i_trace_config)) {
+            if (l_trace_config.match_trace(i_trace_config.get_ref_class_name(), i_trace_config.get_name())) {
                 l_trace_result = l_trace_config
                 break
             }

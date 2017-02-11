@@ -40,10 +40,12 @@ interface I_trace extends I_inherited_configurations, I_object_with_guid {
 
     String get_ref_class_name()
 
-    Boolean match_trace(I_trace i_trace_new)
+    Boolean match_trace(String i_ref_class_name, String i_name)
 
     String get_ref_guid()
 
     String format_trace(I_event i_source_event)
+
+    String unsecure_serialize()
 
 }

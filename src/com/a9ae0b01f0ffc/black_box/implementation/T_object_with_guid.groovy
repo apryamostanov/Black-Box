@@ -2,7 +2,9 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_object_with_guid
 import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import groovy.transform.ToString
 
+@ToString(includeNames = true, includeFields = true)
 class T_object_with_guid implements I_object_with_guid{
 
     String p_guid = UUID.randomUUID()
