@@ -62,7 +62,7 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                     l_changed_block_statement.addStatement(create_logger_declaration_statement())
                     l_changed_block_statement.addStatement(create_l_methodname_declaration_statement(l_method_node.getName()))
                     l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
-                    if (l_black_box_type != PC_BLACK_BOX_TYPE_ERROR) {
+                    if (l_black_box_type == PC_BLACK_BOX_TYPE_FULL) {
                         l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                         BlockStatement l_inside_try = new BlockStatement()
                         T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
@@ -75,14 +75,32 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                             l_inside_try.addStatement(create_log_exit_statement(l_method_node))
                         }
                         l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_exception"))
-                    } else {
-                        BlockStatement l_inside_try = new BlockStatement()
-                        T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
-                        l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
-                        for (Statement l_return_statement in l_statements) {
-                            l_inside_try.addStatement(l_return_statement)
+                    } else if (l_black_box_type == PC_BLACK_BOX_TYPE_ERROR) {
+                        if (T_s.c().GC_PROFILE_ALL != T_common_const.GC_TRUE_STRING) {
+                            BlockStatement l_inside_try = new BlockStatement()
+                            T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
+                            l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
+                            for (Statement l_return_statement in l_statements) {
+                                l_inside_try.addStatement(l_return_statement)
+                            }
+                            l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_error"))
+                        } else {
+                            l_changed_block_statement.addStatement(create_profile_enter_statement(l_method_node))
+                            BlockStatement l_inside_try = new BlockStatement()
+                            T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
+                            l_return_expression_visitor.set_profile_only()
+                            l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
+                            for (Statement l_return_statement in l_statements) {
+                                l_return_statement.visit(l_return_expression_visitor)
+                                l_inside_try.addStatement(l_return_statement)
+                            }
+                            if (!l_return_expression_visitor.p_is_return_added) {
+                                l_inside_try.addStatement(create_profile_exit_statement(l_method_node))
+                            }
+                            l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_exception"))
                         }
-                        l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_error"))
+                    } else {
+                        throw new RuntimeException("Unsupported Black Box type $l_black_box_type")
                     }
                     l_method_node.setCode(l_changed_block_statement)
                     T_s.l().log_debug(T_s.s().Finished_Processing_method_Z1, l_method_node.getName())
@@ -119,16 +137,31 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                 l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
             }
         }
-        String l_log_enter_code = "l_logger.log_enter(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\" $l_serialized_parameters, l_shortcuts.r(this, \"this\"))"
-        T_s.l().log_debug(T_s.s().l_log_enter_code_Z1, l_log_enter_code)
-        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
+        String l_statement_code = "l_logger.log_enter(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\" $l_serialized_parameters, l_shortcuts.r(this, \"this\"))"
+        T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
+        return (Statement) l_resulting_statements.first()
+    }
+
+    Statement create_profile_enter_statement(MethodNode i_method_node) {
+        Parameter[] l_arguments = i_method_node.getParameters()
+        String l_statement_code = "l_logger.profile_enter(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\")"
+        T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
         return (Statement) l_resulting_statements.first()
     }
 
     Statement create_log_exit_statement(MethodNode i_method_node) {
-        String l_log_enter_code = "l_logger.log_exit(\"${i_method_node.getDeclaringClass().getName()}\",\"${i_method_node.getName()}\")"
-        T_s.l().log_debug(T_s.s().l_log_enter_code_Z1, l_log_enter_code)
-        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
+        String l_statement_code = "l_logger.log_exit(\"${i_method_node.getDeclaringClass().getName()}\",\"${i_method_node.getName()}\")"
+        T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
+        return (Statement) l_resulting_statements.first()
+    }
+
+    Statement create_profile_exit_statement(MethodNode i_method_node) {
+        String l_statement_code = "l_logger.profile_exit(\"${i_method_node.getDeclaringClass().getName()}\",\"${i_method_node.getName()}\")"
+        T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
         return (Statement) l_resulting_statements.first()
     }
 
@@ -140,9 +173,9 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                 l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
             }
         }
-        String l_log_enter_code = "l_logger.${i_log_function_name}(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\", e_others $l_serialized_parameters)"
-        T_s.l().log_debug(T_s.s().l_log_enter_code_Z1, l_log_enter_code)
-        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_log_enter_code)
+        String l_statement_code = "l_logger.${i_log_function_name}(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\", e_others $l_serialized_parameters)"
+        T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
         return (Statement) l_resulting_statements.first()
     }
 

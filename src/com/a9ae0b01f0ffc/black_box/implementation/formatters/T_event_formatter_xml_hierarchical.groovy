@@ -5,6 +5,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
+import com.a9ae0b01f0ffc.black_box.main.T_u
 import org.codehaus.groovy.runtime.StackTraceUtils
 
 class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_event_formatter {
@@ -25,13 +26,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     }
 
     String get_short_name(String i_class_name) {
-        String l_short_name = T_logging_const.GC_EMPTY_STRING
-        if (i_class_name.contains(T_logging_const.GC_POINT)) {
-            l_short_name = i_class_name.substring(i_class_name.lastIndexOf(T_logging_const.GC_POINT) + T_logging_const.GC_ONE_CHAR)
-        } else {
-            l_short_name = i_class_name
-        }
-        return l_short_name
+        return T_u.get_short_name(i_class_name)
     }
 
     String make_line(String i_source_line, Integer i_depth) {

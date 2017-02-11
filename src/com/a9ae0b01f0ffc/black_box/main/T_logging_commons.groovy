@@ -5,6 +5,7 @@ import com.a9ae0b01f0ffc.commons.main.T_common_commons
 class T_logging_commons extends T_common_commons {
 
     String GC_BLACK_BOX_ENABLED = T_logging_const.GC_TRUE_STRING
+    String GC_PROFILE_ALL = T_logging_const.GC_TRUE_STRING
     String GC_DEFAULT_LOGGER_CONF_FILE_NAME = T_logging_const.GC_EMPTY_STRING
     String GC_LOG_CSV_SEPARATOR = "|"
     String GC_ARGUMENT_POSITIONAL_NAME = "Argument#"
@@ -22,6 +23,7 @@ class T_logging_commons extends T_common_commons {
     T_logging_commons(String i_conf_file_name) {
         super(i_conf_file_name)
         GC_BLACK_BOX_ENABLED = GC_CONST_CONF.GC_BLACK_BOX_ENABLED(GC_BLACK_BOX_ENABLED)
+        GC_PROFILE_ALL = GC_CONST_CONF.GC_PROFILE_ALL(GC_PROFILE_ALL)
         GC_DEFAULT_LOGGER_CONF_FILE_NAME = GC_CONST_CONF.GC_DEFAULT_LOGGER_CONF_FILE_NAME(GC_DEFAULT_LOGGER_CONF_FILE_NAME)
         GC_LOG_CSV_SEPARATOR = GC_CONST_CONF.GC_LOG_CSV_SEPARATOR(GC_LOG_CSV_SEPARATOR)
         GC_ARGUMENT_POSITIONAL_NAME = GC_CONST_CONF.GC_ARGUMENT_POSITIONAL_NAME(GC_ARGUMENT_POSITIONAL_NAME)

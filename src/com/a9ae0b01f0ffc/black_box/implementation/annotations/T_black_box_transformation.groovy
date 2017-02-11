@@ -82,4 +82,16 @@ class T_black_box_transformation extends T_black_box_transformation_base {
     Statement rethrow(AnnotationNode i_annotation_node) {
         return super.rethrow(i_annotation_node)
     }
+
+    @Override
+    @I_black_box_base
+    Statement create_profile_enter_statement(MethodNode i_method_node) {
+        return super.create_profile_enter_statement(i_method_node)
+    }
+
+    @Override
+    @I_black_box_base
+    Statement create_profile_exit_statement(MethodNode i_method_node) {
+        return super.create_profile_exit_statement(i_method_node)
+    }
 }
