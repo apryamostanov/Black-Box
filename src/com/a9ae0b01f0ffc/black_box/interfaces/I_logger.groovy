@@ -24,6 +24,10 @@ interface I_logger {
 
     void print_stats()
 
+    void profile_enter(String i_class_name, String i_method_name)
+
+    void profile_exit(String i_class_name, String i_method_name)
+
     void log_enter(
             String i_class_name
             , String i_method_name

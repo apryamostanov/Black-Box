@@ -13,4 +13,10 @@ interface I_method_invocation {
 
     void set_method_arguments(ArrayList<I_trace> i_method_arguments)
 
+    void stop_timing()
+
+    void start_timing()
+
+    Long get_elapsed_time()
+
 }
