@@ -1,11 +1,15 @@
 # Black Box
 
-Example of integrating this JAR into another project: https://github.com/apryamostanov/CardProcessing
+Example of of usage: https://github.com/apryamostanov/CardProcessing
 
 1. Experimental runtime prototyping and diagnostic framework
 2. Next-generation logging, tracing and profiling framework
 
-Work in progress. Version: 0.85
+Work in progress. Version: 0.86
+
+Performance: I have used the tools profiling capabilities to perform self-profiling.
+Currently performance is slow: 3-4 milliseconds per cycle (log event, profile method) - affected by active profiling, but still slow.
+Some optimizations have been done but it is nowhere comparable to normal loggers.
 
 Intended purpose of usage:
 - Credit card processing
@@ -15,6 +19,8 @@ Intended purpose of usage:
 - PCI DSS, PA DSS applications
 - TCP IP applications
 - Working with hardware (I2C, Robotics, GPIO, drones, etc)
+- Troubleshooting on environments with limited access
+- Perfomance issues investigations
 
 Features:
 - Does not accept free text from programmers
@@ -35,12 +41,12 @@ Features:
 - Lightweight with small number dependenices (note: Groovy runtime is required)
 - Event-based spooling - a mode when debug is bufferred (up to configurable # of lines) and spooled only in case when error is encountered
 - Trackable sources of debug data
--- Runtime data (whatever programmer or annotation passes to logger)
--- Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
--- Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
--- Compile-time Meta-data (line number, file name, CVS version)
+1. Runtime data (whatever programmer or annotation passes to logger)
+2. Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
+3. Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
+4. Compile-time Meta-data (line number, file name, CVS version)
 - Hierarchical method invocation logging
-- Future support of performance profiling
+- Support of performance profiling
 
 Sample usage:
 ```Groovy
