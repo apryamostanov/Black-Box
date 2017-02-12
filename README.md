@@ -44,7 +44,7 @@ Features:
 1. Runtime data (whatever programmer or annotation passes to logger)
 2. Context data (thread-specific global cache of data - such as IP address, session) - defined by programmer
 3. Pre-defined data (Datetimestamp, Process ID, Thread Id, etc)
-4. Compile-time Meta-data (line number, file name, CVS version)
+4. Compile-time Meta-data (line number, file name, CVS version) - in future
 - Hierarchical method invocation logging
 - Support of performance profiling
 
