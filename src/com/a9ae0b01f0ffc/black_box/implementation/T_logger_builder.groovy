@@ -3,7 +3,7 @@ package com.a9ae0b01f0ffc.black_box.implementation
 import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import groovy.transform.ToString
@@ -14,7 +14,7 @@ class T_logger_builder implements I_logger_builder {
 
     GPathResult p_conf = T_logging_const.GC_NULL_OBJ_REF as GPathResult
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     I_logger create_logger(String i_conf_file_name) {
         p_conf = (GPathResult) new XmlSlurper().parse(i_conf_file_name)
         I_logger l_logger = (I_logger) T_s.ioc().instantiate("I_logger")
@@ -27,7 +27,7 @@ class T_logger_builder implements I_logger_builder {
         return l_logger
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     I_destination init_destination(GPathResult i_destination_xml) {
         I_destination l_destination = (I_destination) T_s.ioc().instantiate(i_destination_xml.name())
         if (!i_destination_xml.@purpose.isEmpty()) {
@@ -65,7 +65,7 @@ class T_logger_builder implements I_logger_builder {
         return l_destination
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     I_event init_event(GPathResult i_event_xml, I_inherited_configurations i_inherited_configurations) {
         I_event l_event = (I_event) T_s.ioc().instantiate(i_event_xml.name())
         l_event.set_event_type(i_event_xml.name())
@@ -80,7 +80,7 @@ class T_logger_builder implements I_logger_builder {
         return l_event
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     I_trace init_trace(GPathResult i_trace_xml, I_inherited_configurations i_inherited_configurations) {
         I_trace l_trace_config = (I_trace) T_s.ioc().instantiate("I_trace")
         l_trace_config.set_name(i_trace_xml.name())
@@ -104,7 +104,7 @@ class T_logger_builder implements I_logger_builder {
         return l_trace_config
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     T_class_loader get_class_loader() {
         return T_s.ioc()
     }

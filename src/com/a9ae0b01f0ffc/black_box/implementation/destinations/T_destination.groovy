@@ -8,7 +8,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 
 abstract class T_destination extends T_inherited_configurations implements I_destination {
@@ -42,28 +42,28 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     String p_spool_event = T_logging_const.GC_EMPTY_STRING
     String p_mask = T_logging_const.GC_EMPTY_STRING
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_buffer() {
         return p_buffer
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_buffer(String i_buffer) {
         this.p_buffer = i_buffer
         p_buffer_size = Integer.parseInt(p_buffer)
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_spool_event() {
         return p_spool_event
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_spool_event(String i_spool_event) {
         this.p_spool_event = i_spool_event
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static I_trace init_predefined_trace(String i_predefined_trace_name) {
         I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         l_trace.set_source(T_logging_const.GC_TRACE_SOURCE_PREDEFINED)
@@ -71,7 +71,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         return l_trace
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static Boolean init() {
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_CLASS_NAME)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_METHOD_NAME)
@@ -93,19 +93,19 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void add_configuration_event(I_event i_event) {
         p_configuration_events_by_name.put(i_event.get_event_type(), i_event)
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_formatter(I_event_formatter i_formatter) {
         p_formatter = i_formatter
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void log_generic(I_event i_event) {
         if (p_configuration_events_by_name.containsKey(i_event.get_event_type())) {
             ArrayList<I_trace> l_trace_list = prepare_trace_list(i_event)
@@ -113,7 +113,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         }
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static I_trace find_and_build_trace_inclusive(I_event i_event_runtime, I_trace i_trace_config) {
         String l_trace_config_source = i_trace_config.get_source()
         if (l_trace_config_source == T_logging_const.GC_EMPTY_STRING || l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_ALL) {
@@ -154,7 +154,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         return l_trace_not_found
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static I_trace build_predefined_trace(I_trace i_predefined_trace, I_event i_event_runtime, I_trace i_trace_config) {
         I_trace l_result_trace = T_s.l().spawn_trace(i_predefined_trace, i_trace_config)
         l_result_trace.set_val(T_logging_const.GC_EMPTY_STRING)
@@ -193,14 +193,14 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         return l_result_trace
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static void build_predefined_traces(ArrayList<I_trace> i_predefined_traces, I_event i_event_runtime, I_trace i_trace_config, ArrayList<I_trace> i_result_traces) {
         for (I_trace l_predefined_trace : i_predefined_traces) {
             i_result_traces.add(build_predefined_trace(l_predefined_trace, i_event_runtime, i_trace_config))
         }
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static void process_source_exclusive(ArrayList<I_trace> i_traces_to_add, I_trace i_predefined_source_trace, I_event i_event_config, List<I_trace> i_traces_from_source) {
         for (I_trace l_trace_from_source : i_traces_from_source) {
             if ((!i_event_config.is_trace_muted(i_predefined_source_trace)) || i_event_config.get_corresponding_trace(l_trace_from_source) != T_logging_const.GC_NULL_OBJ_REF) {
@@ -213,7 +213,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     ArrayList<I_trace> prepare_trace_list(I_event i_event_runtime) {
         I_event l_event_config = p_configuration_events_by_name.get(i_event_runtime.get_event_type())
         ArrayList<I_trace> l_trace_list = new ArrayList<I_trace>()
@@ -253,31 +253,31 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_destination_purpose(String i_destination_purpose) {
         p_purpose = i_destination_purpose
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_location(String i_location) {
         p_location = i_location
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_destination_purpose() {
         return p_purpose
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_mask() {
         return p_mask
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_mask(String i_mask) {
         p_mask = i_mask
     }

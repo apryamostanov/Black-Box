@@ -5,13 +5,13 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace_formatter
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
 class T_trace_formatter_for_messages implements I_trace_formatter {
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String format_trace(I_trace i_trace, I_event i_parent_event) {
         String l_formatted_trace = T_logging_const.GC_EMPTY_STRING
         if (i_trace.get_val() != T_logging_const.GC_EMPTY_STRING) {

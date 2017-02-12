@@ -15,7 +15,7 @@ class T_tests {
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
     static {
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("./src/com/a9ae0b01f0ffc/black_box/conf/logger_debug/logger_commons.conf")
+        T_s.x().init_custom("./src/com/a9ae0b01f0ffc/black_box/conf/logger_debug/logger_commons.conf")
     }
 
 
@@ -405,9 +405,9 @@ class T_tests {
 
     @Test
     void test_044() {
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.l().profile_enter("classname", "methodname")
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.l().log_debug(T_s.s().ZZZ)
+        com.a9ae0b01f0ffc.black_box.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
+        com.a9ae0b01f0ffc.black_box.main.T_s.l().profile_enter("classname", "methodname")
+        com.a9ae0b01f0ffc.black_box.main.T_s.l().log_debug(T_s.s().ZZZ)
     }
 
 }

@@ -5,7 +5,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
@@ -13,12 +13,12 @@ class T_event_formatter_html extends T_event_formatter implements I_event_format
 
     Boolean p_header_was_added = T_logging_const.GC_FALSE
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static String attr(String i_attr_name, String i_attr_val) {
         return i_attr_name + "=\"" + i_attr_val + "\" "
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static String format_trace(I_trace i_trace) {
         String l_result = T_logging_const.GC_EMPTY_STRING
         l_result += "<trace "
@@ -36,7 +36,7 @@ class T_event_formatter_html extends T_event_formatter implements I_event_format
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String format_traces(ArrayList<I_trace> i_event_traces, I_event i_source_event) {
         String l_result = T_logging_const.GC_EMPTY_STRING
         if (!p_header_was_added) {

@@ -4,7 +4,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
 import groovy.transform.Memoized
 
 class T_trace extends T_inherited_configurations implements I_trace {
@@ -18,13 +18,13 @@ class T_trace extends T_inherited_configurations implements I_trace {
     String p_config_class = T_logging_const.GC_EMPTY_STRING
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     Boolean is_muted() {
         return p_muted
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     Boolean is_masked() {
         if (p_mask == T_logging_const.GC_EMPTY_STRING || p_mask == T_logging_const.GC_FALSE_STRING || p_mask == T_logging_const.GC_TRACE_MASK_NONE) {
             return T_logging_const.GC_FALSE
@@ -34,13 +34,13 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_muted(Boolean i_is_muted) {
         p_muted = i_is_muted
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String format_trace(I_event i_source_event) {
         String l_result_string = T_logging_const.GC_EMPTY_STRING
         if (get_formatter() != T_logging_const.GC_NULL_OBJ_REF) {
@@ -52,19 +52,19 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String toString() {
         String l_result_string = T_logging_const.GC_EMPTY_STRING
         l_result_string += to_string()
         return l_result_string
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     private String unmasked() {
         return T_u.nvl(p_value, p_ref.toString())
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     private String masked() {
         if (p_ref instanceof I_maskable) {
             if (p_value != T_logging_const.GC_EMPTY_STRING) {
@@ -78,12 +78,12 @@ class T_trace extends T_inherited_configurations implements I_trace {
         }
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     private Boolean is_trace_missing() {
         return (p_ref == T_logging_const.GC_NULL_OBJ_REF && (p_value == T_logging_const.GC_NULL_OBJ_REF || p_value == T_logging_const.GC_EMPTY_STRING || p_value == T_s.c().GC_DEFAULT_TRACE))
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     private String to_string() {
         if (is_trace_missing()) {
             return T_s.c().GC_DEFAULT_TRACE
@@ -113,25 +113,25 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_formatter(I_trace_formatter i_trace_formatter) {
         p_trace_formatter = i_trace_formatter
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     I_trace_formatter get_formatter() {
         return p_trace_formatter
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_name() {
         return p_name
     }
 
     @Memoized
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_search_name_config() {
         String l_result = T_logging_const.GC_EMPTY_STRING
         if (get_ref() != T_logging_const.GC_NULL_OBJ_REF && p_config_class != T_logging_const.GC_EMPTY_STRING) {
@@ -145,7 +145,7 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Memoized
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_ref_class_name() {
         String l_result = T_logging_const.GC_EMPTY_STRING
         if (get_ref() != T_logging_const.GC_NULL_OBJ_REF) {
@@ -155,67 +155,67 @@ class T_trace extends T_inherited_configurations implements I_trace {
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_name(String i_name) {
         p_name = i_name
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     Object get_ref() {
         return p_ref
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_ref(Object i_ref) {
         p_ref = i_ref
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_val(String i_value) {
         p_value = i_value
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_val() {
         return p_value
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_source(String i_source) {
         p_source = i_source
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_source() {
         return p_source
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     void set_class(String i_class) {
         p_config_class = i_class
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_config_class() {
         return p_config_class
     }
 
     @Memoized
-    @I_black_box("error")
+    @I_black_box_base("error")
     Boolean match_trace(String i_ref_class_name, String i_name) {
         return (get_search_name_config() == T_u.nvl(i_ref_class_name, i_name) || get_search_name_config() == i_name)
     }
 
     @Override
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_ref_guid() {
         if (p_ref instanceof I_object_with_guid) {
             return p_ref.get_guid()

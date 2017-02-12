@@ -1,4 +1,4 @@
-package com.a9ae0b01f0ffc.black_box.implementation.annotations
+package com.a9ae0b01f0ffc.black_box_base.implementation.annotations
 
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.commons.main.T_common_const
@@ -24,20 +24,16 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
     private static final ClassNode PC_CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     public static final String PC_BLACK_BOX_TYPE_ERROR = "error"
     public static final String PC_BLACK_BOX_TYPE_FULL = "full"
-    private T_black_box_visitor_base p_return_expression_visitor = new T_black_box_visitor_base()
-
-    static {
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
-        T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
+    private T_black_box_visitor p_return_expression_visitor = new T_black_box_visitor()
+    static { //TODO: IF not init, init in both annotations; rename these annotations to _base
+        if (!T_s.x().is_init()) {
+            T_s.x().init_custom("C:/COMPILE/commons.conf")//for logging&configuration
+        }
     }
 
-    T_black_box_visitor_base get_return_expression_visitor() {
+    T_black_box_visitor get_return_expression_visitor() {
         return p_return_expression_visitor
     }
-
-    T_black_box_transformation_base() {
-    }
-
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         if (T_s.c().GC_BLACK_BOX_ENABLED != T_common_const.GC_TRUE_STRING) {
@@ -68,7 +64,7 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                     if (l_black_box_type == PC_BLACK_BOX_TYPE_FULL) {
                         l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                         BlockStatement l_inside_try = new BlockStatement()
-                        T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
+                        T_black_box_visitor l_return_expression_visitor = get_return_expression_visitor()
                         l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
                         for (Statement l_return_statement in l_statements) {
                             l_return_statement.visit(l_return_expression_visitor)
@@ -81,7 +77,7 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                     } else if (l_black_box_type == PC_BLACK_BOX_TYPE_ERROR) {
                         if (T_s.c().GC_PROFILE_ALL != T_common_const.GC_TRUE_STRING) {
                             BlockStatement l_inside_try = new BlockStatement()
-                            T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
+                            T_black_box_visitor l_return_expression_visitor = get_return_expression_visitor()
                             l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
                             for (Statement l_return_statement in l_statements) {
                                 l_inside_try.addStatement(l_return_statement)
@@ -90,7 +86,7 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                         } else {
                             l_changed_block_statement.addStatement(create_profile_enter_statement(l_method_node))
                             BlockStatement l_inside_try = new BlockStatement()
-                            T_black_box_visitor_base l_return_expression_visitor = get_return_expression_visitor()
+                            T_black_box_visitor l_return_expression_visitor = get_return_expression_visitor()
                             l_return_expression_visitor.set_profile_only()
                             l_return_expression_visitor.p_is_return_added = T_common_const.GC_FALSE
                             for (Statement l_return_statement in l_statements) {
@@ -109,7 +105,7 @@ class T_black_box_transformation_base extends AbstractASTTransformation {
                     T_s.l().log_debug(T_s.s().Finished_Processing_method_Z1, l_method_node.getName())
                 }
             } else {
-                this.addError("@I_black_box should be applied to Methods.", l_first_node)
+                this.addError("@I_black_box_base should be applied to Methods.", l_first_node)
             }
         } else {
             throw new RuntimeException("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + Arrays.asList(i_ast_nodes))
