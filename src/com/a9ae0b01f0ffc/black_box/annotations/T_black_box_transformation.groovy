@@ -26,6 +26,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
     public static final String PC_BLACK_BOX_TYPE_ERROR = "error"
     public static final String PC_BLACK_BOX_TYPE_FULL = "full"
     public static final String PC_CLASS_NAME = "T_black_box_transformation"
+    public static final Class PC_SHORTCUT_CLASS = com.a9ae0b01f0ffc.black_box.main.T_s
 
     static {
         T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
@@ -166,7 +167,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, "create_shortcut_declaration_statement", T_s.r(this, "this"))
         try {
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_shortcut_declaration_statement", T_s.r(GeneralUtils.declS(GeneralUtils.varX("l_shortcuts"), new ConstructorCallExpression(new ClassNode(T_s.class), new ArgumentListExpression())), "T_s.r(GeneralUtils.declS(GeneralUtils.varX(\"l_shortcuts\"), new ConstructorCallExpression(new ClassNode(T_s.class), new ArgumentListExpression()))")) as Statement
+            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_shortcut_declaration_statement", T_s.r(GeneralUtils.declS(GeneralUtils.varX("l_shortcuts"), new ConstructorCallExpression(new ClassNode(PC_SHORTCUT_CLASS), new ArgumentListExpression())), "T_s.r(GeneralUtils.declS(GeneralUtils.varX(\"l_shortcuts\"), new ConstructorCallExpression(new ClassNode(T_s.class), new ArgumentListExpression()))")) as Statement
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_shortcut_declaration_statement", e_others)
             throw e_others

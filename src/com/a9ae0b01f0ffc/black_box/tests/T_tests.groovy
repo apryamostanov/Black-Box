@@ -22,14 +22,8 @@ class T_tests {
     }
 
     @Test
-    void t0() {
-        new T_case_investigations2().init_logger("./src/com/a9ae0b01f0ffc/black_box/tests/conf/main_001.conf")
-    }
-
-    @Test
     void test_001() {
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom(PC_COMMONS_CONF_NAME_LOGGER)
-        //com.a9ae0b01f0ffc.black_box_base.main.T_s.l().log_info(T_s.s().HELLO_WORLD)
+        //com.a9ae0b01f0ffc.black_box.main.T_s.l().log_info(T_s.s().HELLO_WORLD)
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_001.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
         assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|T_method_invocation{p_class_name='Unknown Class', p_method_name='Unknown Method', p_method_arguments=[], p_start_time=null, p_end_time=null}|[]" + System.lineSeparator()
