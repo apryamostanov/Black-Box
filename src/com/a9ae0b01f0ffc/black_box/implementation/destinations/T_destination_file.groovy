@@ -29,7 +29,7 @@ class T_destination_file extends T_destination {
         l_location = l_location.replaceAll(T_logging_const.GC_SUBST_USERNAME, T_logging_const.GC_USERNAME)
         l_location = l_location.replaceAll(T_logging_const.GC_SUBST_DATE, l_current_date.format(T_s.c().GC_FILENAME_DATE_FORMAT))
         l_location = l_location.replaceAll(T_logging_const.GC_SUBST_TIME, l_current_date.format(T_s.c().GC_FILENAME_TIME_FORMAT))
-        l_location = l_location.replaceAll(T_logging_const.GC_SUBST_THREADID, T_logging_const.GC_THREADID)
+        l_location = l_location.replaceAll(T_logging_const.GC_SUBST_THREADID, T_s.commons().GC_THREADID)
         l_location = l_location.replaceAll(T_logging_const.GC_SUBST_PROCESSID, T_logging_const.GC_PROCESSID)
         return l_location
     }

@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
+import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
@@ -10,7 +11,7 @@ import com.a9ae0b01f0ffc.commons.static_string.T_static_string
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
-class T_logger implements I_logger {
+class T_logger extends T_object_with_guid implements I_logger {
 
     private ArrayList<I_destination> p_destinations = new ArrayList<I_destination>()
     private String p_logger_id = UUID.randomUUID().toString()
@@ -21,6 +22,17 @@ class T_logger implements I_logger {
     private Boolean p_is_init = init()
     private HashMap<String, Integer> p_statistics_method_calls_count = new HashMap<String, Integer>()
     private HashMap<String, Long> p_statistics_method_calls_duration = new HashMap<String, Long>()
+    static String p_class_guid = UUID.randomUUID()
+
+    @I_black_box("error")
+    String get_class_guid() {
+        return p_class_guid
+    }
+
+    @I_black_box("error")
+    static String get_static_class_guid() {
+        return p_class_guid
+    }
 
     @Override
     @I_black_box_base("error")

@@ -1,7 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.annotations
 
-import com.a9ae0b01f0ffc.black_box_base.interfaces.I_logger
-import com.a9ae0b01f0ffc.black_box_base.main.T_s
+import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
+import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.commons.main.T_common_const
 import groovy.transform.ToString
 import org.codehaus.groovy.ast.*

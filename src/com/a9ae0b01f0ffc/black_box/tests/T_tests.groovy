@@ -16,10 +16,10 @@ class T_tests {
     final String PC_COMMONS_CONF_NAME_LOGGER = "./src/com/a9ae0b01f0ffc/black_box/conf/logger_debug/logger_commons.conf"
     static final String PC_PAN = "4447778899992222"
     static final String PC_CLASS_NAME = "T_tests"
-
+/*
     static {
-        com.a9ae0b01f0ffc.black_box_base.main.T_s.x().init_custom(PC_COMMONS_CONF_NAME_LOGGER)
-    }
+        com.a9ae0b01f0ffc.black_box.main.T_s.x().init_custom(PC_COMMONS_CONF_NAME_LOGGER)
+    }*/
 
     @Test
     void test_001() {

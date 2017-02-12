@@ -180,7 +180,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
         } else if (PC_STATIC_TRACE_NAME_MESSAGE.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_message().toString())
         } else if (PC_STATIC_TRACE_NAME_THREADID.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
-            l_result_trace.set_val(T_logging_const.GC_THREADID)
+            l_result_trace.set_val(T_s.commons().GC_THREADID)
         } else if (PC_STATIC_TRACE_NAME_PROCESSID.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(T_logging_const.GC_PROCESSID)
         } else if (PC_STATIC_TRACE_NAME_METHOD_INVOCATION.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {

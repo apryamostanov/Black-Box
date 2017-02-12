@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="black_box:jar">
+    <output-path>$USER_HOME$/.m2/repository/BlackBox/Main/1.1/</output-path>
+    <root id="archive" name="Main-1.1.jar">
+      <element id="module-output" name="black_box" />
+    </root>
+  </artifact>
+</component>

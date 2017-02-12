@@ -7,11 +7,13 @@ import groovy.transform.ToString
 @ToString(includeNames = true, includeFields = true)
 class T_object_with_guid implements I_object_with_guid{
 
-    String p_guid = ""//UUID.randomUUID()
+    String p_guid = UUID.randomUUID()
 
     @Override
     @I_black_box("error")
     String get_guid() {
         return p_guid
     }
+
+
 }

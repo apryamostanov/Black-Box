@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.main
 
+import com.a9ae0b01f0ffc.black_box.implementation.T_object_with_guid
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
@@ -7,7 +8,7 @@ import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string_builder
 
-class T_s {
+class T_s extends T_object_with_guid {
 
     @I_black_box_base("error")
     static I_logger l() {
