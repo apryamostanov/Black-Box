@@ -8,7 +8,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 
 abstract class T_destination extends T_inherited_configurations implements I_destination {

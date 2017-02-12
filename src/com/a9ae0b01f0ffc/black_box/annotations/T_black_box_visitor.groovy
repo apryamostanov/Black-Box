@@ -1,6 +1,6 @@
-package com.a9ae0b01f0ffc.black_box.implementation.annotations
+package com.a9ae0b01f0ffc.black_box.annotations
 
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.main.T_common_const
 import groovy.transform.ToString
 import org.codehaus.groovy.ast.CodeVisitorSupport
@@ -15,6 +15,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
 
     Boolean p_is_return_added = T_common_const.GC_FALSE
     Boolean p_is_profile_only = T_common_const.GC_FALSE
+    //todo return # number
 
     @Override
     @I_black_box_base

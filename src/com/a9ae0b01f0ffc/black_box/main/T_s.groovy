@@ -2,7 +2,7 @@ package com.a9ae0b01f0ffc.black_box.main
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string_builder

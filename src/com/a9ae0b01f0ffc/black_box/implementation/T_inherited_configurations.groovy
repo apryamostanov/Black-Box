@@ -2,7 +2,7 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_inherited_configurations
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)

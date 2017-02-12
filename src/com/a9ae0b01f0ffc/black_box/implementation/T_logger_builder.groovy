@@ -3,7 +3,7 @@ package com.a9ae0b01f0ffc.black_box.implementation
 import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.black_box_base.implementation.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import groovy.transform.ToString

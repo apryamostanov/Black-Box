@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="BlackBox.jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/BlackBox.jar</output-path>
+  <artifact type="jar" name="BlackBox">
+    <output-path>$PROJECT_DIR$/out/artifacts/BlackBox</output-path>
     <root id="archive" name="BlackBox.jar">
       <element id="module-output" name="black_box" />
     </root>
