@@ -82,7 +82,8 @@ class T_logger implements I_logger {
     @Override
     @I_black_box_base("error")
     I_trace object2trace(Object i_object, String i_source) {
-        I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
+        I_trace l_trace = T_logging_const.GC_NULL_OBJ_REF as I_trace
+        l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_object)
         } else if (p_mode == T_s.c().GC_LOGGER_MODE_DIAGNOSTIC) {
