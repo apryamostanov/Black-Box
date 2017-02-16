@@ -1,6 +1,5 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.implementation.T_object_with_guid
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
@@ -16,12 +15,12 @@ class T_logging_context extends T_object_with_guid {
     private Boolean p_is_init = T_logging_const.GC_FALSE
     static String p_class_guid = UUID.randomUUID()
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_class_guid() {
         return p_class_guid
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static String get_static_class_guid() {
         return p_class_guid
     }

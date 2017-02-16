@@ -4,6 +4,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
+import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import groovy.transform.ToString
 
@@ -22,7 +23,7 @@ class T_event_formatter_xml extends T_event_formatter implements I_event_formatt
         String l_result = T_logging_const.GC_EMPTY_STRING
         l_result += "        <trace "
         l_result += attr("name", i_trace.get_name())
-        l_result += attr("serialized_representation", i_trace.format_trace(i_source_event))
+        l_result += attr("serialized_representation", T_u.escape_xml(i_trace.format_trace(i_source_event)))
         l_result += attr("source", i_trace.get_source())
         l_result += attr("mask", i_trace.get_mask())
         l_result += attr("ref_class_name", i_trace.get_ref_class_name())

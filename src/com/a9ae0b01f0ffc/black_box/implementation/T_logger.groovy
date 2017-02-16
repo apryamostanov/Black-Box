@@ -1,6 +1,5 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
-import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
@@ -24,12 +23,12 @@ class T_logger extends T_object_with_guid implements I_logger {
     private HashMap<String, Long> p_statistics_method_calls_duration = new HashMap<String, Long>()
     static String p_class_guid = UUID.randomUUID()
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     String get_class_guid() {
         return p_class_guid
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     static String get_static_class_guid() {
         return p_class_guid
     }
@@ -164,11 +163,6 @@ class T_logger extends T_object_with_guid implements I_logger {
         p_logger_id
     }
 
-    @I_black_box_base("error")
-    static Boolean method_arguments_exist(Object[] i_traces) {
-        return (i_traces != T_logging_const.GC_SKIPPED_ARGS && i_traces != T_logging_const.GC_NULL_OBJ_REF && i_traces.size() > T_logging_const.GC_EMPTY_SIZE)
-    }
-
     @Override
     @I_black_box_base("error")
     void print_stats() {
@@ -247,7 +241,7 @@ class T_logger extends T_object_with_guid implements I_logger {
         ArrayList<I_trace> l_method_arguments = objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME)
         add_invocation(i_class_name, i_method_name, l_method_arguments)
         I_event l_event = create_event("enter", i_class_name, i_method_name)
-        if (method_arguments_exist(i_traces)) {
+        if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(l_method_arguments)
         }
         log_generic(l_event)
@@ -257,7 +251,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @I_black_box_base("error")
     void log_exit(String i_class_name, String i_method_name, I_trace... i_traces = T_logging_const.GC_SKIPPED_ARGS as I_trace[]) {
         I_event l_event = create_event("exit", i_class_name, i_method_name)
-        if (method_arguments_exist(i_traces)) {
+        if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
@@ -299,10 +293,20 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
+    void log_error(T_static_string i_message, Throwable i_throwable, I_trace... i_traces = T_logging_const.GC_SKIPPED_ARGS as I_trace[]) {
+        I_event l_event = create_event("error", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        l_event.set_message(i_message)
+        l_event.set_throwable(i_throwable)
+        l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
+        log_generic(l_event)
+    }
+
+    @Override
+    @I_black_box_base("error")
     void log_debug(T_static_string i_static_string_message, Object... i_traces = T_logging_const.GC_SKIPPED_ARGS as Object[]) {
         I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_message)
-        if (method_arguments_exist(i_traces)) {
+        if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
@@ -313,7 +317,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     void log_info(T_static_string i_static_string_info, Object... i_traces = T_logging_const.GC_SKIPPED_ARGS as Object[]) {
         I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_info)
-        if (method_arguments_exist(i_traces)) {
+        if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
         }
         log_generic(l_event)
@@ -324,9 +328,25 @@ class T_logger extends T_object_with_guid implements I_logger {
     void log_warning(T_static_string i_static_string_warning, Object... i_traces = T_logging_const.GC_SKIPPED_ARGS as Object[]) {
         I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_static_string_warning)
-        if (method_arguments_exist(i_traces)) {
+        if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
         }
+        log_generic(l_event)
+    }
+
+    @Override
+    @I_black_box_base("error")
+    void log_receive(Object i_incoming_data) {
+        I_event l_event = create_event("receive", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        l_event.add_trace_runtime(T_s.r(i_incoming_data, "incoming_data"))
+        log_generic(l_event)
+    }
+
+    @Override
+    @I_black_box_base("error")
+    void log_send(Object i_outgoing_data) {
+        I_event l_event = create_event("send", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        l_event.add_trace_runtime(T_s.r(i_outgoing_data, "outgoing_data"))
         log_generic(l_event)
     }
 

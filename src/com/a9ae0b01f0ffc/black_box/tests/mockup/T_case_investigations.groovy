@@ -1,6 +1,5 @@
 package com.a9ae0b01f0ffc.black_box.tests.mockup
 
-import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_logging_context
@@ -16,7 +15,7 @@ class T_case_investigations extends T_logging_context {
     private String p_current_direction = T_logging_const.GC_EMPTY_STRING
     Integer z
 
-    @I_black_box
+    @I_black_box_base
     Integer get_value_position() {
         if (p_current_direction != PC_VTS_TO_HOST) {
             return PC_VTS_LOG_VALUE_POSITION_SENT
@@ -25,12 +24,12 @@ class T_case_investigations extends T_logging_context {
         }
     }
 
-    @I_black_box
+    @I_black_box_base
     void process_line(String i_line) {
         z = get_value_position()
     }
 
-    @I_black_box("error")
+    @I_black_box_base("error")
     void test_error() {
         throw new E_application_exception(T_s.s().SOME_ERROR)
     }

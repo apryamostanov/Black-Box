@@ -28,23 +28,11 @@ interface I_logger {
 
     void profile_exit(String i_class_name, String i_method_name)
 
-    void log_enter(
-            String i_class_name
-            , String i_method_name
-            , I_trace... i_traces
-    )
+    void log_enter(String i_class_name, String i_method_name, I_trace... i_traces)
 
-    void log_exit(
-            String i_class_name
-            , String i_method_name
-            , I_trace... i_traces
-    )
+    void log_exit(String i_class_name, String i_method_name, I_trace... i_traces)
 
-    Object log_exit_automatic(
-            String i_class_name
-            , String i_method_name
-            , I_trace i_return_object_trace
-    )
+    Object log_exit_automatic(String i_class_name, String i_method_name, I_trace i_return_object_trace)
 
     Object profile_exit_automatic(String i_class_name, String i_method_name, Object i_return_object)
 
@@ -52,20 +40,17 @@ interface I_logger {
 
     void log_error(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces)
 
-    void log_debug(
-            T_static_string i_static_string_message
-            , Object... i_traces
-    )
+    void log_error(T_static_string i_message, Throwable i_throwable, I_trace... i_traces)
 
-    void log_info(
-            T_static_string i_static_string_info
-            , Object... i_traces
-    )
+    void log_debug(T_static_string i_static_string_message, Object... i_traces)
 
-    void log_warning(
-            T_static_string i_static_string_warning
-            , Object... i_traces
-    )
+    void log_info(T_static_string i_static_string_info, Object... i_traces)
+
+    void log_warning(T_static_string i_static_string_warning, Object... i_traces)
+
+    void log_receive(Object i_incoming_data)
+
+    void log_send(Object i_outgoing_data)
 
     I_event create_event(String i_event_type, String i_class_name, String i_method_name)
 

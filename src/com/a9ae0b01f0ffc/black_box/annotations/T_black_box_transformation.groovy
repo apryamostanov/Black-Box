@@ -26,12 +26,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
     public static final String PC_BLACK_BOX_TYPE_ERROR = "error"
     public static final String PC_BLACK_BOX_TYPE_FULL = "full"
     public static final String PC_CLASS_NAME = "T_black_box_transformation"
-    public static final Class PC_SHORTCUT_CLASS = com.a9ae0b01f0ffc.black_box.main.T_s
-
-    static {
-        T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
-    }
-
+    public static final Class PC_SHORTCUT_CLASS = T_s
 
     T_black_box_visitor get_return_expression_visitor() {
         I_logger l_logger = T_s.l()
@@ -46,6 +41,9 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
+        if (!T_s.x().is_init()) {
+            T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
+        }
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, "visit", T_s.r(this, "this"))
         try {
