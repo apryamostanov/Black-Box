@@ -122,7 +122,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES).values()) {
                     l_result += make_line("        <exception_trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${T_u.escape_xml(l_runtime_trace.format_trace(i_source_event))}</exception_trace>", l_depth)
                 }
-                if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES)) {
+                if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_RUNTIME)) {
                     for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_RUNTIME).values()) {
                         l_result += make_line("        <trace class=\"${get_short_name(l_runtime_trace.get_ref_class_name())}\">${T_u.escape_xml(l_runtime_trace.format_trace(i_source_event))}</trace>", l_depth)
                     }
