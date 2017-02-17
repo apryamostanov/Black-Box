@@ -221,8 +221,8 @@ class T_tests {
                 "        <trace name=\"exception\" serialized_representation=\"Trace missing\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"exception_message\" serialized_representation=\"Trace missing\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"message\" serialized_representation=\"null\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
-                "        <trace name=\"i_pan\" serialized_representation=\"T_pan(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"T_pan\" masked=\"false\" />\n" +
-                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"T_pan_maskable\" masked=\"false\" />\n" +
+                "        <trace name=\"i_pan\" serialized_representation=\"T_pan(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan\" masked=\"false\" />\n" +
+                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
         E_application_exception.set_is_tokenization_enabled(T_logging_const.GC_TRUE)
         assert T_destination_variable.l() == l_expected.replaceAll("\n", "\r\n")
@@ -243,8 +243,8 @@ class T_tests {
                 "        <trace name=\"exception\" serialized_representation=\"Trace missing\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"exception_message\" serialized_representation=\"Trace missing\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"message\" serialized_representation=\"null\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
-                "        <trace name=\"result_pan\" serialized_representation=\"T_pan(4447778899992225)\" source=\"runtime\" mask=\"\" ref_class_name=\"T_pan\" masked=\"false\" />\n" +
-                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"T_pan_maskable\" masked=\"false\" />\n" +
+                "        <trace name=\"result_pan\" serialized_representation=\"T_pan(4447778899992225)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan\" masked=\"false\" />\n" +
+                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
         assert T_destination_variable.l() == l_expected.replaceAll("\n", "\r\n")
     }
@@ -267,9 +267,9 @@ class T_tests {
                 "        <trace name=\"event\" serialized_representation=\"error\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"exception_message\" serialized_representation=\"TEST EXCEPTION\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"message\" serialized_representation=\"null\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
-                "        <trace name=\"exception_pan\" serialized_representation=\"T_pan_maskable(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"T_pan_maskable\" masked=\"false\" />\n" +
-                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"T_pan_maskable\" masked=\"false\" />\n" +
-                "        <trace name=\"\" serialized_representation=\"T_pan_maskable(4447778899992224)\" source=\"exception_traces\" mask=\"\" ref_class_name=\"T_pan_maskable\" masked=\"false\" />\n" +
+                "        <trace name=\"exception_pan\" serialized_representation=\"T_pan_maskable(4447778899992223)\" source=\"runtime\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
+                "        <trace name=\"pan\" serialized_representation=\"T_pan_maskable(4447778899992222)\" source=\"context\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
+                "        <trace name=\"\" serialized_representation=\"T_pan_maskable(4447778899992224)\" source=\"exception_traces\" mask=\"\" ref_class_name=\"com.a9ae0b01f0ffc.black_box.tests.mockup.T_pan_maskable\" masked=\"false\" />\n" +
                 "    </event>\n"
         assert T_destination_variable.l() == l_expected.replaceAll("\n", "\r\n")
     }
@@ -404,13 +404,6 @@ class T_tests {
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_043.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD_Z1, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
         assert T_destination_variable.l() == "info|HELLO WORLD T_pan_maskable(4447778899992221)" + System.lineSeparator()
-    }
-
-    @Test
-    void test_044() {
-        com.a9ae0b01f0ffc.black_box.main.T_s.x().init_custom("C:/COMPILE/commons.conf")
-        com.a9ae0b01f0ffc.black_box.main.T_s.l().profile_enter("classname", "methodname")
-        com.a9ae0b01f0ffc.black_box.main.T_s.l().log_debug(T_s.s().ZZZ)
     }
 
 }

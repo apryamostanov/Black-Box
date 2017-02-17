@@ -275,10 +275,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_exception(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces = T_logging_const.GC_SKIPPED_ARGS as I_trace[]) {
-        I_event l_event = create_event("error", i_class_name, i_method_name)
-        l_event.set_throwable(i_throwable)
-        l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
-        log_generic(l_event)
+        log_error(i_class_name, i_method_name, i_throwable, i_traces)
         pop_invocation()
     }
 

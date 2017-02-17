@@ -20,5 +20,6 @@ class T_logging_const extends T_common_const {
     static final String GC_TRACE_MASK_SENSITIVE = "sensitive"
     static final String GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE = "except_non_sensitive"
     static final String GC_TRACE_MASK_NONE = "none"
+    static final String GC_DEFAULT_FORMATTER_NONE = "none"
 
 }

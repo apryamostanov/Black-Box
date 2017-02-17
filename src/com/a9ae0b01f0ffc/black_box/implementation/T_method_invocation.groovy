@@ -3,7 +3,6 @@ package com.a9ae0b01f0ffc.black_box.implementation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
-import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import groovy.transform.ToString
 
@@ -71,6 +70,9 @@ class T_method_invocation implements I_method_invocation {
     @Override
     @I_black_box_base("error")
     Long get_elapsed_time() {
+        if (p_start_time == T_logging_const.GC_NULL_OBJ_REF) {
+            return T_logging_const.GC_NULL_OBJ_REF as Long
+        }
         stop_timing()
         return p_end_time - p_start_time
     }
