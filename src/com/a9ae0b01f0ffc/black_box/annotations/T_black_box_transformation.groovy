@@ -16,7 +16,7 @@ import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.AbstractASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
 
-@ToString(includeNames = true, includeFields = true)
+@ToString(includeNames = true, includeFields = true, includePackage = false)
 @GroovyASTTransformation(
         phase = CompilePhase.SEMANTIC_ANALYSIS
 )

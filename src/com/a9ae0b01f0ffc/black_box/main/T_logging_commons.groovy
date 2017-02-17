@@ -19,6 +19,7 @@ class T_logging_commons extends T_common_commons {
     String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
     String GC_DESTINATION_PURPOSE_DISPLAY = "display"
     String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
+    String GC_XML_PAD_DEPTH = "4"
 
     T_logging_commons(String i_conf_file_name) {
         super(i_conf_file_name)
@@ -37,6 +38,7 @@ class T_logging_commons extends T_common_commons {
         GC_LOGGER_MODE_DIAGNOSTIC = GC_CONST_CONF.GC_LOGGER_MODE_DIAGNOSTIC(GC_LOGGER_MODE_DIAGNOSTIC)
         GC_DESTINATION_PURPOSE_DISPLAY = GC_CONST_CONF.GC_DESTINATION_PURPOSE_DISPLAY(GC_DESTINATION_PURPOSE_DISPLAY)
         GC_DESTINATION_PURPOSE_WAREHOUSE = GC_CONST_CONF.GC_DESTINATION_PURPOSE_WAREHOUSE(GC_DESTINATION_PURPOSE_WAREHOUSE)
+        GC_XML_PAD_DEPTH = GC_CONST_CONF.GC_XML_PAD_DEPTH(GC_XML_PAD_DEPTH)
     }
 
 }
