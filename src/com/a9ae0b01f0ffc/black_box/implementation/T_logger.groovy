@@ -57,6 +57,7 @@ class T_logger extends T_object_with_guid implements I_logger {
         l_event.set_method_name(i_method_name)
         l_event.set_depth(p_method_invocation_stack.size())
         l_event.set_datetimestamp(new Date())
+        l_event.set_invocation(get_current_method_invocation())
         return l_event
     }
 

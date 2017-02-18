@@ -16,8 +16,10 @@ class T_trace_formatter_for_messages implements I_trace_formatter {
         String l_formatted_trace = T_logging_const.GC_EMPTY_STRING
         if (i_trace.get_val() != T_logging_const.GC_EMPTY_STRING) {
             l_formatted_trace = i_trace.get_val().replace(T_s.c().GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_BEFORE.toString(), T_s.c().GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_AFTER.toString())
-        } else {
+        } else if (i_trace.get_ref() != T_logging_const.GC_NULL_OBJ_REF) {
             l_formatted_trace = i_trace.get_ref().toString().replace(T_s.c().GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_BEFORE.toString(), T_s.c().GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_AFTER.toString())
+        } else {
+            l_formatted_trace = T_s.c().GC_DEFAULT_TRACE
         }
         Integer l_trace_seqno = T_logging_const.GC_ZERO
         for (I_trace l_runtime_trace in i_parent_event.get_traces_runtime()) {

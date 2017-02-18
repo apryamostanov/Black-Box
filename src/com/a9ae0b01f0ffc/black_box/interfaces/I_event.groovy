@@ -48,4 +48,8 @@ interface I_event extends I_inherited_configurations {
 
     Boolean is_trace_masked(I_trace i_trace)
 
+    void set_invocation(I_method_invocation i_method_invocation)
+
+    I_method_invocation get_invocation()
+
 }

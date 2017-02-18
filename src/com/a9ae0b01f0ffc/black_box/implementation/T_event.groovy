@@ -2,6 +2,7 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
+import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
@@ -21,6 +22,7 @@ class T_event extends T_inherited_configurations implements I_event {
     private ArrayList<I_trace> p_traces_config = new ArrayList<I_trace>()
     private T_static_string p_message = T_logging_const.GC_NULL_OBJ_REF as T_static_string
     private Throwable p_throwable = T_logging_const.GC_NULL_OBJ_REF as Throwable
+    private I_method_invocation p_invocation = T_logging_const.GC_NULL_OBJ_REF as I_method_invocation
 
     @Override
     @I_black_box_base("error")
@@ -179,4 +181,15 @@ class T_event extends T_inherited_configurations implements I_event {
         return l_result
     }
 
+    @Override
+    @I_black_box_base("error")
+    void set_invocation(I_method_invocation i_method_invocation) {
+        p_invocation = i_method_invocation
+    }
+
+    @Override
+    @I_black_box_base("error")
+    I_method_invocation get_invocation() {
+        return p_invocation
+    }
 }
