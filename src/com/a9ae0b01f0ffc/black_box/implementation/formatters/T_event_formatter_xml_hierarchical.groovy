@@ -4,7 +4,6 @@ import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event_formatter
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.main.T_u
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
@@ -29,7 +28,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     ThreadLocal<Integer> p_relative_xml_depth = new ThreadLocal<Integer>()
 
     T_event_formatter_xml_hierarchical() {
-        p_relative_xml_depth.set(T_logging_const.GC_ZERO)
+        p_relative_xml_depth.set(GC_ZERO)
     }
 
     @I_black_box_base("error")
@@ -55,58 +54,58 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
 
     @I_black_box_base("error")
     static String make_class_name_attribute(String i_short_name) {
-        return PC_ATTR_CLASS + T_logging_const.GC_EQUALS + T_logging_const.GC_XML_DOUBLE_QUOTE + i_short_name + T_logging_const.GC_XML_DOUBLE_QUOTE
+        return PC_ATTR_CLASS + GC_EQUALS + GC_XML_DOUBLE_QUOTE + i_short_name + GC_XML_DOUBLE_QUOTE
     }
 
     @I_black_box_base("error")
     static String get_name(I_trace i_trace) {
-        return PC_ATTR_NAME + T_logging_const.GC_EQUALS + T_logging_const.GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(i_trace.get_name()) + T_logging_const.GC_XML_DOUBLE_QUOTE
+        return PC_ATTR_NAME + GC_EQUALS + GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(i_trace.get_name()) + GC_XML_DOUBLE_QUOTE
     }
 
     @I_black_box_base("error")
     String make_line(String i_source_line) {
         String l_tag_string = get_indent() + i_source_line
-        return l_tag_string == T_logging_const.GC_EMPTY_STRING ? T_logging_const.GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
+        return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
     @I_black_box_base("error")
     String get_indent() {
-        return T_logging_const.GC_EMPTY_STRING.padLeft(p_relative_xml_depth.get(), T_logging_const.GC_SPACE)
+        return GC_EMPTY_STRING.padLeft(p_relative_xml_depth.get(), GC_SPACE)
     }
 
     @I_black_box_base("error")
     static String get_attributes_predefined(ArrayList<I_trace> i_event_traces, I_event i_source_event) {
-        String l_attribute_string = T_logging_const.GC_EMPTY_STRING
+        String l_attribute_string = GC_EMPTY_STRING
         for (l_trace in i_event_traces) {
             if (l_trace.get_source() == T_destination.PC_TRACE_SOURCE_PREDEFINED.get_name()) {
-                if (l_attribute_string != T_logging_const.GC_EMPTY_STRING) {
-                    l_attribute_string += T_logging_const.GC_SPACE
+                if (l_attribute_string != GC_EMPTY_STRING) {
+                    l_attribute_string += GC_SPACE
                 }
-                l_attribute_string += l_trace.get_name() + T_logging_const.GC_EQUALS + T_logging_const.GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(l_trace.format_trace(i_source_event)) + T_logging_const.GC_XML_DOUBLE_QUOTE
+                l_attribute_string += l_trace.get_name() + GC_EQUALS + GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(l_trace.format_trace(i_source_event)) + GC_XML_DOUBLE_QUOTE
             }
         }
         return l_attribute_string
     }
 
     @I_black_box_base("error")
-    String open_tag(String i_tag_name, String i_attributes = T_logging_const.GC_EMPTY_STRING) {
-        String l_tag_string = get_indent() + T_logging_const.GC_XML_LESS + i_tag_name + (i_attributes == T_logging_const.GC_EMPTY_STRING ? T_logging_const.GC_EMPTY_STRING : T_logging_const.GC_SPACE + i_attributes) + T_logging_const.GC_XML_GREATER
+    String open_tag(String i_tag_name, String i_attributes = GC_EMPTY_STRING) {
+        String l_tag_string = get_indent() + GC_XML_LESS + i_tag_name + (i_attributes == GC_EMPTY_STRING ? GC_EMPTY_STRING : GC_SPACE + i_attributes) + GC_XML_GREATER
         p_relative_xml_depth.set(p_relative_xml_depth.get() + Integer.parseInt(T_s.c().GC_XML_PAD_DEPTH))
-        return l_tag_string == T_logging_const.GC_EMPTY_STRING ? T_logging_const.GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
+        return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
     @I_black_box_base("error")
     String close_tag(String i_tag_name) {
         p_relative_xml_depth.set(p_relative_xml_depth.get() - Integer.parseInt(T_s.c().GC_XML_PAD_DEPTH))
-        String l_tag_string = get_indent() + T_logging_const.GC_XML_LESS + T_logging_const.GC_XML_END + i_tag_name + T_logging_const.GC_XML_GREATER
-        return l_tag_string == T_logging_const.GC_EMPTY_STRING ? T_logging_const.GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
+        String l_tag_string = get_indent() + GC_XML_LESS + GC_XML_END + i_tag_name + GC_XML_GREATER
+        return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
     @I_black_box_base("error")
     static String get_elapsed_time(I_event i_source_event) {
-        String l_message = T_logging_const.GC_EMPTY_STRING
-        if (i_source_event.get_invocation().get_elapsed_time() != T_logging_const.GC_NULL_OBJ_REF) {
-            l_message = T_logging_const.GC_XML_LESS + PC_TAG_ELAPSED_TIME + T_logging_const.GC_SPACE + PC_ATTR_MILLISECONDS + T_logging_const.GC_EQUALS + T_logging_const.GC_XML_DOUBLE_QUOTE + i_source_event.get_invocation().get_elapsed_time().toString() + T_logging_const.GC_XML_DOUBLE_QUOTE + T_logging_const.GC_XML_END + T_logging_const.GC_XML_GREATER
+        String l_message = GC_EMPTY_STRING
+        if (i_source_event.get_invocation().get_elapsed_time() != GC_NULL_OBJ_REF) {
+            l_message = GC_XML_LESS + PC_TAG_ELAPSED_TIME + GC_SPACE + PC_ATTR_MILLISECONDS + GC_EQUALS + GC_XML_DOUBLE_QUOTE + i_source_event.get_invocation().get_elapsed_time().toString() + GC_XML_DOUBLE_QUOTE + GC_XML_END + GC_XML_GREATER
         }
         return l_message
     }
@@ -114,22 +113,22 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     @Override
     @I_black_box_base("error")
     String format_traces(ArrayList<I_trace> i_event_traces, I_event i_source_event) {
-        String l_result = T_logging_const.GC_EMPTY_STRING
+        String l_result = GC_EMPTY_STRING
         HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = make_traces_by_source_by_name(i_event_traces)
         String l_event_type = i_source_event.get_event_type()
         if (l_event_type == "enter") {
             l_result += open_tag(PC_TAG_INVOCATION, get_attributes_predefined(i_event_traces, i_source_event))
-            if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_RUNTIME)) {
-                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += open_tag(PC_TAG_ARGUMENT, get_class_name_short(l_runtime_trace) + T_logging_const.GC_SPACE + get_name(l_runtime_trace))
+            if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
+                    l_result += open_tag(PC_TAG_ARGUMENT, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_ARGUMENT)
                 }
             }
         } else if (l_event_type == "exit") {
-            if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_RUNTIME)) {
-                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += open_tag(PC_TAG_RESULT, get_class_name_short(l_runtime_trace) + T_logging_const.GC_SPACE + get_name(l_runtime_trace))
+            if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
+                    l_result += open_tag(PC_TAG_RESULT, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_RESULT)
                 }
@@ -137,21 +136,21 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             l_result += make_line(get_elapsed_time(i_source_event))
             l_result += close_tag(PC_TAG_INVOCATION)
         } else if (l_event_type == "error") {
-            l_result += open_tag(PC_TAG_EXCEPTION, make_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + T_logging_const.GC_SPACE + get_attributes_predefined(i_event_traces, i_source_event))
-            if (i_source_event.get_throwable() != T_logging_const.GC_NULL_OBJ_REF) {
+            l_result += open_tag(PC_TAG_EXCEPTION, make_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + get_attributes_predefined(i_event_traces, i_source_event))
+            if (i_source_event.get_throwable() != GC_NULL_OBJ_REF) {
                 l_result += open_tag(PC_TAG_EXCEPTION_STACKTRACE)
-                l_result += make_line(T_u.escape_xml(Arrays.toString(new StackTraceUtils().sanitizeRootCause(i_source_event.get_throwable())?.getStackTrace()).replace(T_logging_const.GC_COMMA, System.lineSeparator() + get_indent())).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
+                l_result += make_line(T_u.escape_xml(Arrays.toString(new StackTraceUtils().sanitizeRootCause(i_source_event.get_throwable())?.getStackTrace()).replace(GC_COMMA, System.lineSeparator() + get_indent())).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                 l_result += close_tag(PC_TAG_EXCEPTION_STACKTRACE)
             }
-            if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES)) {
-                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES).values()) {
+            if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_EXCEPTION_TRACES)) {
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_EXCEPTION_TRACES).values()) {
                     l_result += open_tag(PC_TAG_EXCEPTION_TRACE, get_class_name_short(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_EXCEPTION_TRACE)
                 }
             }
-            if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_RUNTIME)) {
-                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_RUNTIME).values()) {
+            if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
                     l_result += open_tag(PC_TAG_TRACE, get_class_name_short(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_TRACE)
@@ -160,11 +159,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             l_result += close_tag(PC_TAG_EXCEPTION)
             l_result += make_line(get_elapsed_time(i_source_event))
             l_result += close_tag(PC_TAG_INVOCATION)
+//todo: close only in case when this is open, i.e. differentiate between Full and Error types.
         } else {
             l_result += open_tag(i_source_event.get_event_type(), get_attributes_predefined(i_event_traces, i_source_event))
-            if (l_traces_by_source_by_name.containsKey(T_logging_const.GC_TRACE_SOURCE_RUNTIME)) {
-                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(T_logging_const.GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += open_tag(PC_TAG_TRACE, get_class_name_short(l_runtime_trace) + T_logging_const.GC_SPACE + get_name(l_runtime_trace))
+            if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
+                for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
+                    l_result += open_tag(PC_TAG_TRACE, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_TRACE)
                 }

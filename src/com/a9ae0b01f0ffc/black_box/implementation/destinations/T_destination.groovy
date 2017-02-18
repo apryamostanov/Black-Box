@@ -29,6 +29,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     final static I_trace PC_TRACE_SOURCE_RUNTIME = init_predefined_trace("runtime")
     final static I_trace PC_TRACE_SOURCE_CONTEXT = init_predefined_trace("context")
     final static I_trace PC_TRACE_SOURCE_EXCEPTION_TRACES = init_predefined_trace("exception_traces")
+//todo: exception stacktrace
     final static ArrayList<I_trace> PC_ALL_POSSIBLE_PREDEFINED_TRACES = new ArrayList<I_trace>()
     final static ArrayList<I_trace> PC_ALL_POSSIBLE_SOURCES = new ArrayList<I_trace>()
     static Boolean p_is_init = init()
