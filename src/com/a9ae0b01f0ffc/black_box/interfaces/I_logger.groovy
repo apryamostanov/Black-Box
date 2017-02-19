@@ -4,8 +4,6 @@ import com.a9ae0b01f0ffc.commons.static_string.T_static_string
 
 interface I_logger {
 
-    String get_logger_id()
-
     Integer get_depth()
 
     void log_generic(I_event i_event)
@@ -52,6 +50,8 @@ interface I_logger {
 
     void log_send(Object i_outgoing_data)
 
+    void log_sql(String i_sql_operation, String i_sql_string, String... i_bind_variables)
+
     I_event create_event(String i_event_type, String i_class_name, String i_method_name)
 
     I_trace object2trace(Object i_object, String i_source)
@@ -63,5 +63,7 @@ interface I_logger {
     I_trace spawn_trace(I_trace i_trace_runtime_or_context, I_trace i_trace_config)
 
     void set_mode(String i_mode)
+
+    I_method_invocation get_default_method_invocation()
 
 }

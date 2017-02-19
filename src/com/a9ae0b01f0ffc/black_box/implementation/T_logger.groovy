@@ -160,12 +160,6 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    String get_logger_id() {
-        p_logger_id
-    }
-
-    @Override
-    @I_black_box_base("error")
     void print_stats() {
         System.out.println("Call counts:")
         TreeMap<Integer, String> l_sorted_statistics_method_calls_count = new TreeMap<Integer, String>()
@@ -294,6 +288,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     void log_error(T_static_string i_message, Throwable i_throwable, I_trace... i_traces = T_logging_const.GC_SKIPPED_ARGS as I_trace[]) {
         I_event l_event = create_event("error", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_message)
+        log_error(get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), i_throwable, i_traces)
         l_event.set_throwable(i_throwable)
         l_event.add_traces_runtime(objects2traces_array(i_traces, T_logging_const.GC_TRACE_SOURCE_RUNTIME))
         log_generic(l_event)
@@ -350,6 +345,16 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
+    void log_sql(String i_sql_operation, String i_sql_string, String... i_bind_variables) {
+        I_event l_event = create_event("sql", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        l_event.add_trace_runtime(T_s.r(i_sql_operation, "sql_operation"))
+        l_event.add_trace_runtime(T_s.r(i_sql_string, "sql_string"))
+        l_event.add_trace_runtime(T_s.r(i_bind_variables, "bind_variables"))
+        log_generic(l_event)
+    }
+
+    @Override
+    @I_black_box_base("error")
     Integer get_depth() {
         return p_method_invocation_stack.size()
     }
@@ -361,6 +366,11 @@ class T_logger extends T_object_with_guid implements I_logger {
         } else {
             return PC_DEFAULT_METHOD_INVOCATION
         }
+    }
+
+    @I_black_box_base("error")
+    I_method_invocation get_default_method_invocation() {
+        return PC_DEFAULT_METHOD_INVOCATION
     }
 
     @Override

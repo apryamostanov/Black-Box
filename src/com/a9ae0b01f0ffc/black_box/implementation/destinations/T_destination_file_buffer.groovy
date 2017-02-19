@@ -27,6 +27,7 @@ class T_destination_file_buffer extends T_destination_file {
         if (p_configuration_events_by_name.containsKey(i_event.get_event_type())) {
             ArrayList<I_trace> l_trace_list = prepare_trace_list(i_event)
             store(l_trace_list, i_event)
+            i_event.get_invocation().set_event_logged_for_destination(i_event.get_event_type(), this)
         }
         if (i_event.get_event_type() == p_spool_event) {
             while (!p_serialized_events.isEmpty()) {

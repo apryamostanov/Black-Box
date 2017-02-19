@@ -40,6 +40,7 @@ class T_logger_builder implements I_logger_builder {
             if (!i_destination_xml.@guid.isEmpty()) {
                 l_event_formatter.set_print_trace_guid(i_destination_xml.@guid.text())
             }
+            l_event_formatter.set_parent_destination(l_destination)
             l_destination.set_formatter(l_event_formatter)
         } else {
             throw new E_application_exception(T_s.s().FORMATTER_IS_MANDATORY_FOR_DESTINATIONS, i_destination_xml.name())

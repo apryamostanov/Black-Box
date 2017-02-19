@@ -1,5 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
+import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
+import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
+import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
@@ -7,13 +10,14 @@ import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
-class T_method_invocation implements I_method_invocation {
+class T_method_invocation extends T_object_with_guid implements I_method_invocation {
 
     String p_class_name = T_logging_const.GC_EMPTY_STRING
     String p_method_name = T_logging_const.GC_EMPTY_STRING
     ArrayList<I_trace> p_method_arguments = T_logging_const.GC_SKIPPED_ARGS as ArrayList<I_trace>
     Long p_start_time = T_logging_const.GC_NULL_OBJ_REF as Long
     Long p_end_time = T_logging_const.GC_NULL_OBJ_REF as Long
+    HashMap<I_destination, ArrayList<String>> p_events_by_destination = new HashMap<I_destination, ArrayList<String>>()
 
 
     @Override
@@ -88,4 +92,25 @@ class T_method_invocation implements I_method_invocation {
                 ", p_end_time=" + p_end_time +
                 '}'
     }
+
+    @Override
+    @I_black_box_base("error")
+    Boolean is_event_logged_for_destination(String i_event_type, I_destination i_destination) {
+        if (p_events_by_destination.containsKey(i_destination)) {
+            return p_events_by_destination.get(i_destination).contains(i_event_type)
+        } else {
+            return GC_FALSE
+        }
+    }
+
+    @Override
+    @I_black_box_base("error")
+    void set_event_logged_for_destination(String i_event_type, I_destination i_destination) {
+        if (p_events_by_destination.containsKey(i_destination)) {
+            p_events_by_destination.get(i_destination).add(i_event_type)
+        } else {
+            p_events_by_destination.put(i_destination, new ArrayList<String>([i_event_type]))
+        }
+    }
+
 }

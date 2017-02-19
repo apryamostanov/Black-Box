@@ -19,4 +19,8 @@ interface I_method_invocation {
 
     Long get_elapsed_time()
 
+    Boolean is_event_logged_for_destination(String i_event_type, I_destination i_destination)
+
+    void set_event_logged_for_destination(String i_event_type, I_destination i_destination)
+
 }

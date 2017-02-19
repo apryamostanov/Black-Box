@@ -95,6 +95,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     }
 
     @I_black_box_base("error")
+    String tag(String i_tag_name, String i_attributes = GC_EMPTY_STRING) {
+        String l_tag_string = get_indent() + GC_XML_LESS + i_tag_name + (i_attributes == GC_EMPTY_STRING ? GC_EMPTY_STRING : GC_SPACE + i_attributes) + GC_XML_END + GC_XML_GREATER
+        return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
+    }
+
+    @I_black_box_base("error")
     String close_tag(String i_tag_name) {
         p_relative_xml_depth.set(p_relative_xml_depth.get() - Integer.parseInt(T_s.c().GC_XML_PAD_DEPTH))
         String l_tag_string = get_indent() + GC_XML_LESS + GC_XML_END + i_tag_name + GC_XML_GREATER
@@ -134,7 +140,9 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
                 }
             }
             l_result += make_line(get_elapsed_time(i_source_event))
-            l_result += close_tag(PC_TAG_INVOCATION)
+            if (i_source_event.get_invocation().is_event_logged_for_destination("enter", get_parent_destination())) {
+                l_result += close_tag(PC_TAG_INVOCATION)
+            }
         } else if (l_event_type == "error") {
             l_result += open_tag(PC_TAG_EXCEPTION, make_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + get_attributes_predefined(i_event_traces, i_source_event))
             if (i_source_event.get_throwable() != GC_NULL_OBJ_REF) {
@@ -158,18 +166,21 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             }
             l_result += close_tag(PC_TAG_EXCEPTION)
             l_result += make_line(get_elapsed_time(i_source_event))
-            l_result += close_tag(PC_TAG_INVOCATION)
-//todo: close only in case when this is open, i.e. differentiate between Full and Error types.
+            if (i_source_event.get_invocation().is_event_logged_for_destination("enter", get_parent_destination())) {
+                l_result += close_tag(PC_TAG_INVOCATION)
+            }
         } else {
-            l_result += open_tag(i_source_event.get_event_type(), get_attributes_predefined(i_event_traces, i_source_event))
             if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
+                l_result += open_tag(i_source_event.get_event_type(), get_attributes_predefined(i_event_traces, i_source_event))
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
                     l_result += open_tag(PC_TAG_TRACE, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                     l_result += close_tag(PC_TAG_TRACE)
                 }
+                l_result += close_tag(i_source_event.get_event_type())
+            } else {
+                l_result += tag(i_source_event.get_event_type(), get_attributes_predefined(i_event_traces, i_source_event))
             }
-            l_result += close_tag(i_source_event.get_event_type())
         }
         return l_result
     }
