@@ -39,10 +39,9 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         if (!T_s.x().is_init()) {
-            T_s.x().init_custom("C:/COMPILE/with_logging/commons.conf")
+            T_s.x().init_default()
         }
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, "visit", T_s.r(this, "this"))

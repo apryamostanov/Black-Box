@@ -21,6 +21,10 @@ class T_logging_commons extends T_common_commons {
     String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
     String GC_XML_PAD_DEPTH = "4"
 
+    T_logging_commons() {
+        super()
+    }
+
     T_logging_commons(String i_conf_file_name) {
         super(i_conf_file_name)
         GC_BLACK_BOX_ENABLED = GC_CONST_CONF.GC_BLACK_BOX_ENABLED(GC_BLACK_BOX_ENABLED)
