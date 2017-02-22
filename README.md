@@ -4,8 +4,16 @@ Example of of usage: https://github.com/apryamostanov/CardProcessing
 
 1. Experimental runtime prototyping and diagnostic framework
 2. Next-generation logging, tracing and profiling framework
+3. Ultimate debugging instrument
 
-Work in progress. Version: 0.86
+Work in progress. Version: 0.87
+Readiness for usage by public: 15-th August 2017
+
+Features in progress:
+- Zero configuration
+- SLF4J integration
+- Statement-level debug
+- Message groupping (repetitive message logging enhancement)
 
 Performance: I have used the tools profiling capabilities to perform self-profiling.
 Currently performance is slow: 3-4 milliseconds per cycle (log event, profile method) - affected by active profiling, but still slow.
@@ -21,8 +29,10 @@ Intended purpose of usage:
 - Working with hardware (I2C, Robotics, GPIO, drones, etc)
 - Troubleshooting on environments with limited access
 - Perfomance issues investigations
+- Forensics and legal case study in software
 
 Features:
+- Multithreaded by nature, designed to be used in Web applications
 - Does not accept free text from programmers
 - Forces straightforward yet mindful coding of tracing in applications
 - Automated usage via annotations and easy syntax
