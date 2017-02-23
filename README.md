@@ -101,29 +101,95 @@ Sample configuration:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <logger mode="diagnostic">
-    <file location="c:/LOGS/WAREHOUSE/LOG_%DATE%_%TIME%_%USERNAME%_%PROCESSID%.xml" formatter="xml_hierarchical" purpose="warehouse" mask="sensitive">
+    <file location="./LOGS/SQLS/%THREADNAME%_%DATE%.xml" formatter="csv"
+          purpose="display" mask="sensitive">
+        <sql>
+            <datetimestamp/>
+            <sql_string/>
+            <bind_variables/>
+        </sql>
+    </file>
+    <file location="./LOGS/PORTS/%THREADNAME%_%DATE%.xml" formatter="csv"
+          purpose="display" mask="sensitive">
+        <receive>
+            <datetimestamp/>
+            <event/>
+            <incoming_data formatter="beautify_xml"/>
+        </receive>
+        <send>
+            <datetimestamp/>
+            <event/>
+            <outgoing_data formatter="beautify_xml"/>
+        </send>
+    </file>
+    <file location="./LOGS/DEBUG/%THREADNAME%_%DATE%.xml" formatter="xml_hierarchical"
+          purpose="display" mask="sensitive">
         <enter>
+            <datetimestamp/>
+            <class/>
+            <method/>
+            <runtime/>
             <this mute="true"/>
         </enter>
-        <exit/>
-        <debug/>
-        <info/>
-        <warning/>
-        <error/>
+        <exit>
+            <runtime/>
+        </exit>
+        <debug>
+            <message formatter="message"/>
+        </debug>
+        <send>
+            <datetimestamp/>
+            <outgoing_data/>
+        </send>
+        <receive>
+            <datetimestamp/>
+            <incoming_data/>
+        </receive>
+        <info>
+            <datetimestamp/>
+            <message formatter="message"/>
+        </info>
+        <warning>
+            <datetimestamp/>
+            <message formatter="message"/>
+        </warning>
+        <error>
+            <datetimestamp/>
+            <class/>
+            <method/>
+            <exception_message/>
+            <exception_traces/>
+        </error>
+    </file>
+    <file location="./LOGS/WARNINGS_AND_ERRORS/%THREADNAME%_%DATE%.xml" formatter="xml_hierarchical"
+          purpose="display" mask="sensitive">
+        <warning>
+            <datetimestamp/>
+            <message formatter="message"/>
+        </warning>
+        <error>
+            <datetimestamp/>
+            <class/>
+            <method/>
+            <exception_message/>
+            <exception_traces/>
+        </error>
     </file>
     <shell formatter="csv" purpose="display" mask="sensitive">
         <info>
             <event/>
-            <message/>
-            <runtime/>
+            <datetimestamp/>
+            <message formatter="message"/>
         </info>
         <warning>
             <event/>
-            <message/>
-            <runtime/>
+            <datetimestamp/>
+            <message formatter="message"/>
         </warning>
         <error>
             <event/>
+            <datetimestamp/>
+            <exception/>
             <exception_message/>
             <exception_traces/>
         </error>
