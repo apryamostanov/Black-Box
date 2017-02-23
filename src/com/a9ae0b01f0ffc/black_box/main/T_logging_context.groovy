@@ -1,11 +1,13 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.black_box.conf.T_zero_ioc_conf
+import com.a9ae0b01f0ffc.black_box.conf.zero_conf.T_zero_ioc_conf
 import com.a9ae0b01f0ffc.black_box.implementation.T_object_with_guid
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.commons.config_helper.T_conf
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
+import groovy.util.slurpersupport.GPathResult
 
 class T_logging_context extends T_object_with_guid {
 
@@ -27,11 +29,11 @@ class T_logging_context extends T_object_with_guid {
     }
 
     @I_black_box_base("error")
-    void init_default() {
+    void init_custom(GPathResult i_zero_ioc_conf, GPathResult i_zero_logger_conf) {
         check_init()
         p_context_thread_local.get().p_commons = new T_logging_commons()
-        p_context_thread_local.get().p_ioc = new T_class_loader(new T_zero_ioc_conf())
-        p_context_thread_local.get().p_logger = ((I_logger_builder) get_ioc().instantiate(GC_LOGGER_BUILDER_INTERFACE)).create_logger(GC_EMPTY_STRING/*Not very beautiful, but KISS*/)
+        p_context_thread_local.get().p_ioc = new T_class_loader(i_zero_ioc_conf)
+        p_context_thread_local.get().p_logger = ((I_logger_builder) get_ioc().instantiate(GC_LOGGER_BUILDER_INTERFACE)).create_logger(i_zero_logger_conf)
         p_is_init = GC_TRUE
     }
 

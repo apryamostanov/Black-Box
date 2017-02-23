@@ -1,13 +1,8 @@
-package com.a9ae0b01f0ffc.black_box.implementation
+package com.a9ae0b01f0ffc.black_box.conf.zero_conf
 
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
-import com.a9ae0b01f0ffc.black_box.main.T_s
-import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
-import groovy.transform.ToString
 import groovy.util.slurpersupport.GPathResult
 
-@ToString(includeNames = true, includeFields = true)
-class T_logger_builder_default extends T_logger_builder {
+class T_zero_logger_conf  {
 
     static final String PC_DEFAULT_LOGGER_CONFIG = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<logger mode=\"diagnostic\">\n" +
@@ -74,18 +69,6 @@ class T_logger_builder_default extends T_logger_builder {
             "    </shell>\n" +
             "</logger>"
 
-    @Override
-    @I_black_box_base("error")
-    I_logger create_logger(String i_conf_file_name) {
-        p_conf = (GPathResult) new XmlSlurper().parseText(PC_DEFAULT_LOGGER_CONFIG)
-        I_logger l_logger = (I_logger) T_s.ioc().instantiate("I_logger")
-        if (!p_conf.@mode.isEmpty()) {
-            l_logger.set_mode(p_conf.@mode.text())
-        }
-        for (l_destination_xml in p_conf.children()) {
-            l_logger.add_destination(init_destination(l_destination_xml as GPathResult))
-        }
-        return l_logger
-    }
+    static final GPathResult PC_LOGGER_CONF = (GPathResult) new XmlSlurper().parseText(PC_DEFAULT_LOGGER_CONFIG)
 
 }

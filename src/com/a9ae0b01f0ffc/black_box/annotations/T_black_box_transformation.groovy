@@ -1,5 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.annotations
 
+import com.a9ae0b01f0ffc.black_box.conf.zero_conf.T_zero_ioc_conf
+import com.a9ae0b01f0ffc.black_box.conf.zero_conf.T_zero_logger_conf
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.commons.main.T_common_const
@@ -41,7 +43,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         if (!T_s.x().is_init()) {
-            T_s.x().init_default()
+            T_s.x().init_custom(T_zero_ioc_conf.PC_IOC_CONF, T_zero_logger_conf.PC_LOGGER_CONF)
         }
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, "visit", T_s.r(this, "this"))

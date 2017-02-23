@@ -4,6 +4,7 @@ import com.a9ae0b01f0ffc.black_box.interfaces.*
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
+import com.a9ae0b01f0ffc.commons.config_helper.T_conf
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.ioc.T_class_loader
 import groovy.transform.ToString
@@ -15,8 +16,8 @@ class T_logger_builder implements I_logger_builder {
     GPathResult p_conf = T_logging_const.GC_NULL_OBJ_REF as GPathResult
 
     @I_black_box_base("error")
-    I_logger create_logger(String i_conf_file_name) {
-        p_conf = (GPathResult) new XmlSlurper().parse(i_conf_file_name)
+    I_logger create_logger(GPathResult i_log_conf) {
+        p_conf = i_log_conf
         I_logger l_logger = (I_logger) T_s.ioc().instantiate("I_logger")
         if (!p_conf.@mode.isEmpty()) {
             l_logger.set_mode(p_conf.@mode.text())
@@ -25,6 +26,11 @@ class T_logger_builder implements I_logger_builder {
             l_logger.add_destination(init_destination(l_destination_xml as GPathResult))
         }
         return l_logger
+    }
+
+    @I_black_box_base("error")
+    I_logger create_logger(String i_conf_file_name) {
+        return create_logger((GPathResult) new XmlSlurper().parse(i_conf_file_name))
     }
 
     @I_black_box_base("error")

@@ -1,11 +1,13 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
-import com.a9ae0b01f0ffc.black_box.conf.T_zero_ioc_conf
+import com.a9ae0b01f0ffc.black_box.conf.zero_conf.T_zero_ioc_conf
+import com.a9ae0b01f0ffc.black_box.conf.zero_conf.T_zero_logger_conf
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.tests.mockup.*
 import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
+import groovy.util.slurpersupport.GPathResult
 import org.junit.Test
 
 class T_tests {
@@ -405,12 +407,6 @@ class T_tests {
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_043.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD_Z1, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
         assert T_destination_variable.l() == "info|HELLO WORLD T_pan_maskable(4447778899992221)" + System.lineSeparator()
-    }
-
-    @Test
-    void test_044() {
-        T_zero_ioc_conf l_zero_ioc_conf = new T_zero_ioc_conf()
-        assert l_zero_ioc_conf.I_logger_builder == "com.a9ae0b01f0ffc.black_box.implementation.T_logger_builder_default"
     }
 
 }
