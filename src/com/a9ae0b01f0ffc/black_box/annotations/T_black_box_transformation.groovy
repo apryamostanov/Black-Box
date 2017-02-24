@@ -27,14 +27,26 @@ class T_black_box_transformation extends AbstractASTTransformation {
     private static final ClassNode PC_CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     public static final String PC_BLACK_BOX_TYPE_ERROR = "error"
     public static final String PC_BLACK_BOX_TYPE_FULL = "full"
+    public static final String PC_BLACK_BOX_TYPE_INVOCATION = "invocation"
     public static final String PC_CLASS_NAME = "T_black_box_transformation"
     public static final Class PC_SHORTCUT_CLASS = T_s
 
-    T_black_box_visitor get_return_expression_visitor() {
+    T_black_box_full_visitor get_full_expression_visitor() {
+        I_logger l_logger = T_s.l()
+        l_logger.log_enter(PC_CLASS_NAME, "get_full_expression_visitor", T_s.r(this, "this"))
+        try {
+            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "get_full_expression_visitor", T_s.r(new T_black_box_full_visitor(), "new T_black_box_full_visitor()")) as T_black_box_full_visitor
+        } catch (Throwable e_others) {
+            l_logger.log_exception(PC_CLASS_NAME, "get_full_expression_visitor", e_others)
+            throw e_others
+        }
+    }
+
+    T_black_box_return_visitor get_return_expression_visitor() {
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, "get_return_expression_visitor", T_s.r(this, "this"))
         try {
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "get_return_expression_visitor", T_s.r(new T_black_box_visitor(), "new T_black_box_visitor()")) as T_black_box_visitor
+            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "get_return_expression_visitor", T_s.r(new T_black_box_return_visitor(), "new T_black_box_return_visitor()")) as T_black_box_return_visitor
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "get_return_expression_visitor", e_others)
             throw e_others
@@ -63,49 +75,53 @@ class T_black_box_transformation extends AbstractASTTransformation {
                 if (l_first_node instanceof MethodNode) {
                     MethodNode l_method_node = (MethodNode) l_first_node
                     T_s.l().log_debug(T_s.s().Processing_method_Z1, l_method_node.getName())
-                    ArrayList<Statement> l_statements = new ArrayList<Statement>()
-                    Statement statement = l_method_node.getCode()
-                    if (statement instanceof BlockStatement) {
-                        l_statements.addAll(((BlockStatement) statement).getStatements())
+                    ArrayList<Statement> l_method_code_statements = new ArrayList<Statement>()
+                    Statement l_method_code_statement = l_method_node.getCode()
+                    if (l_method_code_statement instanceof BlockStatement) {
+                        l_method_code_statements.addAll(((BlockStatement) l_method_code_statement).getStatements())
                     }
-                    if (!l_statements.isEmpty()) {
+                    if (!l_method_code_statements.isEmpty()) {
                         BlockStatement l_changed_block_statement = new BlockStatement()
                         l_changed_block_statement.addStatement(create_shortcut_declaration_statement())
                         l_changed_block_statement.addStatement(create_logger_declaration_statement())
                         l_changed_block_statement.addStatement(create_l_methodname_declaration_statement(l_method_node.getName()))
                         l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
-                        T_black_box_visitor l_return_expression_visitor = get_return_expression_visitor()
-                        if (l_black_box_type == PC_BLACK_BOX_TYPE_FULL) {
+                        T_black_box_return_visitor l_return_expression_visitor = get_return_expression_visitor()
+                        T_black_box_full_visitor l_full_expression_visitor = get_full_expression_visitor()
+                        if ([PC_BLACK_BOX_TYPE_FULL, PC_BLACK_BOX_TYPE_INVOCATION].contains(l_black_box_type)) {
                             l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                             BlockStatement l_inside_try = new BlockStatement()
-                            for (Statement l_return_statement in l_statements) {
+                            for (Statement l_statement_to_visit in l_method_code_statements) {
                                 if (!l_method_node.isVoidMethod()) {
-                                    l_return_statement.visit(l_return_expression_visitor)
+                                    l_statement_to_visit.visit(l_return_expression_visitor)
                                 }
-                                l_inside_try.addStatement(l_return_statement)
+                                if (!l_statement_to_visit instanceof ReturnStatement) {
+                                    l_statement_to_visit.visit(l_full_expression_visitor)
+                                }
+                                l_inside_try.addStatement(l_statement_to_visit)
                             }
-                            if (!l_return_expression_visitor.p_is_return_added) {
+                            if (!l_return_expression_visitor.p_is_log_exit_added) {
                                 l_inside_try.addStatement(create_log_exit_statement(l_method_node))
                             }
                             l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_exception"))
                         } else if (l_black_box_type == PC_BLACK_BOX_TYPE_ERROR) {
                             if (T_s.c().GC_PROFILE_ALL != T_common_const.GC_TRUE_STRING) {
                                 BlockStatement l_inside_try = new BlockStatement()
-                                for (Statement l_return_statement in l_statements) {
-                                    l_inside_try.addStatement(l_return_statement)
+                                for (Statement l_statement_to_visit in l_method_code_statements) {
+                                    l_inside_try.addStatement(l_statement_to_visit)
                                 }
                                 l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_error"))
                             } else {
                                 l_changed_block_statement.addStatement(create_profile_enter_statement(l_method_node))
                                 BlockStatement l_inside_try = new BlockStatement()
                                 l_return_expression_visitor.set_profile_only()
-                                for (Statement l_return_statement in l_statements) {
+                                for (Statement l_statement_to_visit in l_method_code_statements) {
                                     if (!l_method_node.isVoidMethod()) {
-                                        l_return_statement.visit(l_return_expression_visitor)
+                                        l_statement_to_visit.visit(l_return_expression_visitor)
                                     }
-                                    l_inside_try.addStatement(l_return_statement)
+                                    l_inside_try.addStatement(l_statement_to_visit)
                                 }
-                                if (!l_return_expression_visitor.p_is_return_added) {
+                                if (!l_return_expression_visitor.p_is_log_exit_added) {
                                     l_inside_try.addStatement(create_profile_exit_statement(l_method_node))
                                 }
                                 l_changed_block_statement.addStatement(create_try_catch_statement(l_inside_try, (AnnotationNode) i_ast_nodes[T_common_const.GC_FIRST_INDEX], l_method_node, "log_exception"))
@@ -187,7 +203,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
             String l_statement_code = "l_logger.log_enter(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\" $l_serialized_parameters, l_shortcuts.r(this, \"this\"))"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_log_enter_statement", T_s.r((Statement) l_resulting_statements.first(), "(Statement) l_resulting_statements.first()")) as Statement
+            T_s.l().log_exit(PC_CLASS_NAME, "create_log_enter_statement", T_s.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
+            return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_log_enter_statement", e_others)
             throw e_others
@@ -202,7 +219,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
             String l_statement_code = "l_logger.profile_enter(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\")"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_profile_enter_statement", T_s.r((Statement) l_resulting_statements.first(), "(Statement) l_resulting_statements.first()")) as Statement
+            T_s.l().log_exit(PC_CLASS_NAME, "create_profile_enter_statement", T_s.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
+            return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_profile_enter_statement", e_others)
             throw e_others
@@ -216,7 +234,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
             String l_statement_code = "l_logger.log_exit(\"${i_method_node.getDeclaringClass().getName()}\",\"${i_method_node.getName()}\")"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_log_exit_statement", T_s.r((Statement) l_resulting_statements.first(), "(Statement) l_resulting_statements.first()")) as Statement
+            T_s.l().log_exit(PC_CLASS_NAME, "create_log_exit_statement", T_s.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
+            return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_log_exit_statement", e_others)
             throw e_others
@@ -230,7 +249,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
             String l_statement_code = "l_logger.profile_exit(\"${i_method_node.getDeclaringClass().getName()}\",\"${i_method_node.getName()}\")"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_profile_exit_statement", T_s.r((Statement) l_resulting_statements.first(), "(Statement) l_resulting_statements.first()")) as Statement
+            T_s.l().log_exit(PC_CLASS_NAME, "create_profile_exit_statement", T_s.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
+            return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_profile_exit_statement", e_others)
             throw e_others
@@ -251,7 +271,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
             String l_statement_code = "l_logger.${i_log_function_name}(\"${i_method_node.getDeclaringClass().getName()}\", \"${i_method_node.getName()}\", e_others $l_serialized_parameters)"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_log_error_statement", T_s.r((Statement) l_resulting_statements.first(), "(Statement) l_resulting_statements.first()")) as Statement
+            T_s.l().log_exit(PC_CLASS_NAME, "create_log_error_statement", T_s.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
+            return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_log_error_statement", e_others)
             throw e_others
@@ -267,7 +288,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
             l_throw_block.addStatement(create_log_error_statement(i_method_node, i_log_function_name))
             l_throw_block.addStatement(rethrow(i_annotation_node))
             tryCatchStatement.addCatch(GeneralUtils.catchS(GeneralUtils.param(PC_CATCHED_THROWABLE_TYPE, "e_others"), l_throw_block))
-            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_try_catch_statement", T_s.r(tryCatchStatement, "tryCatchStatement")) as Statement
+            return T_s.l().log_exit_automatic(PC_CLASS_NAME, "create_try_catch_statement", T_s.r(tryCatchStatement, "tryCatchStatement")) as TryCatchStatement
         } catch (Throwable e_others) {
             l_logger.log_exception(PC_CLASS_NAME, "create_try_catch_statement", e_others)
             throw e_others

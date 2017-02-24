@@ -44,6 +44,8 @@ interface I_logger {
 
     void log_info(T_static_string i_static_string_info, Object... i_traces)
 
+    void log_statement(String i_statement_type, String i_statement_text)
+
     void log_warning(T_static_string i_static_string_warning, Object... i_traces)
 
     void log_receive(Object i_incoming_data)

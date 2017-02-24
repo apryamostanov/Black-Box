@@ -1,8 +1,5 @@
 package com.a9ae0b01f0ffc.black_box.conf.zero_conf
 
-import com.a9ae0b01f0ffc.commons.config_helper.T_conf
-import com.a9ae0b01f0ffc.commons.exceptions.E_application_exception
-import com.a9ae0b01f0ffc.commons.static_string.T_static_string_builder
 import groovy.util.slurpersupport.GPathResult
 
 class T_zero_ioc_conf {
@@ -26,6 +23,7 @@ class T_zero_ioc_conf {
             "    <enter value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <exit value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <debug value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
+            "    <statement value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <info value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <warning value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <error value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
