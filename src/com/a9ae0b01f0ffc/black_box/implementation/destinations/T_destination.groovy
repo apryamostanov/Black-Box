@@ -117,6 +117,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     @I_black_box_base("error")
     static I_trace find_and_build_trace_inclusive(I_event i_event_runtime, I_trace i_trace_config) {
         //todo: deduplicate traces
+        //todo: all predefined->api
         String l_trace_config_source = i_trace_config.get_source()
         if (l_trace_config_source == GC_EMPTY_STRING || l_trace_config_source == GC_TRACE_SOURCE_ALL) {
             for (I_trace l_trace_predefined : PC_ALL_POSSIBLE_PREDEFINED_TRACES) {

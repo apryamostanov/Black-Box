@@ -92,10 +92,13 @@ class T_black_box_transformation extends AbstractASTTransformation {
                             l_changed_block_statement.addStatement(create_log_enter_statement(l_method_node))
                             BlockStatement l_inside_try = new BlockStatement()
                             for (Statement l_statement_to_visit in l_method_code_statements) {
+                                T_s.l().log_debug(T_s.s().Processing_statement_of_type_Z1_with_text_Z2, l_statement_to_visit.getClass().getSimpleName(), l_statement_to_visit.getText())
                                 if (!l_method_node.isVoidMethod()) {
+                                    T_s.l().log_debug(T_s.s().About_to_visit_return_statements)
                                     l_statement_to_visit.visit(l_return_expression_visitor)
                                 }
-                                if (!l_statement_to_visit instanceof ReturnStatement) {
+                                if (!(l_statement_to_visit instanceof ReturnStatement)) {
+                                    T_s.l().log_debug(T_s.s().About_to_visit_other_statements)
                                     l_statement_to_visit.visit(l_full_expression_visitor)
                                 }
                                 l_inside_try.addStatement(l_statement_to_visit)

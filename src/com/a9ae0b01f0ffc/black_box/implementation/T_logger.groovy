@@ -306,10 +306,10 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    void log_statement(String i_statement_type, String i_statement_text) {
+    void log_statement(T_static_string i_message, Integer i_line_number) {
         I_event l_event = create_event("statement", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
-        l_event.add_trace_runtime(T_s.r(i_statement_type, "statement_type"))
-        l_event.add_trace_runtime(T_s.r(i_statement_text, "statement_text"))
+        l_event.set_message(i_message)
+        l_event.add_trace_runtime(T_s.r(i_line_number, "line_number"))
         log_generic(l_event)
     }
 
