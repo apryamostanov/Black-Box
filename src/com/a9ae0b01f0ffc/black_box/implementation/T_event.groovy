@@ -15,6 +15,7 @@ class T_event extends T_inherited_configurations implements I_event {
     private String p_event_type = GC_EMPTY_STRING
     private String p_class_name = GC_EMPTY_STRING
     private String p_method_name = GC_EMPTY_STRING
+    private String p_statement_name = GC_EMPTY_STRING
     private Integer p_depth = GC_ZERO
     private Date p_datetimestamp = new Date()
     private ArrayList<I_trace> p_traces_runtime = new ArrayList<I_trace>()
@@ -201,5 +202,15 @@ class T_event extends T_inherited_configurations implements I_event {
     @Override
     void set_line_number(Integer i_line_number) {
         p_line_number = i_line_number
+    }
+
+    @Override
+    void set_statement_name(String i_statement_name) {
+        p_statement_name = i_statement_name
+    }
+
+    @Override
+    String get_statement_name() {
+        return p_statement_name
     }
 }

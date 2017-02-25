@@ -56,4 +56,8 @@ interface I_event extends I_inherited_configurations {
 
     void set_line_number(Integer i_line_number)
 
+    String get_statement_name()
+
+    void set_statement_name(String i_statement_name)
+
 }

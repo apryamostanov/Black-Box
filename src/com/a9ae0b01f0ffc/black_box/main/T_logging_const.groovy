@@ -21,5 +21,9 @@ class T_logging_const extends T_common_const {
     static final String GC_TRACE_MASK_ALL_EXCEPT_NON_SENSITIVE = "except_non_sensitive"
     static final String GC_TRACE_MASK_NONE = "none"
     static final String GC_DEFAULT_FORMATTER_NONE = "none"
+    static final String GC_STATEMENT_NAME_METHOD = GC_EMPTY_STRING
+    static final String GC_BLACK_BOX_TYPE_ERROR = "error"
+    static final String GC_BLACK_BOX_TYPE_FULL = "full"
+    static final String GC_BLACK_BOX_TYPE_INVOCATION = "invocation"
 
 }

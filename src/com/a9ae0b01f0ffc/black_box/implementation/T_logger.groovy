@@ -49,7 +49,7 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    I_event create_event(String i_event_type, String i_class_name, String i_method_name) {
+    I_event create_event(String i_event_type, String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
         I_event l_event = T_s.ioc().instantiate(i_event_type) as I_event
         l_event.set_event_type(i_event_type)
         l_event.set_class_name(i_class_name)
@@ -57,6 +57,8 @@ class T_logger extends T_object_with_guid implements I_logger {
         l_event.set_depth(p_method_invocation_stack.size())
         l_event.set_datetimestamp(new Date())
         l_event.set_invocation(get_current_method_invocation())
+        l_event.set_statement_name(i_statement_name)
+        l_event.set_line_number(i_line_number)
         return l_event
     }
 
@@ -93,8 +95,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     I_trace object2trace(Object i_object, String i_source) {
-        I_trace l_trace = GC_NULL_OBJ_REF as I_trace
-        l_trace = T_s.ioc().instantiate("I_trace") as I_trace
+        I_trace l_trace = T_s.ioc().instantiate("I_trace") as I_trace
         if (p_mode == T_s.c().GC_LOGGER_MODE_PRODUCTION) {
             l_trace.set_ref(i_object)
         } else if (p_mode == T_s.c().GC_LOGGER_MODE_DIAGNOSTIC) {
@@ -187,14 +188,16 @@ class T_logger extends T_object_with_guid implements I_logger {
     }
 
     @I_black_box_base("error")
-    void add_invocation(String i_class_name, String i_method_name, ArrayList<I_trace> i_traces = GC_SKIPPED_ARGS as ArrayList<I_trace>) {
+    void add_invocation(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, ArrayList<I_trace> i_traces = GC_SKIPPED_ARGS as ArrayList<I_trace>) {
         I_method_invocation l_method_invocation = T_s.ioc().instantiate("I_method_invocation") as I_method_invocation
         l_method_invocation.set_class_name(i_class_name)
         l_method_invocation.set_method_name(i_method_name)
         l_method_invocation.set_method_arguments(i_traces)
+        l_method_invocation.set_statement_name(i_statement_name)
+        l_method_invocation.set_line_number(i_line_number)
         p_method_invocation_stack.push(l_method_invocation)
         l_method_invocation.start_timing()
-        String l_stat_key = i_class_name + "->" + i_method_name
+        String l_stat_key = i_class_name + "->" + i_method_name + "->" + i_statement_name + "->" + i_line_number.toString()
         if (p_statistics_method_calls_count.containsKey(l_stat_key)) {
             p_statistics_method_calls_count.put(l_stat_key, p_statistics_method_calls_count.get(l_stat_key) + GC_ONE_ONLY)
         } else {
@@ -207,7 +210,7 @@ class T_logger extends T_object_with_guid implements I_logger {
         if (!p_method_invocation_stack.isEmpty()) {
             I_method_invocation l_curr_invocation = get_current_method_invocation()
             l_curr_invocation.stop_timing()
-            String l_stat_key = l_curr_invocation.get_class_name() + "->" + l_curr_invocation.get_method_name()
+            String l_stat_key = l_curr_invocation.get_class_name() + "->" + l_curr_invocation.get_method_name() + "->" + l_curr_invocation.get_statement_name() + "->" + l_curr_invocation.get_line_number().toString()
             if (p_statistics_method_calls_duration.containsKey(l_stat_key)) {
                 p_statistics_method_calls_duration.put(l_stat_key, p_statistics_method_calls_duration.get(l_stat_key) + l_curr_invocation.get_elapsed_time())
             } else {
@@ -219,22 +222,22 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    void profile_enter(String i_class_name, String i_method_name) {
-        add_invocation(i_class_name, i_method_name)
+    void profile_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
+        add_invocation(i_class_name, i_method_name, i_statement_name, i_line_number)
     }
 
     @Override
     @I_black_box_base("error")
-    void profile_exit(String i_class_name, String i_method_name) {
+    void profile_exit() {
         pop_invocation()
     }
 
     @Override
     @I_black_box_base("error")
-    void log_enter(String i_class_name, String i_method_name, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+    void log_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
         ArrayList<I_trace> l_method_arguments = objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME)
-        add_invocation(i_class_name, i_method_name, l_method_arguments)
-        I_event l_event = create_event("enter", i_class_name, i_method_name)
+        add_invocation(i_class_name, i_method_name, i_statement_name, i_line_number, l_method_arguments)
+        I_event l_event = create_event("enter", i_class_name, i_method_name, i_statement_name, i_line_number)
         if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(l_method_arguments)
         }
@@ -243,19 +246,16 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    void log_exit(String i_class_name, String i_method_name, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
-        I_event l_event = create_event("exit", i_class_name, i_method_name)
-        if (T_u.method_arguments_exist(i_traces)) {
-            l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
-        }
+    void log_exit() {
+        I_event l_event = create_event("exit", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         log_generic(l_event)
         pop_invocation()
     }
 
     @Override
     @I_black_box_base("error")
-    Object log_result(String i_class_name, String i_method_name, I_trace i_return_object_trace) {
-        I_event l_event = create_event("result", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+    Object log_result(I_trace i_return_object_trace) {
+        I_event l_event = create_event("result", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.add_trace_runtime(i_return_object_trace)
         log_generic(l_event)
         return i_return_object_trace.get_ref() //wow smart code like a real programmar is doin lol
@@ -263,26 +263,15 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    Object profile_exit_automatic(String i_class_name, String i_method_name, Object i_return_object) {
-        profile_exit(i_class_name, i_method_name)
+    Object profile_exit_automatic(Object i_return_object) {
+        profile_exit()
         return i_return_object //wow smart code like a real programmar is doin lol
     }
 
     @Override
     @I_black_box_base("error")
-    void log_error(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
-        I_event l_event = create_event("error", i_class_name, i_method_name)
-        l_event.set_throwable(i_throwable)
-        l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
-        log_generic(l_event)
-    }
-
-    @Override
-    @I_black_box_base("error")
-    void log_error(T_static_string i_message, Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
-        I_event l_event = create_event("error", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
-        l_event.set_message(i_message)
-        log_error(get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), i_throwable, i_traces)
+    void log_error(Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+        I_event l_event = create_event("error", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.set_throwable(i_throwable)
         l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
         log_generic(l_event)
@@ -291,7 +280,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_debug(T_static_string i_static_string_message, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.set_message(i_static_string_message)
         if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -303,7 +292,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @I_black_box_base("error")
     void log_statement(T_static_string i_message, Integer i_line_number) {
 //todo: log_debug_automatic; to all automatic functions - add line number; log_enter_automatic - add "statement" parameter
-        I_event l_event = create_event("statement", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("statement", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.set_message(i_message)
         l_event.set_line_number(i_line_number)
         log_generic(l_event)
@@ -312,7 +301,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_info(T_static_string i_static_string_info, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.set_message(i_static_string_info)
         if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -323,7 +312,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_warning(T_static_string i_static_string_warning, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.set_message(i_static_string_warning)
         if (T_u.method_arguments_exist(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -334,7 +323,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_receive(Object i_incoming_data) {
-        I_event l_event = create_event("receive", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("receive", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.add_trace_runtime(T_s.r(i_incoming_data, "incoming_data"))
         log_generic(l_event)
     }
@@ -342,7 +331,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_send(Object i_outgoing_data) {
-        I_event l_event = create_event("send", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("send", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.add_trace_runtime(T_s.r(i_outgoing_data, "outgoing_data"))
         log_generic(l_event)
     }
@@ -350,7 +339,7 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_sql(String i_sql_operation, String i_sql_string, String... i_bind_variables) {
-        I_event l_event = create_event("sql", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        I_event l_event = create_event("sql", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.add_trace_runtime(T_s.r(i_sql_operation, "sql_operation"))
         l_event.add_trace_runtime(T_s.r(i_sql_string, "sql_string"))
         l_event.add_trace_runtime(T_s.r(i_bind_variables, "bind_variables"))

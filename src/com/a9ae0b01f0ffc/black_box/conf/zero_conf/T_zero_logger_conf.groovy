@@ -8,48 +8,33 @@ class T_zero_logger_conf  {
             "<logger mode=\"diagnostic\">\n" +
             "    <file formatter=\"xml_hierarchical\" location=\"c:/LOGS/WAREHOUSE/COMPILE_LOG_%DATE%_%TIME%_%USERNAME%_%PROCESSID%.xml\" mask=\"sensitive\" purpose=\"display\">\n" +
             "        <enter>\n" +
-            "            <class/>\n" +
-            "            <method/>\n" +
-            "            <depth/>\n" +
+            "            <datetimestamp/>\n" +
+            "            <line/>\n" +
+            "            <class formatter=\"short\"/>\n" +
             "            <runtime/>\n" +
+            "            <this mute=\"true\"/>\n" +
             "        </enter>\n" +
-            "        <exit>\n" +
+            "        <result>\n" +
             "            <runtime/>\n" +
-            "        </exit>\n" +
+            "        </result>\n" +
+            "        <exit/>\n" +
             "        <debug>\n" +
-            "            <class/>\n" +
-            "            <method/>\n" +
-            "            <depth/>\n" +
-            "            <event/>\n" +
             "            <message formatter=\"message\"/>\n" +
-            "            <runtime/>\n" +
             "        </debug>\n" +
-            "        <warning>\n" +
-            "            <class/>\n" +
-            "            <method/>\n" +
-            "            <depth/>\n" +
-            "            <event/>\n" +
-            "            <message formatter=\"message\"/>\n" +
-            "            <runtime/>\n" +
-            "        </warning>\n" +
             "        <info>\n" +
-            "            <class/>\n" +
-            "            <method/>\n" +
-            "            <depth/>\n" +
-            "            <event/>\n" +
+            "            <datetimestamp/>\n" +
             "            <message formatter=\"message\"/>\n" +
-            "            <runtime/>\n" +
             "        </info>\n" +
+            "        <warning>\n" +
+            "            <datetimestamp/>\n" +
+            "            <message formatter=\"message\"/>\n" +
+            "        </warning>\n" +
             "        <error>\n" +
+            "            <datetimestamp/>\n" +
             "            <class/>\n" +
             "            <method/>\n" +
-            "            <depth/>\n" +
-            "            <event/>\n" +
-            "            <exception/>\n" +
             "            <exception_message/>\n" +
             "            <exception_traces/>\n" +
-            "            <message formatter=\"message\"/>\n" +
-            "            <runtime/>\n" +
             "        </error>\n" +
             "    </file>\n" +
             "    <shell formatter=\"csv\" mask=\"sensitive\" purpose=\"display\">\n" +

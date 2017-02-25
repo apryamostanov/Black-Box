@@ -1,7 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.tests
 
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination_variable
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box.tests.mockup.*
@@ -27,7 +26,7 @@ class T_tests {
         //com.a9ae0b01f0ffc.black_box.main.T_s.l().log_info(T_s.s().HELLO_WORLD)
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_001.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD)
-        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|T_method_invocation{p_class_name='Unknown Class', p_method_name='Unknown Method', p_method_arguments=[], p_start_time=null, p_end_time=null}|[]" + System.lineSeparator()
+        assert T_destination_variable.l() == "Unknown Class|Unknown Method|0|info|HELLO_WORLD|0|T_method_invocation{p_class_name='Unknown Class', p_method_name='Unknown Method', p_method_arguments=[], p_start_time=null, p_end_time=null}|[]" + System.lineSeparator()
     }
 
     @Test
@@ -190,7 +189,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_error(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
+            T_s.l().log_error(e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
         }
         assert T_destination_variable.l() == "TEST EXCEPTION|Trace masked|**********2222|Trace masked" + System.lineSeparator()
     }
@@ -202,7 +201,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_error(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
+            T_s.l().log_error(e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
         }
         assert T_destination_variable.l() == "TEST EXCEPTION|**********2222|**********2224|**********2223" + System.lineSeparator()
     }
@@ -212,7 +211,7 @@ class T_tests {
         final String LC_METHOD_NAME = "test_025"
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_025.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
         E_application_exception.set_is_tokenization_enabled(T_logging_const.GC_FALSE)
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -234,8 +233,8 @@ class T_tests {
         final String LC_METHOD_NAME = "test_026"
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_026.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
-        T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992225"), "result_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_result(T_s.r(new T_pan("4447778899992225"), "result_pan"))
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
                 "        <trace name=\"method\" serialized_representation=\"test_026\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -255,11 +254,11 @@ class T_tests {
         final String LC_METHOD_NAME = "test_027"
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_027.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
+            T_s.l().log_error(e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
         }
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -280,20 +279,20 @@ class T_tests {
         final String LC_METHOD_NAME = "test_028"
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_028.conf")
         T_s.l().put_to_context(new T_pan_maskable(PC_PAN), "pan")
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
         T_s.l().log_info(T_s.s().HELLO_WORLD, T_s.r(new T_pan("4447778899992223"), "pan"))
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
-        T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992225"), "result_pan"))
-        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992223"), "i_pan"))
-        T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992225"), "result_pan"))
-        T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(new T_pan("4447778899992225"), "result_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_result(T_s.r(new T_pan("4447778899992225"), "result_pan"))
+        T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(new T_pan("4447778899992223"), "i_pan"))
+        T_s.l().log_result(T_s.r(new T_pan("4447778899992225"), "result_pan"))
+        T_s.l().log_result(T_s.r(new T_pan("4447778899992225"), "result_pan"))
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
+            T_s.l().log_error(e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
         }
     }
 
@@ -405,14 +404,6 @@ class T_tests {
         T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_043.conf")
         T_s.l().log_info(T_s.s().HELLO_WORLD_Z1, T_s.r(new T_pan_maskable("4447778899992221"), "T_pan_maskable"), T_s.r(new T_pan_sensitive("4447778899992222"), "T_pan_sensitive"), T_s.r(new T_pan_non_sensitive("4447778899992223"), "T_pan_non_sensitive"), T_s.r(new T_pan("4447778899992224"), "T_pan"))
         assert T_destination_variable.l() == "info|HELLO WORLD T_pan_maskable(4447778899992221)" + System.lineSeparator()
-    }
-
-    @Test
-    void test_044() {
-        T_s.x().init_custom_with_custom_logger(PC_COMMONS_CONF_NAME, PC_TEST_CONF_PATH + "main_044.conf")
-        I_logger l_logger = T_s.l()
-        T_s l_shortcuts = new T_s()
-        l_logger.log_statement("MethodCallExpression", "com.a9ae0b01f0ffc.black_box.main.T_s.l().log_info(com.a9ae0b01f0ffc.black_box.main.T_s.s().Welcome_to_Visa_VIP_Full_Service_Recon_File_Generator)")
     }
 
 }

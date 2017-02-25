@@ -14,6 +14,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
 
     final static I_trace PC_STATIC_TRACE_NAME_CLASS_NAME = init_predefined_trace("class")
     final static I_trace PC_STATIC_TRACE_NAME_METHOD_NAME = init_predefined_trace("method")
+    final static I_trace PC_STATIC_TRACE_NAME_STATEMENT_NAME = init_predefined_trace("statement")
     final static I_trace PC_STATIC_TRACE_NAME_DEPTH = init_predefined_trace("depth")
     final static I_trace PC_STATIC_TRACE_NAME_EVENT_TYPE = init_predefined_trace("event")
     final static I_trace PC_STATIC_TRACE_NAME_DATETIMESTAMP = init_predefined_trace("datetimestamp")
@@ -76,6 +77,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     static Boolean init() {
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_CLASS_NAME)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_METHOD_NAME)
+        PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_STATEMENT_NAME)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_DEPTH)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_EVENT_TYPE)
         PC_ALL_POSSIBLE_PREDEFINED_TRACES.add(PC_STATIC_TRACE_NAME_DATETIMESTAMP)
@@ -170,6 +172,8 @@ abstract class T_destination extends T_inherited_configurations implements I_des
             l_result_trace.set_val(i_event_runtime.get_class_name())
         } else if (PC_STATIC_TRACE_NAME_METHOD_NAME.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_method_name())
+        } else if (PC_STATIC_TRACE_NAME_STATEMENT_NAME.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
+            l_result_trace.set_val(i_event_runtime.get_statement_name())
         } else if (PC_STATIC_TRACE_NAME_DEPTH.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {
             l_result_trace.set_val(i_event_runtime.get_depth().toString())
         } else if (PC_STATIC_TRACE_NAME_EVENT_TYPE.match_trace(i_predefined_trace.get_ref_class_name(), i_predefined_trace.get_name())) {

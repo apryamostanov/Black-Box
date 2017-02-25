@@ -11,11 +11,12 @@ class T_method_invocation extends T_object_with_guid implements I_method_invocat
 
     String p_class_name = GC_EMPTY_STRING
     String p_method_name = GC_EMPTY_STRING
+    String p_statement_name = GC_EMPTY_STRING
+    Integer p_line_number = GC_ZERO
     ArrayList<I_trace> p_method_arguments = GC_SKIPPED_ARGS as ArrayList<I_trace>
     Long p_start_time = GC_NULL_OBJ_REF as Long
     Long p_end_time = GC_NULL_OBJ_REF as Long
     HashMap<I_destination, ArrayList<String>> p_events_by_destination = new HashMap<I_destination, ArrayList<String>>()
-
 
     @Override
     @I_black_box_base("error")
@@ -110,4 +111,23 @@ class T_method_invocation extends T_object_with_guid implements I_method_invocat
         }
     }
 
+    @Override
+    String get_statement_name() {
+        return p_statement_name
+    }
+
+    @Override
+    Integer get_line_number() {
+        return p_line_number
+    }
+
+    @Override
+    void set_statement_name(String i_statement_name) {
+        p_statement_name = i_statement_name
+    }
+
+    @Override
+    void set_line_number(Integer i_line_number) {
+        p_line_number = i_line_number
+    }
 }
