@@ -52,4 +52,8 @@ interface I_event extends I_inherited_configurations {
 
     I_method_invocation get_invocation()
 
+    Integer get_line_number()
+
+    void set_line_number(Integer i_line_number)
+
 }

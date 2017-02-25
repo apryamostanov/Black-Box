@@ -254,8 +254,10 @@ class T_logger extends T_object_with_guid implements I_logger {
 
     @Override
     @I_black_box_base("error")
-    Object log_exit_automatic(String i_class_name, String i_method_name, I_trace i_return_object_trace) {
-        log_exit(i_class_name, i_method_name, i_return_object_trace)
+    Object log_result(String i_class_name, String i_method_name, I_trace i_return_object_trace) {
+        I_event l_event = create_event("result", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
+        l_event.add_trace_runtime(i_return_object_trace)
+        log_generic(l_event)
         return i_return_object_trace.get_ref() //wow smart code like a real programmar is doin lol
     }
 
@@ -264,13 +266,6 @@ class T_logger extends T_object_with_guid implements I_logger {
     Object profile_exit_automatic(String i_class_name, String i_method_name, Object i_return_object) {
         profile_exit(i_class_name, i_method_name)
         return i_return_object //wow smart code like a real programmar is doin lol
-    }
-
-    @Override
-    @I_black_box_base("error")
-    void log_exception(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
-        log_error(i_class_name, i_method_name, i_throwable, i_traces)
-        pop_invocation()
     }
 
     @Override
@@ -307,9 +302,10 @@ class T_logger extends T_object_with_guid implements I_logger {
     @Override
     @I_black_box_base("error")
     void log_statement(T_static_string i_message, Integer i_line_number) {
+//todo: log_debug_automatic; to all automatic functions - add line number; log_enter_automatic - add "statement" parameter
         I_event l_event = create_event("statement", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name())
         l_event.set_message(i_message)
-        l_event.add_trace_runtime(T_s.r(i_line_number, "line_number"))
+        l_event.set_line_number(i_line_number)
         log_generic(l_event)
     }
 

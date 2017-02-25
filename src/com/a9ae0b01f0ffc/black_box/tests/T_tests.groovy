@@ -190,7 +190,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
+            T_s.l().log_error(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan("4447778899992223"), "pan"))
         }
         assert T_destination_variable.l() == "TEST EXCEPTION|Trace masked|**********2222|Trace masked" + System.lineSeparator()
     }
@@ -202,7 +202,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_exception(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
+            T_s.l().log_error(T_s.c().GC_DEFAULT_CLASS_NAME, T_s.c().GC_DEFAULT_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "pan"))
         }
         assert T_destination_variable.l() == "TEST EXCEPTION|**********2222|**********2224|**********2223" + System.lineSeparator()
     }
@@ -259,7 +259,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
+            T_s.l().log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
         }
         String l_expected = "    <event>\n" +
                 "        <trace name=\"class\" serialized_representation=\"T_tests\" source=\"predefined\" mask=\"\" ref_class_name=\"\" masked=\"false\" />\n" +
@@ -293,7 +293,7 @@ class T_tests {
         try {
             throw new E_application_exception(T_s.s().TEST_EXCEPTION, new T_pan_maskable("4447778899992224"))
         } catch (Exception e_exception) {
-            T_s.l().log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
+            T_s.l().log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_exception, T_s.r(new T_pan_maskable("4447778899992223"), "exception_pan"))
         }
     }
 

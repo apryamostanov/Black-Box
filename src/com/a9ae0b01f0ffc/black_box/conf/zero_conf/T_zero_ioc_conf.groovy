@@ -29,6 +29,7 @@ class T_zero_ioc_conf {
             "    <error value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <send value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <receive value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
+            "    <result value=\"com.a9ae0b01f0ffc.black_box.implementation.T_event\"/>\n" +
             "    <!--Formatters-->\n" +
             "    <xml value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_event_formatter_xml\"/>\n" +
             "    <xml_hierarchical value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_event_formatter_xml_hierarchical\"/>\n" +
@@ -37,6 +38,7 @@ class T_zero_ioc_conf {
             "    <message value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_trace_formatter_for_messages\"/>\n" +
             "    <beautify_xml value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_trace_formatter_beautify_xml\"/>\n" +
             "    <default value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_trace_formatter_shorten_class_names\"/>\n" +
+            "    <short value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_trace_formatter_shorten_class\"/>\n" +
             "    <!--Misc-->\n" +
             "    <trace_name_resolver_default value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_event_formatter_csv\"/>\n" +
             "    <trace_name_resolver_class_name value=\"com.a9ae0b01f0ffc.black_box.implementation.formatters.T_event_formatter_csv\"/>\n" +

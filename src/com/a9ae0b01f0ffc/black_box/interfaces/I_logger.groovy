@@ -30,11 +30,9 @@ interface I_logger {
 
     void log_exit(String i_class_name, String i_method_name, I_trace... i_traces)
 
-    Object log_exit_automatic(String i_class_name, String i_method_name, I_trace i_return_object_trace)
+    Object log_result(String i_class_name, String i_method_name, I_trace i_return_object_trace)
 
     Object profile_exit_automatic(String i_class_name, String i_method_name, Object i_return_object)
-
-    void log_exception(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces)
 
     void log_error(String i_class_name, String i_method_name, Throwable i_throwable, I_trace... i_traces)
 

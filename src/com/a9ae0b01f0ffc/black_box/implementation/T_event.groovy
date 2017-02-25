@@ -4,7 +4,6 @@ import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box.main.T_s
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import com.a9ae0b01f0ffc.commons.static_string.T_static_string
@@ -13,16 +12,17 @@ import groovy.transform.ToString
 @ToString(includeNames = true, includeFields = true)
 class T_event extends T_inherited_configurations implements I_event {
 
-    private String p_event_type = T_logging_const.GC_EMPTY_STRING
-    private String p_class_name = T_logging_const.GC_EMPTY_STRING
-    private String p_method_name = T_logging_const.GC_EMPTY_STRING
-    private Integer p_depth = T_logging_const.GC_ZERO
+    private String p_event_type = GC_EMPTY_STRING
+    private String p_class_name = GC_EMPTY_STRING
+    private String p_method_name = GC_EMPTY_STRING
+    private Integer p_depth = GC_ZERO
     private Date p_datetimestamp = new Date()
     private ArrayList<I_trace> p_traces_runtime = new ArrayList<I_trace>()
     private ArrayList<I_trace> p_traces_config = new ArrayList<I_trace>()
-    private T_static_string p_message = T_logging_const.GC_NULL_OBJ_REF as T_static_string
-    private Throwable p_throwable = T_logging_const.GC_NULL_OBJ_REF as Throwable
-    private I_method_invocation p_invocation = T_logging_const.GC_NULL_OBJ_REF as I_method_invocation
+    private T_static_string p_message = GC_NULL_OBJ_REF as T_static_string
+    private Throwable p_throwable = GC_NULL_OBJ_REF as Throwable
+    private I_method_invocation p_invocation = GC_NULL_OBJ_REF as I_method_invocation
+    private Integer p_line_number = GC_ZERO
 
     @Override
     @I_black_box_base("error")
@@ -141,22 +141,22 @@ class T_event extends T_inherited_configurations implements I_event {
     @Override
     @I_black_box_base("error")
     I_trace get_corresponding_trace(I_trace i_trace_config) {
-        I_trace l_trace_result = T_logging_const.GC_NULL_OBJ_REF as I_trace
+        I_trace l_trace_result = GC_NULL_OBJ_REF as I_trace
         for (I_trace l_trace_config : get_traces_config()) {
             if (l_trace_config.match_trace(i_trace_config.get_ref_class_name(), i_trace_config.get_name())) {
                 l_trace_result = l_trace_config
                 break
             }
         }
-        if (l_trace_result == T_logging_const.GC_NULL_OBJ_REF) {
+        if (l_trace_result == GC_NULL_OBJ_REF) {
             String l_trace_config_source = i_trace_config.get_source()
-            if (l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_RUNTIME) {
+            if (l_trace_config_source == GC_TRACE_SOURCE_RUNTIME) {
                 l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
             }
-            if (l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_CONTEXT) {
+            if (l_trace_config_source == GC_TRACE_SOURCE_CONTEXT) {
                 l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
             }
-            if (l_trace_config_source == T_logging_const.GC_TRACE_SOURCE_EXCEPTION_TRACES) {
+            if (l_trace_config_source == GC_TRACE_SOURCE_EXCEPTION_TRACES) {
                 l_trace_result = get_corresponding_trace(T_destination.PC_TRACE_SOURCE_RUNTIME)
             }
         }
@@ -168,7 +168,7 @@ class T_event extends T_inherited_configurations implements I_event {
     Boolean is_trace_muted(I_trace i_trace) {
         Boolean l_result
         I_trace l_trace = get_corresponding_trace(i_trace)
-        l_result = l_trace == T_logging_const.GC_NULL_OBJ_REF ? T_logging_const.GC_FALSE : l_trace.is_muted()
+        l_result = l_trace == GC_NULL_OBJ_REF ? GC_FALSE : l_trace.is_muted()
         return l_result
     }
 
@@ -177,7 +177,7 @@ class T_event extends T_inherited_configurations implements I_event {
     Boolean is_trace_masked(I_trace i_trace) {
         Boolean l_result
         I_trace l_trace = get_corresponding_trace(i_trace)
-        l_result = l_trace == T_logging_const.GC_NULL_OBJ_REF ? T_logging_const.GC_FALSE : l_trace.is_masked()
+        l_result = l_trace == GC_NULL_OBJ_REF ? GC_FALSE : l_trace.is_masked()
         return l_result
     }
 
@@ -191,5 +191,15 @@ class T_event extends T_inherited_configurations implements I_event {
     @I_black_box_base("error")
     I_method_invocation get_invocation() {
         return p_invocation
+    }
+
+    @Override
+    Integer get_line_number() {
+        return p_line_number
+    }
+
+    @Override
+    void set_line_number(Integer i_line_number) {
+        p_line_number = i_line_number
     }
 }

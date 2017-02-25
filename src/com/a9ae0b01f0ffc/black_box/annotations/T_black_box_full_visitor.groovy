@@ -27,11 +27,13 @@ class T_black_box_full_visitor extends CodeVisitorSupport {
             l_statement_code = "l_logger.log_statement(l_shortcuts.s().$i_message, $i_line_number)"
             T_s.l().log_debug(T_s.s().l_statement_code_Z1, l_statement_code)
             List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(l_statement_code, "resulting_statement"))
+            T_s.l().log_result(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(l_statement_code, "resulting_statement"))
             return (Statement) l_resulting_statements.first()
         } catch (Throwable e_others) {
-            l_logger.log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_others, T_s.r(l_statement_code, "l_statement_code"))
+            l_logger.log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_others, T_s.r(l_statement_code, "l_statement_code"))
             throw e_others
+        } finally {
+            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME)
         }
     }
 
@@ -39,22 +41,18 @@ class T_black_box_full_visitor extends CodeVisitorSupport {
     void visitBlockStatement(BlockStatement i_statement) {
         final String LC_METHOD_NAME = "visitBlockStatement"
         I_logger l_logger = T_s.l()
-        l_logger.log_enter(PC_CLASS_NAME, "visitBlockStatement", T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
+        l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
         try {
-            ArrayList<Statement> l_modified_statements = new ArrayList<Statement>()
-            for (l_statement_to_modify in i_statement.getStatements()) {
+            ArrayList<Statement> l_modified_statements = i_statement.getStatements()
+            for (l_statement_to_modify in l_modified_statements) {
                 l_statement_to_modify.visit(this)
-                l_modified_statements.add(create_log_statement(T_s.s().Processing_Statement, l_statement_to_modify.getLineNumber()))
-                l_modified_statements.add(l_statement_to_modify)
             }
-            i_statement.getStatements().clear()
-            i_statement.getStatements().add(create_log_statement(T_s.s().Inside_Block_Statement, i_statement.getLineNumber()))
-            i_statement.getStatements().addAll(l_modified_statements)
-            i_statement.getStatements().add(create_log_statement(T_s.s().Finished_Block_Statement, l_modified_statements.last()?.getLineNumber()))
-            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(i_statement.getText(), "modified_statement_text"))
+            T_s.l().log_result(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(i_statement.getText(), "modified_statement_text"))
         } catch (Throwable e_others) {
-            l_logger.log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_others)
+            l_logger.log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_others)
             throw e_others
+        } finally {
+            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME)
         }
     }
 
@@ -67,13 +65,16 @@ class T_black_box_full_visitor extends CodeVisitorSupport {
             Statement l_statement_to_modify = i_statement.getLoopBlock()
             l_statement_to_modify.visit(this)
             BlockStatement l_modified_statements = new BlockStatement()
-            l_modified_statements.addStatement(create_log_statement(T_s.s().Inside_Loop, i_statement.getLineNumber()))
+            l_modified_statements.addStatement(create_log_statement(T_s.s().Start_loop_cycle, i_statement.getLineNumber()))
             l_modified_statements.addStatement(l_statement_to_modify)
+            l_modified_statements.addStatement(create_log_statement(T_s.s().End_loop_cycle, i_statement.getLineNumber()))
             i_statement.setLoopBlock(l_modified_statements)
-            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(i_statement.getText(), "modified_statement_text"))
+            T_s.l().log_result(PC_CLASS_NAME, LC_METHOD_NAME, T_s.r(i_statement.getText(), "modified_statement_text"))
         } catch (Throwable e_others) {
-            l_logger.log_exception(PC_CLASS_NAME, LC_METHOD_NAME, e_others)
+            l_logger.log_error(PC_CLASS_NAME, LC_METHOD_NAME, e_others)
             throw e_others
+        } finally {
+            T_s.l().log_exit(PC_CLASS_NAME, LC_METHOD_NAME)
         }
     }
 

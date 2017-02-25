@@ -1,22 +1,19 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
-import com.a9ae0b01f0ffc.black_box.annotations.I_black_box
 import com.a9ae0b01f0ffc.black_box.interfaces.I_destination
-import com.a9ae0b01f0ffc.black_box.interfaces.I_event
 import com.a9ae0b01f0ffc.black_box.interfaces.I_method_invocation
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
-import com.a9ae0b01f0ffc.black_box.main.T_logging_const
 import com.a9ae0b01f0ffc.black_box_base.annotations.I_black_box_base
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
 class T_method_invocation extends T_object_with_guid implements I_method_invocation {
 
-    String p_class_name = T_logging_const.GC_EMPTY_STRING
-    String p_method_name = T_logging_const.GC_EMPTY_STRING
-    ArrayList<I_trace> p_method_arguments = T_logging_const.GC_SKIPPED_ARGS as ArrayList<I_trace>
-    Long p_start_time = T_logging_const.GC_NULL_OBJ_REF as Long
-    Long p_end_time = T_logging_const.GC_NULL_OBJ_REF as Long
+    String p_class_name = GC_EMPTY_STRING
+    String p_method_name = GC_EMPTY_STRING
+    ArrayList<I_trace> p_method_arguments = GC_SKIPPED_ARGS as ArrayList<I_trace>
+    Long p_start_time = GC_NULL_OBJ_REF as Long
+    Long p_end_time = GC_NULL_OBJ_REF as Long
     HashMap<I_destination, ArrayList<String>> p_events_by_destination = new HashMap<I_destination, ArrayList<String>>()
 
 
@@ -59,7 +56,7 @@ class T_method_invocation extends T_object_with_guid implements I_method_invocat
     @Override
     @I_black_box_base("error")
     void stop_timing() {
-        if (p_end_time == T_logging_const.GC_NULL_OBJ_REF) {
+        if (p_end_time == GC_NULL_OBJ_REF) {
             p_end_time = System.currentTimeMillis()
         }
     }
@@ -74,8 +71,8 @@ class T_method_invocation extends T_object_with_guid implements I_method_invocat
     @Override
     @I_black_box_base("error")
     Long get_elapsed_time() {
-        if (p_start_time == T_logging_const.GC_NULL_OBJ_REF) {
-            return T_logging_const.GC_NULL_OBJ_REF as Long
+        if (p_start_time == GC_NULL_OBJ_REF) {
+            return GC_NULL_OBJ_REF as Long
         }
         stop_timing()
         return p_end_time - p_start_time

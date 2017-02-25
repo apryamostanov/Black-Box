@@ -123,12 +123,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
         HashMap<String, HashMap<String, I_trace>> l_traces_by_source_by_name = make_traces_by_source_by_name(i_event_traces)
         String l_event_type = i_source_event.get_event_type()
         if (l_event_type == "enter") {
-            l_result += open_tag(PC_TAG_INVOCATION, get_attributes_predefined(i_event_traces, i_source_event))
+            l_result += open_tag(i_source_event.get_method_name(), get_attributes_predefined(i_event_traces, i_source_event))
             if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
                 for (I_trace l_runtime_trace in l_traces_by_source_by_name.get(GC_TRACE_SOURCE_RUNTIME).values()) {
-                    l_result += open_tag(PC_TAG_ARGUMENT, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
+                    l_result += open_tag(l_runtime_trace.get_name(), get_class_name_short(l_runtime_trace))
                     l_result += make_line(T_u.escape_xml(l_runtime_trace.format_trace(i_source_event)).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
-                    l_result += close_tag(PC_TAG_ARGUMENT)
+                    l_result += close_tag(l_runtime_trace.get_name())
                 }
             }
         } else if (l_event_type == "exit") {
@@ -140,9 +140,6 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
                 }
             }
             l_result += make_line(get_elapsed_time(i_source_event))
-            if (i_source_event.get_invocation().is_event_logged_for_destination("enter", get_parent_destination())) {
-                l_result += close_tag(PC_TAG_INVOCATION)
-            }
         } else if (l_event_type == "error") {
             l_result += open_tag(PC_TAG_EXCEPTION, make_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + get_attributes_predefined(i_event_traces, i_source_event))
             if (i_source_event.get_throwable() != GC_NULL_OBJ_REF) {
@@ -165,10 +162,8 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
                 }
             }
             l_result += close_tag(PC_TAG_EXCEPTION)
-            l_result += make_line(get_elapsed_time(i_source_event))
-            if (i_source_event.get_invocation().is_event_logged_for_destination("enter", get_parent_destination())) {
-                l_result += close_tag(PC_TAG_INVOCATION)
-            }
+        } else if (l_event_type == "statement") {
+            l_result += tag(i_source_event.get_message().toString(), get_attributes_predefined(i_event_traces, i_source_event))
         } else {
             if (l_traces_by_source_by_name.containsKey(GC_TRACE_SOURCE_RUNTIME)) {
                 l_result += open_tag(i_source_event.get_event_type(), get_attributes_predefined(i_event_traces, i_source_event))
