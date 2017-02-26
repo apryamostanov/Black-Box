@@ -8,6 +8,7 @@ import org.codehaus.groovy.ast.CodeVisitorSupport
 import org.codehaus.groovy.ast.Parameter
 import org.codehaus.groovy.ast.expr.*
 import org.codehaus.groovy.ast.stmt.*
+import org.codehaus.groovy.ast.tools.GeneralUtils
 
 @ToString(includeNames = true, includeFields = true)
 class T_black_box_visitor extends CodeVisitorSupport {
@@ -19,28 +20,6 @@ class T_black_box_visitor extends CodeVisitorSupport {
     String p_statement_name = T_logging_const.GC_EMPTY_STRING
     String p_black_box_type = T_logging_const.GC_EMPTY_STRING
     Parameter[] p_parameters = T_logging_const.GC_SKIPPED_ARGS as Parameter[]
-
-    private void addNode(node, Class expectedSubclass, Closure superMethod) {
-
-        if (expectedSubclass.getName() == node.getClass().getName()) {
-            if (currentNode == null) {
-                currentNode = adapter.make(node)
-                superMethod.call(node)
-            } else {
-                // visitor works off void methods... so we have to
-                // perform a swap to get accumulation like behavior.
-                def temp = currentNode
-                currentNode = adapter.make(node)
-
-                temp.add(currentNode)
-                currentNode.parent = temp
-                superMethod.call(node)
-                currentNode = temp
-            }
-        } else {
-            superMethod.call(node)
-        }
-    }
 
     T_black_box_visitor(T_black_box_transformation i_black_box_transformation, String i_class_name, String i_method_name, String i_statement_name, String i_black_box_type, Parameter[] i_parameters = T_logging_const.GC_SKIPPED_ARGS as Parameter[]) {
         p_black_box_transformation = i_black_box_transformation
@@ -63,7 +42,26 @@ class T_black_box_visitor extends CodeVisitorSupport {
             ArrayList<Statement> l_modified_statements = new ArrayList<Statement>()
             for (l_statement_to_modify in i_statement.getStatements()) {
                 if (l_statement_to_modify instanceof ForStatement) {
-                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "for_loop", p_black_box_type, p_parameters))
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "for", p_black_box_type, p_parameters))
+                } else if (l_statement_to_modify instanceof WhileStatement) {
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "while", p_black_box_type, p_parameters))
+                } else if (l_statement_to_modify instanceof IfStatement) {
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "if", p_black_box_type, p_parameters))
+                } else if (l_statement_to_modify instanceof ExpressionStatement) {
+                    if (l_statement_to_modify.getExpression() instanceof DeclarationExpression) {
+                        l_modified_statements.add(GeneralUtils.declS(((DeclarationExpression)l_statement_to_modify.getExpression()).getVariableExpression(), new EmptyExpression()))
+                        Statement l_modified_statement = p_black_box_transformation.decorate_statement(GeneralUtils.assignS(((DeclarationExpression)l_statement_to_modify.getExpression()).getVariableExpression(), ((DeclarationExpression)l_statement_to_modify.getExpression()).getRightExpression()), p_class_name, p_method_name, "declaration", p_black_box_type, p_parameters)
+                        l_modified_statement.setLineNumber(l_statement_to_modify.getLineNumber())
+                        l_modified_statements.add(l_modified_statement)
+                    } else if (l_statement_to_modify.getExpression() instanceof MethodCallExpression) {
+                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, ((MethodCallExpression)l_statement_to_modify.getExpression()).getMethodAsString(), p_black_box_type, p_parameters))
+                    } else if (l_statement_to_modify.getExpression() instanceof StaticMethodCallExpression) {
+                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, ((StaticMethodCallExpression)l_statement_to_modify.getExpression()).getMethodAsString(), p_black_box_type, p_parameters))
+                    } else {
+                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, l_statement_to_modify.getExpression().getClass().getSimpleName(), p_black_box_type, p_parameters))
+                    }
+                } else if (l_statement_to_modify instanceof SwitchStatement) {
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "switch", p_black_box_type, p_parameters))
                 } else {
                     l_modified_statements.add(l_statement_to_modify)
                 }
@@ -87,7 +85,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
         try {
             super.visitForLoop(i_statement)
             Statement l_statement_to_modify = i_statement.getLoopBlock()
-            i_statement.setLoopBlock(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "for_loop_cycle", p_black_box_type, p_parameters))
+            i_statement.setLoopBlock(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "iteration", p_black_box_type, p_parameters))
             T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
         } catch (Throwable e_others) {
             l_logger.log_error(e_others)
@@ -116,48 +114,59 @@ class T_black_box_visitor extends CodeVisitorSupport {
     }
 
     @Override
-    void visitWhileLoop(WhileStatement loop) {
-        super.visitWhileLoop(loop)
+    void visitWhileLoop(WhileStatement i_statement) {
+        final String LC_METHOD_NAME = "visitWhileLoop"
+        I_logger l_logger = T_s.l()
+        l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
+        try {
+            super.visitWhileLoop(i_statement)
+            Statement l_statement_to_modify = i_statement.getLoopBlock()
+            i_statement.setLoopBlock(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "iteration", p_black_box_type, p_parameters))
+            T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
+        } catch (Throwable e_others) {
+            l_logger.log_error(e_others)
+            throw e_others
+        } finally {
+            T_s.l().log_exit()
+        }
     }
 
     @Override
-    void visitIfElse(IfStatement ifElse) {
-        super.visitIfElse(ifElse)
+    void visitIfElse(IfStatement i_statement) {
+        final String LC_METHOD_NAME = "visitIfElse"
+        I_logger l_logger = T_s.l()
+        l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
+        try {
+            super.visitIfElse(i_statement)
+            i_statement.setIfBlock(p_black_box_transformation.decorate_statement(i_statement.getIfBlock(), p_class_name, p_method_name, "then", p_black_box_type, p_parameters))
+            i_statement.setElseBlock(p_black_box_transformation.decorate_statement(i_statement.getElseBlock(), p_class_name, p_method_name, "else", p_black_box_type, p_parameters))
+            T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
+        } catch (Throwable e_others) {
+            l_logger.log_error(e_others)
+            throw e_others
+        } finally {
+            T_s.l().log_exit()
+        }
     }
 
     @Override
-    void visitExpressionStatement(ExpressionStatement statement) {
-        super.visitExpressionStatement(statement)
-    }
-
-    @Override
-    void visitTryCatchFinally(TryCatchStatement statement) {
-        super.visitTryCatchFinally(statement)
-    }
-
-    @Override
-    void visitSwitch(SwitchStatement statement) {
-        super.visitSwitch(statement)
-    }
-
-    @Override
-    void visitCaseStatement(CaseStatement statement) {
-        super.visitCaseStatement(statement)
-    }
-
-    @Override
-    void visitMethodCallExpression(MethodCallExpression call) {
-        super.visitMethodCallExpression(call)
-    }
-
-    @Override
-    void visitStaticMethodCallExpression(StaticMethodCallExpression call) {
-        super.visitStaticMethodCallExpression(call)
-    }
-
-    @Override
-    void visitCatchStatement(CatchStatement statement) {
-        super.visitCatchStatement(statement)
+    void visitSwitch(SwitchStatement i_statement) {
+        final String LC_METHOD_NAME = "visitSwitch"
+        I_logger l_logger = T_s.l()
+        l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
+        try {
+            super.visitSwitch(i_statement)
+            for (l_statement_to_modify in i_statement.getCaseStatements()) {
+                l_statement_to_modify.setCode(p_black_box_transformation.decorate_statement(l_statement_to_modify.getCode(), p_class_name, p_method_name, "case", p_black_box_type, p_parameters))
+            }
+            i_statement.setDefaultStatement(p_black_box_transformation.decorate_statement(i_statement.getDefaultStatement(), p_class_name, p_method_name, "default", p_black_box_type, p_parameters))
+            T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
+        } catch (Throwable e_others) {
+            l_logger.log_error(e_others)
+            throw e_others
+        } finally {
+            T_s.l().log_exit()
+        }
     }
 
 }
