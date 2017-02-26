@@ -50,6 +50,8 @@ class T_black_box_transformation extends AbstractASTTransformation {
                 T_s.l().log_debug(T_s.s().Black_box_type_Z1, l_black_box_type)
                 if (l_method_node instanceof MethodNode) {
                     T_s.l().log_debug(T_s.s().Processing_method_Z1, l_method_node.getName())
+                    T_black_box_visitor l_full_expression_visitor = new T_black_box_visitor(this, l_method_node.getDeclaringClass().getName(), l_method_node.getName(), T_logging_const.GC_STATEMENT_NAME_METHOD, l_black_box_type, l_method_node.getParameters())
+                    l_method_node.getCode().visit(l_full_expression_visitor)
                     BlockStatement l_changed_block_statement = new BlockStatement()
                     l_changed_block_statement.addStatement(create_shortcut_declaration_statement())
                     l_changed_block_statement.addStatement(create_logger_declaration_statement())
@@ -76,8 +78,6 @@ class T_black_box_transformation extends AbstractASTTransformation {
         final String LC_METHOD_NAME = "decorate_statement"
         T_s.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement_to_decorate, "i_statement_to_decorate"), T_s.r(i_class_name, "i_class_name"), T_s.r(i_method_name, "i_method_name"), T_s.r(i_statement_name, "i_statement_name"), T_s.r(i_parameters, "i_parameters"), T_s.r(this, "this"))
         try {
-            T_black_box_visitor l_full_expression_visitor = new T_black_box_visitor(this, i_class_name, i_method_name, i_statement_name, i_black_box_type, i_parameters)
-            i_statement_to_decorate.visit(l_full_expression_visitor)
             BlockStatement l_decorated_block_statement = new BlockStatement()
             BlockStatement l_try_block = new BlockStatement()
             l_try_block.addStatement(i_statement_to_decorate)

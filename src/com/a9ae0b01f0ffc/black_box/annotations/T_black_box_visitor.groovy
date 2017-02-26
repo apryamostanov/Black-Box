@@ -20,6 +20,28 @@ class T_black_box_visitor extends CodeVisitorSupport {
     String p_black_box_type = T_logging_const.GC_EMPTY_STRING
     Parameter[] p_parameters = T_logging_const.GC_SKIPPED_ARGS as Parameter[]
 
+    private void addNode(node, Class expectedSubclass, Closure superMethod) {
+
+        if (expectedSubclass.getName() == node.getClass().getName()) {
+            if (currentNode == null) {
+                currentNode = adapter.make(node)
+                superMethod.call(node)
+            } else {
+                // visitor works off void methods... so we have to
+                // perform a swap to get accumulation like behavior.
+                def temp = currentNode
+                currentNode = adapter.make(node)
+
+                temp.add(currentNode)
+                currentNode.parent = temp
+                superMethod.call(node)
+                currentNode = temp
+            }
+        } else {
+            superMethod.call(node)
+        }
+    }
+
     T_black_box_visitor(T_black_box_transformation i_black_box_transformation, String i_class_name, String i_method_name, String i_statement_name, String i_black_box_type, Parameter[] i_parameters = T_logging_const.GC_SKIPPED_ARGS as Parameter[]) {
         p_black_box_transformation = i_black_box_transformation
         p_method_name = i_method_name
@@ -35,10 +57,19 @@ class T_black_box_visitor extends CodeVisitorSupport {
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
         try {
-            ArrayList<Statement> l_modified_statements = i_statement.getStatements()
-            for (l_statement_to_modify in l_modified_statements) {
-                l_statement_to_modify.visit(this)
+            for (l_statement_to_visit in i_statement.getStatements()) {
+                l_statement_to_visit.visit(this)
             }
+            ArrayList<Statement> l_modified_statements = new ArrayList<Statement>()
+            for (l_statement_to_modify in i_statement.getStatements()) {
+                if (l_statement_to_modify instanceof ForStatement) {
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "for_loop", p_black_box_type, p_parameters))
+                } else {
+                    l_modified_statements.add(l_statement_to_modify)
+                }
+            }
+            i_statement.getStatements().clear()
+            i_statement.getStatements().addAll(l_modified_statements)
             T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
         } catch (Throwable e_others) {
             l_logger.log_error(e_others)
@@ -54,8 +85,8 @@ class T_black_box_visitor extends CodeVisitorSupport {
         I_logger l_logger = T_s.l()
         l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
         try {
+            super.visitForLoop(i_statement)
             Statement l_statement_to_modify = i_statement.getLoopBlock()
-            l_statement_to_modify.visit(this)
             i_statement.setLoopBlock(p_black_box_transformation.decorate_statement(l_statement_to_modify, p_class_name, p_method_name, "for_loop_cycle", p_black_box_type, p_parameters))
             T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
         } catch (Throwable e_others) {
