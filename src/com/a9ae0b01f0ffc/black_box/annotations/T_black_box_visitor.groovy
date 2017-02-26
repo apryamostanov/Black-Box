@@ -78,6 +78,29 @@ class T_black_box_visitor extends CodeVisitorSupport {
     }
 
     @Override
+    void visitClosureExpression(ClosureExpression i_statement) {
+        final String LC_METHOD_NAME = "visitClosureExpression"
+        I_logger l_logger = T_s.l()
+        l_logger.log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_const.GC_STATEMENT_NAME_METHOD, T_logging_const.GC_ZERO, T_s.r(i_statement, "i_statement"), T_s.r(this, "this"))
+        try {
+            super.visitClosureExpression(i_statement)
+            BlockStatement l_changed_block_statement = new BlockStatement()
+            l_changed_block_statement.addStatement(p_black_box_transformation.create_shortcut_declaration_statement())
+            l_changed_block_statement.addStatement(p_black_box_transformation.create_logger_declaration_statement())
+            l_changed_block_statement.addStatement(p_black_box_transformation.create_l_methodname_declaration_statement(p_method_name))
+            l_changed_block_statement.addStatement(p_black_box_transformation.create_l_classname_declaration_statement(p_class_name))
+            l_changed_block_statement.addStatement(p_black_box_transformation.decorate_statement(i_statement.getCode(), p_class_name, p_method_name, "closure", p_black_box_type, p_parameters))
+            i_statement.setCode(l_changed_block_statement)
+            T_s.l().log_result(T_s.r(i_statement.getText(), "modified_statement_text"))
+        } catch (Throwable e_others) {
+            l_logger.log_error(e_others)
+            throw e_others
+        } finally {
+            T_s.l().log_exit()
+        }
+    }
+
+    @Override
     void visitForLoop(ForStatement i_statement) {
         final String LC_METHOD_NAME = "visitForLoop"
         I_logger l_logger = T_s.l()
