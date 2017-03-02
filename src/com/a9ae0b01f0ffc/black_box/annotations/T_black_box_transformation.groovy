@@ -27,7 +27,15 @@ class T_black_box_transformation extends AbstractASTTransformation {
     private static final ClassNode PC_CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     public static final String PC_CLASS_NAME = "T_black_box_transformation"
     public static final Class PC_SHORTCUT_CLASS = T_s
+
+    AnnotationNode get_annotation_node() {
+        return p_annotation_node
+    }
     private AnnotationNode p_annotation_node = T_logging_const.GC_NULL_OBJ_REF as AnnotationNode
+
+    void set_annotation_node(AnnotationNode p_annotation_node) {
+        this.p_annotation_node = p_annotation_node
+    }
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         final String LC_METHOD_NAME = "visit"
