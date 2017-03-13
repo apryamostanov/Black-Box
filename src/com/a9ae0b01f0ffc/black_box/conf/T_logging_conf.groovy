@@ -1,12 +1,13 @@
-package com.a9ae0b01f0ffc.black_box.main
+package com.a9ae0b01f0ffc.black_box.conf
 
-import com.a9ae0b01f0ffc.commons.main.T_common_commons
+import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
+import com.a9ae0b01f0ffc.commons.implementation.config.T_common_conf
 
-class T_logging_commons extends T_common_commons {
+class T_logging_conf extends T_common_conf {
 
-    String GC_BLACK_BOX_ENABLED = T_logging_const.GC_TRUE_STRING
-    String GC_PROFILE_ALL = T_logging_const.GC_TRUE_STRING
-    String GC_DEFAULT_LOGGER_CONF_FILE_NAME = T_logging_const.GC_EMPTY_STRING
+    String GC_BLACK_BOX_ENABLED = T_logging_base_4_const.GC_TRUE_STRING
+    String GC_PROFILE_ALL = T_logging_base_4_const.GC_TRUE_STRING
+    String GC_DEFAULT_LOGGER_CONF_FILE_NAME = T_logging_base_4_const.GC_EMPTY_STRING
     String GC_LOG_CSV_SEPARATOR = "|"
     String GC_ARGUMENT_POSITIONAL_NAME = "Argument#"
     String GC_DEFAULT_CLASS_NAME = "Unknown Class"
@@ -15,17 +16,14 @@ class T_logging_commons extends T_common_commons {
     String GC_DEFAULT_TRACE = "Trace missing"
     String GC_DEFAULT_TRACE_MASKED = "Trace masked"
     String GC_DEFAULT_TRACE_MUTED = "Trace muted"
-    String GC_LOGGER_MODE_PRODUCTION = "production"
-    String GC_LOGGER_MODE_DIAGNOSTIC = "diagnostic"
-    String GC_DESTINATION_PURPOSE_DISPLAY = "display"
-    String GC_DESTINATION_PURPOSE_WAREHOUSE = "warehouse"
+    String GC_DEFAULT_TRACE_NAME = "unnamed"
     String GC_XML_PAD_DEPTH = "4"
 
-    T_logging_commons() {
+    T_logging_conf() {
         super()
     }
 
-    T_logging_commons(String i_conf_file_name) {
+    T_logging_conf(String i_conf_file_name) {
         super(i_conf_file_name)
         GC_BLACK_BOX_ENABLED = GC_CONST_CONF.GC_BLACK_BOX_ENABLED(GC_BLACK_BOX_ENABLED)
         GC_PROFILE_ALL = GC_CONST_CONF.GC_PROFILE_ALL(GC_PROFILE_ALL)
@@ -38,11 +36,8 @@ class T_logging_commons extends T_common_commons {
         GC_DEFAULT_TRACE = GC_CONST_CONF.GC_DEFAULT_TRACE(GC_DEFAULT_TRACE)
         GC_DEFAULT_TRACE_MASKED = GC_CONST_CONF.GC_DEFAULT_TRACE_MASKED(GC_DEFAULT_TRACE_MASKED)
         GC_DEFAULT_TRACE_MUTED = GC_CONST_CONF.GC_DEFAULT_TRACE_MUTED(GC_DEFAULT_TRACE_MUTED)
-        GC_LOGGER_MODE_PRODUCTION = GC_CONST_CONF.GC_LOGGER_MODE_PRODUCTION(GC_LOGGER_MODE_PRODUCTION)
-        GC_LOGGER_MODE_DIAGNOSTIC = GC_CONST_CONF.GC_LOGGER_MODE_DIAGNOSTIC(GC_LOGGER_MODE_DIAGNOSTIC)
-        GC_DESTINATION_PURPOSE_DISPLAY = GC_CONST_CONF.GC_DESTINATION_PURPOSE_DISPLAY(GC_DESTINATION_PURPOSE_DISPLAY)
-        GC_DESTINATION_PURPOSE_WAREHOUSE = GC_CONST_CONF.GC_DESTINATION_PURPOSE_WAREHOUSE(GC_DESTINATION_PURPOSE_WAREHOUSE)
         GC_XML_PAD_DEPTH = GC_CONST_CONF.GC_XML_PAD_DEPTH(GC_XML_PAD_DEPTH)
+        GC_DEFAULT_TRACE_NAME = GC_CONST_CONF.GC_DEFAULT_TRACE_NAME(GC_DEFAULT_TRACE_NAME)
     }
 
 }

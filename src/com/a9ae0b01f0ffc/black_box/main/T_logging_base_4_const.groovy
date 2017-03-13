@@ -1,8 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.commons.main.T_common_const
+import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_3_utils
 
-class T_logging_const extends T_common_const {
+class T_logging_base_4_const extends T_common_base_3_utils {
 
     static final String GC_LOGGER_BUILDER_INTERFACE = "I_logger_builder"
     static final String GC_DATE_FORMAT_UID = "yyyyMMddHHmmssSSS"
@@ -22,6 +22,7 @@ class T_logging_const extends T_common_const {
     static final String GC_TRACE_MASK_NONE = "none"
     static final String GC_DEFAULT_FORMATTER_NONE = "none"
     static final String GC_STATEMENT_NAME_METHOD = GC_EMPTY_STRING
+    static final String GC_STATEMENT_NAME_CLOSURE = "closure"
     static final String GC_BLACK_BOX_TYPE_ERROR = "error"
     static final String GC_BLACK_BOX_TYPE_FULL = "full"
     static final String GC_BLACK_BOX_TYPE_INVOCATION = "invocation"

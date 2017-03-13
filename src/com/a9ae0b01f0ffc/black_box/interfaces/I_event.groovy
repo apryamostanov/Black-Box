@@ -1,6 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-import com.a9ae0b01f0ffc.commons.static_string.T_static_string
+import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
 
 interface I_event extends I_inherited_configurations {
 
@@ -20,7 +20,7 @@ interface I_event extends I_inherited_configurations {
 
     String get_datetimestamp()
 
-    T_static_string get_message()
+    String get_message()
 
     Throwable get_throwable()
 
@@ -41,10 +41,6 @@ interface I_event extends I_inherited_configurations {
     void set_message(T_static_string i_message)
 
     void set_throwable(Throwable i_throwable)
-
-    I_trace get_corresponding_trace(I_trace i_trace_config)
-
-    Boolean is_trace_muted(I_trace i_trace)
 
     Boolean is_trace_masked(I_trace i_trace)
 

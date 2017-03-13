@@ -10,13 +10,9 @@ interface I_destination extends I_inherited_configurations{
 
     void add_configuration_event(I_event i_event)
 
-    void set_destination_purpose(String i_destination_purpose)
-
     void set_location(String i_location)
 
-    String get_destination_purpose()
-
-    void store(ArrayList<I_trace> i_trace_list, I_event i_source_event)
+    void store(I_event i_source_event)
 
     String get_buffer()
 

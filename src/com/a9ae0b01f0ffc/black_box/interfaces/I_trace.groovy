@@ -1,12 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.interfaces
 
-interface I_trace extends I_inherited_configurations, I_object_with_guid {
+import com.a9ae0b01f0ffc.commons.interfaces.I_object_with_uid
 
-    Boolean is_muted()
+interface I_trace extends I_inherited_configurations, I_object_with_uid {
 
     Boolean is_masked()
-
-    void set_muted(Boolean i_is_muted)
 
     void set_mask(String i_mask)
 
@@ -45,7 +43,5 @@ interface I_trace extends I_inherited_configurations, I_object_with_guid {
     String get_ref_guid()
 
     String format_trace(I_event i_source_event)
-
-    String unsecure_serialize()
 
 }
