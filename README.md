@@ -1,7 +1,7 @@
 # Black Box
 
 This annotation (@I_black_box) adds A LOT of logging and profiling to your methods - by traversing the whole AST of the method.
-If used in Error-only mode (@I_black_box) - it logs only errors.
+If used in Error-only mode (@I_black_box("error")) - it logs only errors.
 
 As of now it works ~3 times faster than java.util.logging, not saying about HUGE amount of boiler plate code and maintenance.
 
