@@ -1,5 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.annotations
 
+import com.a9ae0b01f0ffc.black_box.conf.T_logging_conf
 import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context
@@ -49,7 +50,10 @@ class T_black_box_visitor extends CodeVisitorSupport {
                         l_modified_statement.setLineNumber(l_statement_to_modify.getLineNumber())
                         l_modified_statements.add(l_modified_statement)
                     } else if (l_statement_to_modify.getExpression() instanceof MethodCallExpression) {
-                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, ((MethodCallExpression)l_statement_to_modify.getExpression()).getMethodAsString()))
+                        MethodCallExpression l_method_call_expression = (MethodCallExpression)l_statement_to_modify.getExpression()
+                        if (!l_method_call_expression.getDeclaringClass()?.getPackageName()?.contains(T_logging_base_5_context.c().GC_EXCLUDE_PACKAGE_FROM_LOGGING)) {
+                            l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, l_method_call_expression.getMethodAsString()))
+                        }
                     } else if (l_statement_to_modify.getExpression() instanceof StaticMethodCallExpression) {
                         l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, ((StaticMethodCallExpression)l_statement_to_modify.getExpression()).getMethodAsString()))
                     } else {

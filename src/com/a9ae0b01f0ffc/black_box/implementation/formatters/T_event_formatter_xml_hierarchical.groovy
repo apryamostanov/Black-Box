@@ -25,6 +25,8 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     static final String PC_EVENT_TYPE_EXIT = "exit"
     static final String PC_EVENT_TYPE_RESULT = "result"
     static final String PC_EVENT_TYPE_ERROR = "error"
+    static final String PC_EVENT_TYPE_INFO = "info"
+    static final String PC_EVENT_TYPE_WARNING = "warning"
     static final String PC_TRACE_TAG_NAME_PARAMETER = "argument"
     static final String PC_TRACE_TAG_NAME_RESULT = "result"
     static final String PC_TRACE_TAG_NAME_EXCEPTION_TRACE_SOURCE = "root_cause_exception_trace"
@@ -37,7 +39,8 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     }
 
     static String get_class_name_short(I_trace i_trace) {
-        return make_class_name_attribute(get_short_name(i_trace.get_ref_class_name()))
+        String l_short_name = get_short_name(i_trace.get_ref_class_name())
+        return make_class_name_attribute(l_short_name)
     }
 
     static String make_exception_class_name_attribute(String i_short_name) {
@@ -49,7 +52,11 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     }
 
     static String get_name(I_trace i_trace) {
-        return PC_ATTR_NAME + GC_EQUALS + GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(i_trace.get_name()) + GC_XML_DOUBLE_QUOTE
+        if (i_trace.get_name() != c().GC_DEFAULT_TRACE_NAME) {
+            return PC_ATTR_NAME + GC_EQUALS + GC_XML_DOUBLE_QUOTE + XmlUtil.escapeXml(i_trace.get_name()) + GC_XML_DOUBLE_QUOTE
+        } else {
+            return GC_EMPTY_STRING
+        }
     }
 
     String make_line(String i_source_line) {
@@ -147,7 +154,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_EXCEPTION_TRACE_UNIT)
             l_result += close_tag(PC_TAG_EXCEPTION)
         } else {
-            if (method_arguments_present(i_source_event.get_traces_runtime())) {
+            if ([PC_EVENT_TYPE_INFO, PC_EVENT_TYPE_WARNING].contains(i_source_event.get_event_type()) && method_arguments_present(i_source_event.get_traces_runtime())) {
                 l_result += open_tag(i_source_event.get_event_type(), get_attrs(i_source_event))
                 l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_TRACE)
                 l_result += close_tag(i_source_event.get_event_type())

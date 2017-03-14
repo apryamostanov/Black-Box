@@ -3,6 +3,8 @@ package com.a9ae0b01f0ffc.black_box.conf
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
 import com.a9ae0b01f0ffc.commons.implementation.config.T_common_conf
 
+import java.util.logging.Level
+
 class T_logging_conf extends T_common_conf {
 
     String GC_BLACK_BOX_ENABLED = T_logging_base_4_const.GC_TRUE_STRING
@@ -18,6 +20,8 @@ class T_logging_conf extends T_common_conf {
     String GC_DEFAULT_TRACE_MUTED = "Trace muted"
     String GC_DEFAULT_TRACE_NAME = "unnamed"
     String GC_XML_PAD_DEPTH = "4"
+    String GC_EXCLUDE_PACKAGE_FROM_LOGGING = "black_box"
+    String GC_JUL_CONF_FILE_NAME = "./conf/logging.properties"
 
     T_logging_conf() {
         super()
@@ -38,6 +42,8 @@ class T_logging_conf extends T_common_conf {
         GC_DEFAULT_TRACE_MUTED = GC_CONST_CONF.GC_DEFAULT_TRACE_MUTED(GC_DEFAULT_TRACE_MUTED)
         GC_XML_PAD_DEPTH = GC_CONST_CONF.GC_XML_PAD_DEPTH(GC_XML_PAD_DEPTH)
         GC_DEFAULT_TRACE_NAME = GC_CONST_CONF.GC_DEFAULT_TRACE_NAME(GC_DEFAULT_TRACE_NAME)
+        GC_EXCLUDE_PACKAGE_FROM_LOGGING = GC_CONST_CONF.GC_EXCLUDE_PACKAGE_FROM_LOGGING(GC_EXCLUDE_PACKAGE_FROM_LOGGING)
+        GC_JUL_CONF_FILE_NAME = GC_CONST_CONF.GC_JUL_CONF_FILE_NAME(GC_JUL_CONF_FILE_NAME)
     }
 
 }

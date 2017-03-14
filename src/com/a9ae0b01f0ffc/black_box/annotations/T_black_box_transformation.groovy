@@ -93,19 +93,15 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    BlockStatement decorate_statement(Statement i_statement_to_decorate, String i_statement_name, Parameter[] i_parameters = p_parameters) {
+    BlockStatement decorate_statement(Statement i_statement_to_decorate, String i_statement_name, Parameter[] i_parameters = T_logging_base_5_context.GC_SKIPPED_ARGS as Parameter[]) {
         final String LC_METHOD_NAME = "decorate_statement"
-        T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_statement_to_decorate, "i_statement_to_decorate"), T_logging_base_6_util.r(p_class_name, "p_class_name"), T_logging_base_6_util.r(p_method_name, "p_method_name"), T_logging_base_6_util.r(i_statement_name, "i_statement_name"), T_logging_base_6_util.r(p_parameters, "p_parameters"))
+        T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_statement_to_decorate, "i_statement_to_decorate"), T_logging_base_6_util.r(p_class_name, "p_class_name"), T_logging_base_6_util.r(p_method_name, "p_method_name"), T_logging_base_6_util.r(i_statement_name, "i_statement_name"), T_logging_base_6_util.r(i_parameters, "i_parameters"))
         try {
             BlockStatement l_decorated_block_statement = new BlockStatement()
             BlockStatement l_try_block = new BlockStatement()
             l_try_block.addStatement(i_statement_to_decorate)
             if ([T_logging_base_4_const.GC_BLACK_BOX_TYPE_FULL, T_logging_base_4_const.GC_BLACK_BOX_TYPE_INVOCATION].contains(p_black_box_type)) {
-                Parameter[] l_parameters = T_logging_base_6_util.GC_SKIPPED_ARGS as Parameter[]
-                if ([T_logging_base_6_util.GC_STATEMENT_NAME_CLOSURE, T_logging_base_6_util.GC_STATEMENT_NAME_METHOD].contains(i_statement_name)) {
-                    l_parameters = i_parameters
-                }
-                l_decorated_block_statement.addStatement(create_log_enter_statement("log_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), l_parameters))
+                l_decorated_block_statement.addStatement(create_log_enter_statement("log_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), i_parameters))
                 Statement l_finally_block = create_log_exit_statement("log_exit")
                 l_decorated_block_statement.addStatement(create_try_catch_statement(l_try_block, l_finally_block, i_parameters))
             } else if (p_black_box_type == T_logging_base_4_const.GC_BLACK_BOX_TYPE_ERROR) {
@@ -130,7 +126,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_l_methodname_declaration_statement(String i_methodname) {
+    static Statement create_l_methodname_declaration_statement(String i_methodname) {
         final String LC_METHOD_NAME = "create_l_methodname_declaration_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_methodname, "i_methodname"))
         try {
@@ -143,7 +139,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_l_classname_declaration_statement(String i_classname) {
+    static Statement create_l_classname_declaration_statement(String i_classname) {
         final String LC_METHOD_NAME = "create_l_classname_declaration_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_classname, "i_classname"))
         try {
@@ -156,7 +152,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_logger_declaration_statement() {
+    static Statement create_logger_declaration_statement() {
         final String LC_METHOD_NAME = "create_logger_declaration_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO)
         try {
@@ -169,7 +165,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_shortcut_declaration_statement() {
+    static Statement create_shortcut_declaration_statement() {
         final String LC_METHOD_NAME = "create_shortcut_declaration_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO)
         try {
@@ -182,13 +178,13 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_log_enter_statement(String i_log_enter_function, String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, Parameter[] i_parameters = T_logging_base_4_const.GC_SKIPPED_ARGS as Parameter[]) {
+    static Statement create_log_enter_statement(String i_log_enter_function, String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, Parameter[] i_parameters = T_logging_base_4_const.GC_SKIPPED_ARGS as Parameter[]) {
         final String LC_METHOD_NAME = "create_log_enter_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_log_enter_function, "i_log_enter_function"), T_logging_base_6_util.r(i_class_name, "i_class_name"), T_logging_base_6_util.r(i_method_name, "i_method_name"), T_logging_base_6_util.r(i_statement_name, "i_statement_name"), T_logging_base_6_util.r(i_line_number, "i_line_number"), T_logging_base_6_util.r(i_parameters, "i_parameters"))
         try {
             String l_serialized_parameters = T_common_base_1_const.GC_EMPTY_STRING
             if (i_log_enter_function != "profile_enter") {
-                if (i_parameters.size() != 0) {
+                if (T_logging_base_5_context.method_arguments_present(i_parameters)) {
                     for (l_argument in i_parameters) {
                         l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
                     }
@@ -207,7 +203,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_log_exit_statement(String i_log_exit_funtion) {
+    static Statement create_log_exit_statement(String i_log_exit_funtion) {
         final String LC_METHOD_NAME = "create_log_exit_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_log_exit_funtion, "i_log_exit_funtion"))
         try {
@@ -223,13 +219,14 @@ class T_black_box_transformation extends AbstractASTTransformation {
         }
     }
 
-    Statement create_log_error_statement(Parameter[] i_parameters) {
+    static Statement create_log_error_statement(Parameter[] i_parameters) {
         final String LC_METHOD_NAME = "create_log_error_statement"
         T_logging_base_5_context.l().log_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_parameters, "i_parameters"))
         try {
             Parameter[] l_arguments = i_parameters
             String l_serialized_parameters = T_common_base_1_const.GC_EMPTY_STRING
-            if (l_arguments.size() != 0) {
+            if (T_logging_base_5_context.method_arguments_present(i_parameters)) {
+                T_logging_base_5_context.l().log_debug(T_logging_base_5_context.s.Parameters_present, i_parameters)
                 for (l_argument in l_arguments) {
                     l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
                 }

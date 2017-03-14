@@ -53,6 +53,7 @@ class T_logger_builder extends T_logging_base_6_util implements I_logger_builder
         for (l_event_xml in i_destination_xml.children()) {
             l_destination.add_configuration_event(init_event((GPathResult) l_event_xml, l_destination))
         }
+        l_destination.init()
         return l_destination
     }
 

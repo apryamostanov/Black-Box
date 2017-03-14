@@ -22,4 +22,6 @@ interface I_destination extends I_inherited_configurations{
 
     void set_spool_event(String i_spool_event)
 
+    void init()
+
 }

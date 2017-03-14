@@ -1,7 +1,10 @@
 package com.a9ae0b01f0ffc.black_box.main
 
 import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
+import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
+
+import java.util.logging.Level
 
 class T_logging_base_6_util extends T_logging_base_5_context {
 
@@ -54,6 +57,32 @@ class T_logging_base_6_util extends T_logging_base_5_context {
 
     static ArrayList<I_trace> objects2traces_array(Object[] i_objects, String i_source) {
         return objects2traces(Arrays.asList(i_objects), i_source)
+    }
+
+    static Level jul_level_by_name(String i_level_name) {
+        Level l_level
+        if (i_level_name == "ALL") {
+            l_level = Level.ALL
+        } else if (i_level_name == "CONFIG") {
+            l_level = Level.CONFIG
+        } else if (i_level_name == "FINE") {
+            l_level = Level.FINE
+        } else if (i_level_name == "FINER") {
+            l_level = Level.FINER
+        } else if (i_level_name == "FINEST") {
+            l_level = Level.FINEST
+        } else if (i_level_name == "INFO") {
+            l_level = Level.INFO
+        } else if (i_level_name == "OFF") {
+            l_level = Level.OFF
+        } else if (i_level_name == "SEVERE") {
+            l_level = Level.SEVERE
+        } else if (i_level_name == "WARNING") {
+            l_level = Level.WARNING
+        } else {
+            throw new E_application_exception(s.Unsupported_java_util_logging_level_Z1, i_level_name)
+        }
+        return l_level
     }
 
 }

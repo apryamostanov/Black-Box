@@ -16,6 +16,10 @@ abstract class T_destination extends T_inherited_configurations implements I_des
     String p_spool_event = GC_EMPTY_STRING
     String p_mask = GC_EMPTY_STRING
 
+    void init() {
+
+    }
+
     String get_buffer() {
         return p_buffer
     }
