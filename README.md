@@ -20,7 +20,7 @@ Intended purpose of usage:
 - OLTP
 - PCI DSS, PA DSS applications
 - TCP IP applications
-- Working with hardware (I2C, Robotics, GPIO, drones, etc)
+- Working with hardware (I2C, Robotics, GPIO, drones, etc) - good to use with pi4j library!
 - Troubleshooting on environments with limited access
 - Perfomance issues investigations
 - Forensics and legal case study in software
@@ -54,6 +54,17 @@ Features:
 4. Compile-time Meta-data (line number, file name, CVS version) - in future
 - Hierarchical method invocation logging
 - Support of performance profiling
+
+Init (1 time per thread):
+```Groovy
+class Main{
+    public static void main(String... i_args) {
+        T_common_base_2_context.x().init_custom("./conf/commons.conf")
+        T_visa_recon_generator l_visa_recon_generator = new T_visa_recon_generator()
+        l_visa_recon_generator.convert_vts_log_to_ctf(c().GC_VTS_LOG_FILE, c().GC_CTF_FILE)
+    }
+}
+```
 
 Sample usage:
 ```Groovy
