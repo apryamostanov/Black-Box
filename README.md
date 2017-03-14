@@ -60,8 +60,6 @@ Init (1 time per thread):
 class Main{
     public static void main(String... i_args) {
         T_common_base_2_context.x().init_custom("./conf/commons.conf")
-        T_visa_recon_generator l_visa_recon_generator = new T_visa_recon_generator()
-        l_visa_recon_generator.convert_vts_log_to_ctf(c().GC_VTS_LOG_FILE, c().GC_CTF_FILE)
     }
 }
 ```
