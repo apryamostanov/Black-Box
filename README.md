@@ -101,7 +101,7 @@ Sample configuration:
 </logger>
 ```
 
-Sample output:
+Sample output (ALL generated AUTOMATICALLY, except for INFO and WARNING):
 ```xml
 <convert_vts_log_to_ctf datetimestamp="2017-03-14 23:39:44:356" line="120" exception_class="T_visa_recon_generator">
     <argument class="String" name="i_vts_log_file_name">
