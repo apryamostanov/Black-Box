@@ -1,7 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
-import com.a9ae0b01f0ffc.black_box.interfaces.I_event
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
+import com.a9ae0b01f0ffc.black_box.implementation.T_event
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
@@ -12,7 +11,7 @@ class T_destination_file extends T_destination {
     Boolean p_is_file_init = GC_FALSE
 
     @Override
-    void store(I_event i_source_event) {
+    void store(T_event i_source_event) {
         init_file()
         p_file_writer.write(p_formatter.format_event(i_source_event))
         p_file_writer.flush()

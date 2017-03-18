@@ -1,12 +1,29 @@
 package com.a9ae0b01f0ffc.black_box.main
 
-import com.a9ae0b01f0ffc.black_box.interfaces.I_trace
+import com.a9ae0b01f0ffc.black_box.implementation.T_trace
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
+import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.ast.ASTNode
+import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.Parameter
+import org.codehaus.groovy.ast.builder.AstBuilder
+import org.codehaus.groovy.ast.expr.ArgumentListExpression
+import org.codehaus.groovy.ast.expr.ConstructorCallExpression
+import org.codehaus.groovy.ast.stmt.BlockStatement
+import org.codehaus.groovy.ast.stmt.EmptyStatement
+import org.codehaus.groovy.ast.stmt.Statement
+import org.codehaus.groovy.ast.stmt.ThrowStatement
+import org.codehaus.groovy.ast.stmt.TryCatchStatement
+import org.codehaus.groovy.ast.tools.GeneralUtils
+import org.codehaus.groovy.control.CompilePhase
 
 import java.util.logging.Level
 
 class T_logging_base_6_util extends T_logging_base_5_context {
+    
+    private static final String PC_CLASS_NAME = "T_logging_base_5_context"
 
     static String escape_xml(String i_unescaped_xml_string) {
         if (i_unescaped_xml_string.contains(GC_XML_DOUBLE_QUOTE)
@@ -20,24 +37,27 @@ class T_logging_base_6_util extends T_logging_base_5_context {
         }
     }
 
-    static I_trace r(Object i_object, String i_trace_name) {
-        I_trace l_trace = object2trace(i_object, GC_TRACE_SOURCE_RUNTIME)
-        l_trace.set_name(i_trace_name)
+    static T_trace r(Object i_object, String T_trace_name) {
+        T_trace l_trace = object2trace(i_object)
+        l_trace.set_name(T_trace_name)
         return l_trace
     }
 
-    static I_trace t(Object i_object, T_static_string i_trace_name) {
-        return r(i_object, i_trace_name.toString())
+    static T_trace t(Object i_object, T_static_string T_trace_name) {
+        return r(i_object, T_trace_name.toString())
     }
 
 
-    static I_trace object2trace(Object i_object, String i_source) {
-        I_trace l_trace = get_ioc().instantiate("I_trace") as I_trace
+    static T_trace object2trace(Object i_object) {
+        T_trace l_trace = get_ioc().instantiate("I_trace") as T_trace
         l_trace.set_ref(i_object)
         l_trace.set_val(i_object.toString())
-        l_trace.set_source(i_source)
         l_trace.set_name(c().GC_DEFAULT_TRACE_NAME)
         return l_trace
+    }
+
+    static String make_method_execution_node_name(String i_class_name, String i_method_name, Integer i_line_number) {
+        return i_class_name + GC_POINT + i_method_name + GC_COLON + i_line_number.toString()
     }
 
     static Object run_closure(Closure i_closure) {
@@ -49,13 +69,13 @@ class T_logging_base_6_util extends T_logging_base_5_context {
         return i_closure.call()
     }
 
-    static ArrayList<I_trace> objects2traces(Collection<Object> i_objects, String i_source) {
-        ArrayList<I_trace> l_method_args = new ArrayList<I_trace>()
+    static ArrayList<T_trace> objects2traces(Collection<Object> i_objects) {
+        ArrayList<T_trace> l_method_args = new ArrayList<T_trace>()
         for (Object l_object : i_objects) {
-            if (l_object instanceof I_trace) {
-                l_method_args.add((I_trace) l_object)
+            if (l_object instanceof T_trace) {
+                l_method_args.add((T_trace) l_object)
             } else {
-                I_trace l_trace = object2trace(l_object, i_source)
+                T_trace l_trace = object2trace(l_object)
                 l_method_args.add(l_trace)
             }
         }
@@ -63,8 +83,8 @@ class T_logging_base_6_util extends T_logging_base_5_context {
     }
 
 
-    static ArrayList<I_trace> objects2traces_array(Object[] i_objects, String i_source) {
-        return objects2traces(Arrays.asList(i_objects), i_source)
+    static ArrayList<T_trace> objects2traces_array(Object[] i_objects) {
+        return objects2traces(Arrays.asList(i_objects))
     }
 
     static Level jul_level_by_name(String i_level_name) {

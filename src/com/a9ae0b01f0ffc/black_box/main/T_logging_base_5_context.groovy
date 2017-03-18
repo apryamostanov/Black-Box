@@ -1,8 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.main
 
 import com.a9ae0b01f0ffc.black_box.conf.T_logging_conf
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger
-import com.a9ae0b01f0ffc.black_box.interfaces.I_logger_builder
+import com.a9ae0b01f0ffc.black_box.implementation.T_logger
+import com.a9ae0b01f0ffc.black_box.implementation.T_logger_builder
 import com.a9ae0b01f0ffc.commons.implementation.config.T_common_conf
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.implementation.ioc.T_class_loader
@@ -12,7 +12,7 @@ class T_logging_base_5_context extends T_logging_base_4_const {
     protected static ThreadLocal<T_logging_base_5_context> p_context_thread_local = new ThreadLocal<T_logging_base_5_context>()
     private T_class_loader p_ioc = GC_NULL_OBJ_REF as T_class_loader
     private T_logging_conf p_common_conf = GC_NULL_OBJ_REF as T_logging_conf
-    protected I_logger p_logger = GC_NULL_OBJ_REF as I_logger
+    protected T_logger p_logger = GC_NULL_OBJ_REF as T_logger
     private Boolean p_is_init = GC_FALSE
 
     static void init_custom(String i_commons_conf_file_name) {
@@ -33,7 +33,7 @@ class T_logging_base_5_context extends T_logging_base_4_const {
 
     static void init_logger(String i_logger_conf_file_name) {
         check_init()
-        p_context_thread_local.get().p_logger = ((I_logger_builder) get_ioc().instantiate(GC_LOGGER_BUILDER_INTERFACE)).create_logger(i_logger_conf_file_name)
+        p_context_thread_local.get().p_logger = new T_logger_builder().create_logger(i_logger_conf_file_name)
     }
 
     static void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name) {
@@ -69,7 +69,7 @@ class T_logging_base_5_context extends T_logging_base_4_const {
         }
     }
 
-    static I_logger l() {
+    static T_logger l() {
         check_init()
         return (p_context_thread_local.get()).p_logger
     }

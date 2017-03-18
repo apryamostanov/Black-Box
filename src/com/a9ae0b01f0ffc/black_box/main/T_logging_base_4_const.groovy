@@ -4,7 +4,7 @@ import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_3_utils
 
 class T_logging_base_4_const extends T_common_base_3_utils {
 
-    static final String GC_LOGGER_BUILDER_INTERFACE = "I_logger_builder"
+    static final String GC_LOGGER_BUILDER_INTERFACE = "T_logger_builder"
     static final String GC_TRACE_SOURCE_RUNTIME = "runtime"
     static final String GC_TRACE_SOURCE_CONTEXT = "context"
     static final String GC_TRACE_SOURCE_EXCEPTION_TRACES = "exception_traces"
@@ -22,13 +22,16 @@ class T_logging_base_4_const extends T_common_base_3_utils {
     static final String GC_EVENT_TYPE_METHOD_EXIT = "method_exit"
     static final String GC_EVENT_TYPE_RESULT = "result"
     static final String GC_EVENT_TYPE_STATEMENT_ENTER = "statement_enter"
+    static final String GC_EVENT_TYPE_EXPRESSION_ENTER = "expression_enter"
     static final String GC_EVENT_TYPE_STATEMENT_EXIT = "statement_exit"
+    static final String GC_EVENT_TYPE_EXPRESSION_EXIT = "expression_exit"
     static final String GC_EVENT_TYPE_INFO = "info"
     static final String GC_EVENT_TYPE_WARNING = "warning"
     static final String GC_EVENT_TYPE_DEBUG = "debug"
     static final String GC_EVENT_TYPE_TRACES = "traces"
     static final String GC_EVENT_TYPE_METHOD_ERROR = "method_error"
     static final String GC_EVENT_TYPE_STATEMENT_ERROR = "statement_error"
+    static final String GC_EVENT_TYPE_EXPRESSION_ERROR = "expression_error"
     static final String GC_EVENT_TYPE_RECEIVE_TCP = "receive_tcp"
     static final String GC_EVENT_TYPE_SEND_TCP = "send_tcp"
     static final String GC_EVENT_TYPE_RECEIVE_I2C = "receive_i2c"
@@ -43,5 +46,8 @@ class T_logging_base_4_const extends T_common_base_3_utils {
     static final String GC_EVENT_TYPE_SEND_SQL = "send_sql"
     static final String GC_EVENT_TYPE_RECEIVE_BLUETOOTH = "receive_bluetooth"
     static final String GC_EVENT_TYPE_SEND_BLUETOOTH = "send_bluetooth"
+    static final String GC_EXCEPTION_VARIABLE_NAME = "e_others"
+    static final Class GC_UTILITY_CLASS = T_logging_base_6_util
+    static final String GC_HYPHEN = "-"
 
 }

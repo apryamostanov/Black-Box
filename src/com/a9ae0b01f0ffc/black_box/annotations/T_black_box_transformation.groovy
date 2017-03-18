@@ -1,25 +1,28 @@
 package com.a9ae0b01f0ffc.black_box.annotations
 
-import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context
-import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
-import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string_builder
 import groovy.transform.ToString
 import org.codehaus.groovy.ast.*
 import org.codehaus.groovy.ast.builder.AstBuilder
 import org.codehaus.groovy.ast.expr.ArgumentListExpression
-import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.ClosureExpression
+import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.ast.expr.ConstructorCallExpression
 import org.codehaus.groovy.ast.expr.Expression
+import org.codehaus.groovy.ast.expr.MethodCallExpression
+import org.codehaus.groovy.ast.expr.VariableExpression
 import org.codehaus.groovy.ast.stmt.*
 import org.codehaus.groovy.ast.tools.GeneralUtils
-import org.codehaus.groovy.classgen.VariableScopeVisitor
 import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.transform.AbstractASTTransformation
 import org.codehaus.groovy.transform.GroovyASTTransformation
+
+import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.*
+import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util.r
+import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const.*
+import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_3_utils.method_arguments_present
 
 @ToString(includeNames = true, includeFields = true, includePackage = false)
 @GroovyASTTransformation(
@@ -29,21 +32,19 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     private static final ClassNode PC_CATCHED_THROWABLE_TYPE = ClassHelper.make(Throwable.class)
     public static final String PC_CLASS_NAME = "T_black_box_transformation"
-    public static final Class PC_SHORTCUT_CLASS = T_logging_base_6_util
     private static final T_static_string_builder s = T_logging_base_5_context.s
-    static final String PC_EXCEPTION_VARIABLE_NAME = "e_others"
-    String p_class_name = T_logging_base_4_const.GC_EMPTY_STRING
-    String p_method_name = T_logging_base_4_const.GC_EMPTY_STRING
-    String p_statement_name = T_logging_base_4_const.GC_EMPTY_STRING
-    String p_black_box_type = T_logging_base_4_const.GC_EMPTY_STRING
-    Parameter[] p_parameters = T_logging_base_4_const.GC_SKIPPED_ARGS as Parameter[]
-    VariableScope p_variable_scope = T_logging_base_4_const.GC_SKIPPED_ARGS as VariableScope
-    static SourceUnit p_last_processed_source_unit = T_logging_base_5_context.GC_NULL_OBJ_REF as SourceUnit
+    String p_class_name = GC_EMPTY_STRING
+    String p_method_name = GC_EMPTY_STRING
+    String p_statement_name = GC_EMPTY_STRING
+    String p_black_box_type = GC_EMPTY_STRING
+    Parameter[] p_parameters = GC_SKIPPED_ARGS as Parameter[]
+    VariableScope p_variable_scope = GC_SKIPPED_ARGS as VariableScope
+    static SourceUnit p_last_processed_source_unit = GC_NULL_OBJ_REF as SourceUnit
 
     AnnotationNode get_annotation_node() {
         return p_annotation_node
     }
-    private AnnotationNode p_annotation_node = T_logging_base_4_const.GC_NULL_OBJ_REF as AnnotationNode
+    private AnnotationNode p_annotation_node = GC_NULL_OBJ_REF as AnnotationNode
 
     void set_annotation_node(AnnotationNode p_annotation_node) {
         this.p_annotation_node = p_annotation_node
@@ -51,58 +52,41 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         final String LC_METHOD_NAME = "visit"
-        if (!T_logging_base_5_context.x().is_init()) {
-            T_logging_base_5_context.x().init_custom("C:/COMPILE/with_logging/commons.conf")
+        if (!x().is_init()) {
+            x().init_custom("C:/COMPILE/with_logging/commons.conf")
         }
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO)
+        l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO)
         try {
-            if (T_logging_base_5_context.c().GC_BLACK_BOX_ENABLED != T_common_base_1_const.GC_TRUE_STRING) {
+            if (c().GC_BLACK_BOX_ENABLED != GC_TRUE_STRING) {
                 return
             }
             if (i_ast_nodes.length == 2 && i_ast_nodes[0] instanceof AnnotationNode && i_ast_nodes[1] instanceof AnnotatedNode) {
-                p_annotation_node = (AnnotationNode) i_ast_nodes[T_common_base_1_const.GC_FIRST_INDEX]
-                ASTNode l_method_node = i_ast_nodes[T_common_base_1_const.GC_ONE_ONLY]
+                p_annotation_node = (AnnotationNode) i_ast_nodes[GC_FIRST_INDEX]
+                ASTNode l_method_node = i_ast_nodes[GC_ONE_ONLY]
                 Expression l_type_member = ((AnnotationNode) i_ast_nodes[0]).getMember("value")
-                String l_black_box_type = T_logging_base_4_const.GC_BLACK_BOX_TYPE_FULL
-                if (l_type_member != T_common_base_1_const.GC_NULL_OBJ_REF) {
+                String l_black_box_type = GC_BLACK_BOX_TYPE_FULL
+                if (l_type_member != GC_NULL_OBJ_REF) {
                     l_black_box_type = l_type_member.getText()
                 }
-                T_logging_base_5_context.l().log_debug(s.Black_box_type_Z1, l_black_box_type)
+                l().log_debug(s.Black_box_type_Z1, l_black_box_type)
                 if (l_method_node instanceof MethodNode) {
-                    T_logging_base_5_context.l().log_debug(s.Processing_method_Z1, l_method_node.getName())
+                    l().log_debug(s.Processing_method_Z1, l_method_node.getName())
                     p_method_name = l_method_node.getName()
-                    p_class_name = l_method_node.getDeclaringClass().getName()
-                    p_statement_name = T_logging_base_4_const.GC_STATEMENT_NAME_METHOD
+                    p_class_name = l_method_node.getDeclaringClass().getNameWithoutPackage()
+                    p_statement_name = GC_STATEMENT_NAME_METHOD
                     p_black_box_type = l_black_box_type
                     p_parameters = l_method_node.getParameters()
                     p_variable_scope = l_method_node.getVariableScope()
                     T_black_box_visitor l_full_expression_visitor = new T_black_box_visitor(this)
                     l_method_node.getCode().visit(l_full_expression_visitor)
                     BlockStatement l_changed_block_statement = new BlockStatement()
-                    //l_changed_block_statement.setVariableScope(l_method_node.getVariableScope().copy())
-                    l_changed_block_statement.addStatement(create_shortcut_declaration_statement())
-                    l_changed_block_statement.addStatement(create_logger_declaration_statement())
-                    l_changed_block_statement.addStatement(create_l_methodname_declaration_statement(l_method_node.getName()))
-                    l_changed_block_statement.addStatement(create_l_classname_declaration_statement(l_method_node.getDeclaringClass().getName()))
-                    l_changed_block_statement.addStatement(decorate_statement(l_method_node.getCode(), T_logging_base_4_const.GC_STATEMENT_NAME_METHOD, l_method_node.getParameters()))
+                    l_changed_block_statement.addStatement(create_shortcut_declaration())
+                    l_changed_block_statement.addStatement(create_logger_declaration())
+                    l_changed_block_statement.addStatement(create_l_methodname_declaration(l_method_node.getName()))
+                    l_changed_block_statement.addStatement(create_l_classname_declaration(l_method_node.getDeclaringClass().getName()))
+                    l_changed_block_statement.addStatement(decorate_method(l_method_node.getCode(), l_method_node.getParameters()))
                     l_method_node.setCode(l_changed_block_statement)
-                    /*VariableScopeVisitor l_variable_scope_visitor = new VariableScopeVisitor(i_source_unit)
-                        if (p_last_processed_source_unit != i_source_unit) {
-                            T_logging_base_5_context.l().log_debug(s.Inside_if_2)
-
-                            i_source_unit.AST.classes.each {
-                                T_logging_base_5_context.l().log_trace(it)
-                                l_variable_scope_visitor.visitClass(it)
-                            }
-                            p_last_processed_source_unit = i_source_unit
-                        }
-                    l_variable_scope_visitor.visitBlockStatement(l_changed_block_statement)*/
-
-/*
-                    VariableScopeVisitor l_variable_scope_visitor = new VariableScopeVisitor(sourceUnit)
-                    l_variable_scope_visitor.visitS(l_changed_block_statement)*/
-
-                    T_logging_base_5_context.l().log_debug(s.Finished_Processing_method_Z1, l_method_node.getName())
+                    l().log_debug(s.Finished_Processing_method_Z1, l_method_node.getName())
                 } else {
                     this.addError("@I_black_box_base should be applied to Methods.", l_method_node)
                 }
@@ -110,228 +94,121 @@ class T_black_box_transformation extends AbstractASTTransformation {
                 throw new RuntimeException("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + Arrays.asList(i_ast_nodes))
             }
         } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
+            l().log_error_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO, e_others)
             throw e_others
         } finally {
-            T_logging_base_5_context.l().log_method_exit()
+            l().log_exit_method()
         }
     }
 
-    BlockStatement decorate_statement(Statement i_statement_to_decorate, String i_statement_name, Parameter[] i_parameters = T_logging_base_5_context.GC_SKIPPED_ARGS as Parameter[]) {
-        final String LC_METHOD_NAME = "decorate_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, i_statement_to_decorate.getLineNumber(), T_logging_base_6_util.r(i_statement_to_decorate, "i_statement_to_decorate"), T_logging_base_6_util.r(p_class_name, "p_class_name"), T_logging_base_6_util.r(p_method_name, "p_method_name"), T_logging_base_6_util.r(i_statement_name, "i_statement_name"), T_logging_base_6_util.r(i_parameters, "i_parameters"))
-        try {
+    Expression decorate_expression(Expression i_expression_to_decorate, String i_expression_name, String i_expression_code) {
+        Statement l_finally_block = new BlockStatement()
+        if (GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
             BlockStatement l_decorated_block_statement = new BlockStatement()
             BlockStatement l_try_block = new BlockStatement()
-            /*if (i_statement_to_decorate instanceof BlockStatement) {
-                l_decorated_block_statement.setVariableScope(i_statement_to_decorate.getVariableScope().copy())
-                l_try_block.setVariableScope(i_statement_to_decorate.getVariableScope().copy())
-            }*/
-            l_try_block.addStatement(i_statement_to_decorate)
+            ReturnStatement l_return_statement = new ReturnStatement(i_expression_to_decorate)
+            l_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_util"), "r", new ArgumentListExpression(l_return_statement.getExpression(), new ConstantExpression(l_return_statement.getExpression().getText()))))))
+            l_try_block.addStatement(l_return_statement)
+            l().log_trace(i_expression_name, i_expression_code, i_expression_to_decorate.getLineNumber())
+            l().log_trace("l_logger.log_enter_expression($i_expression_name, $i_expression_code, ${i_expression_to_decorate.getLineNumber()}")
+            l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.log_enter_expression($i_expression_name, $i_expression_code, ${i_expression_to_decorate.getLineNumber()}"))
+            l_finally_block.addStatement(create_log_method_call_with_traces("l_logger.log_exit_expression("))
+            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_expression($GC_EXCEPTION_VARIABLE_NAME", l_try_block, l_finally_block))
+            ClosureExpression l_closure_expression = GeneralUtils.closureX(GC_NULL_OBJ_REF as Parameter[], l_decorated_block_statement)
+            l_closure_expression.setVariableScope(p_variable_scope.copy())
+            MethodCallExpression l_method_call_on_closure = GeneralUtils.callX(l_closure_expression, "call", new ArgumentListExpression())
+            return l_method_call_on_closure
+        } else {
+            return i_expression_to_decorate
+        }
+    }
+
+    Statement decorate_statement(Statement i_statement_to_decorate, String i_statement_name) {
+        BlockStatement l_decorated_block_statement = new BlockStatement()
+        BlockStatement l_try_block = new BlockStatement()
+        l_try_block.addStatement(i_statement_to_decorate)
+        Statement l_finally_block
+        if (GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
+            l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.log_enter_statement($i_statement_name, ${i_statement_to_decorate.getLineNumber()}"))
+            l_finally_block = create_log_method_call_with_traces("l_logger.log_exit_statement(")
+            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_statement($GC_EXCEPTION_VARIABLE_NAME", l_try_block, l_finally_block))
+            return l_decorated_block_statement
+        } else {
+            return i_statement_to_decorate
+        }
+    }
+
+    Statement decorate_method(Statement i_method_code, Parameter[] i_parameters = GC_SKIPPED_ARGS as Parameter[]) {
+            BlockStatement l_decorated_block_statement = new BlockStatement()
+            BlockStatement l_try_block = new BlockStatement()
+            l_try_block.addStatement(i_method_code)
             Statement l_finally_block
-            if (T_logging_base_4_const.GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
-                if (i_statement_name == T_logging_base_5_context.GC_STATEMENT_NAME_METHOD) {
-                    l_decorated_block_statement.addStatement(create_log_enter_statement("log_method_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), i_parameters))
-                    l_finally_block = create_log_exit_statement("log_method_exit")
-                } else {
-                    l_decorated_block_statement.addStatement(create_log_enter_statement("log_statement_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), i_parameters))
-                    l_finally_block = create_log_exit_statement("log_statement_exit")
-                }
-                l_decorated_block_statement.addStatement(create_try_catch_statement(p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), l_try_block, l_finally_block, i_parameters))
-            } else if (p_black_box_type == T_logging_base_4_const.GC_BLACK_BOX_TYPE_ERROR) {
-                if (T_logging_base_5_context.c().GC_PROFILE_ALL == T_logging_base_5_context.GC_TRUE_STRING) {
-                    if (i_statement_name == T_logging_base_5_context.GC_STATEMENT_NAME_METHOD) {
-                        l_decorated_block_statement.addStatement(create_log_enter_statement("profile_method_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber()))
-                        l_finally_block = create_log_exit_statement("profile_method_exit")
-                    } else {
-                        l_decorated_block_statement.addStatement(create_log_enter_statement("profile_statement_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber()))
-                        l_finally_block = create_log_exit_statement("profile_statement_exit")
-                    }
+            if (GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
+                l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.log_enter_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}", i_parameters))
+                l_finally_block = create_log_method_call_with_traces("l_logger.log_exit_method(")
+                l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
+            } else if (p_black_box_type == GC_BLACK_BOX_TYPE_ERROR) {
+                if (c().GC_PROFILE_ALL == GC_TRUE_STRING) {
+                    l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.profile_start_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}"))
+                    l_finally_block = create_log_method_call_with_traces("l_logger.profile_stop_any(")
                 } else {
                     l_finally_block = new EmptyStatement()
                 }
-                l_decorated_block_statement.addStatement(create_try_catch_statement(p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), l_try_block, l_finally_block, i_parameters))
-            } else if (p_black_box_type == T_logging_base_4_const.GC_BLACK_BOX_TYPE_PROFILE) {
-                if (i_statement_name == T_logging_base_5_context.GC_STATEMENT_NAME_METHOD) {
-                    l_decorated_block_statement.addStatement(create_log_enter_statement("profile_method_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber()))
-                    l_finally_block = create_log_exit_statement("profile_method_exit")
-                } else {
-                    l_decorated_block_statement.addStatement(create_log_enter_statement("profile_statement_enter", p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber()))
-                    l_finally_block = create_log_exit_statement("profile_statement_exit")
-                }
-                l_decorated_block_statement.addStatement(create_try_catch_statement(p_class_name, p_method_name, i_statement_name, i_statement_to_decorate.getLineNumber(), l_try_block, l_finally_block, i_parameters))
+                l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
+            } else if (p_black_box_type == GC_BLACK_BOX_TYPE_PROFILE) {
+                l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.profile_start_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}"))
+                l_finally_block = create_log_method_call_with_traces("l_logger.profile_stop_any(")
+                l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method($p_class_name, $p_method_name, ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
             } else {
-                throw new RuntimeException("Unsupported Black Box type $p_black_box_type")
+                return i_method_code
             }
-            T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(l_decorated_block_statement, "l_decorated_block_statement"))
             return l_decorated_block_statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
     }
 
-    static Statement create_l_methodname_declaration_statement(String i_methodname) {
-        final String LC_METHOD_NAME = "create_l_methodname_declaration_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_methodname, "i_methodname"))
-        try {
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(GeneralUtils.declS(GeneralUtils.varX("l_methodname"), GeneralUtils.constX(i_methodname)), "GeneralUtils.declS(GeneralUtils.varX(\"l_methodname\"), GeneralUtils.constX(i_methodname))")) as Statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    static Statement create_l_methodname_declaration(String i_methodname) {
+        return GeneralUtils.declS(GeneralUtils.varX("l_methodname"), GeneralUtils.constX(i_methodname))
     }
 
-    static Statement create_l_classname_declaration_statement(String i_classname) {
-        final String LC_METHOD_NAME = "create_l_classname_declaration_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_classname, "i_classname"))
-        try {
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(GeneralUtils.declS(GeneralUtils.varX("l_classname"), GeneralUtils.constX(i_classname)), "GeneralUtils.declS(GeneralUtils.varX(\"l_classname\"), GeneralUtils.constX(i_classname))")) as Statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    static Statement create_l_classname_declaration(String i_classname) {
+        return GeneralUtils.declS(GeneralUtils.varX("l_classname"), GeneralUtils.constX(i_classname))
     }
 
-    static Statement create_logger_declaration_statement() {
-        final String LC_METHOD_NAME = "create_logger_declaration_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO)
-        try {
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(GeneralUtils.declS(GeneralUtils.varX("l_logger"), GeneralUtils.callX(GeneralUtils.varX("l_shortcuts"), "l", new ArgumentListExpression())), "GeneralUtils.declS(GeneralUtils.varX(\"l_logger\"), GeneralUtils.callX(GeneralUtils.varX(\"l_shortcuts\"), \"l\", new ArgumentListExpression()))")) as Statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    static Statement create_logger_declaration() {
+        return GeneralUtils.declS(GeneralUtils.varX("l_logger"), GeneralUtils.callX(GeneralUtils.varX("l_util"), "l", new ArgumentListExpression()))
     }
 
-    static Statement create_shortcut_declaration_statement() {
-        final String LC_METHOD_NAME = "create_shortcut_declaration_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO)
-        try {
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(GeneralUtils.declS(GeneralUtils.varX("l_shortcuts"), new ConstructorCallExpression(new ClassNode(PC_SHORTCUT_CLASS), new ArgumentListExpression())), "T_logging_base_6_util.r(GeneralUtils.declS(GeneralUtils.varX(\"l_shortcuts\"), new ConstructorCallExpression(new ClassNode(T_logging_base_5_context.class), new ArgumentListExpression()))")) as Statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    static Statement create_shortcut_declaration() {
+        return GeneralUtils.declS(GeneralUtils.varX("l_util"), new ConstructorCallExpression(new ClassNode(GC_UTILITY_CLASS), new ArgumentListExpression()))
     }
 
-    static Statement create_log_enter_statement(String i_log_enter_function, String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, Parameter[] i_parameters = T_logging_base_4_const.GC_SKIPPED_ARGS as Parameter[]) {
-        final String LC_METHOD_NAME = "create_log_enter_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_log_enter_function, "i_log_enter_function"), T_logging_base_6_util.r(i_class_name, "i_class_name"), T_logging_base_6_util.r(i_method_name, "i_method_name"), T_logging_base_6_util.r(i_statement_name, "i_statement_name"), T_logging_base_6_util.r(i_line_number, "i_line_number"), T_logging_base_6_util.r(i_parameters, "i_parameters"))
-        try {
-            String l_serialized_parameters = T_common_base_1_const.GC_EMPTY_STRING
-            if (i_log_enter_function != "profile_method_enter") {
-                if (T_logging_base_5_context.method_arguments_present(i_parameters)) {
-                    for (l_argument in i_parameters) {
-                        l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
-                    }
-                }
+    static Statement create_log_method_call_with_traces(String i_code_line, Parameter[] i_parameters) {
+        l().log_trace(i_code_line)
+        Parameter[] l_arguments = i_parameters
+        String l_serialized_parameters = GC_EMPTY_STRING
+        if (method_arguments_present(i_parameters)) {
+            for (l_argument in l_arguments) {
+                l_serialized_parameters += ", l_util.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
             }
-            String l_statement_code
-            if (i_statement_name == T_logging_base_5_context.GC_STATEMENT_NAME_METHOD) {
-                l_statement_code = "l_logger.$i_log_enter_function(\"$i_class_name\", \"$i_method_name\", ${i_line_number.toString()} $l_serialized_parameters)"
-            } else {
-                l_statement_code = "l_logger.$i_log_enter_function(\"$i_class_name\", \"$i_method_name\", \"$i_statement_name\", ${i_line_number.toString()} $l_serialized_parameters)"
-            }
-            T_logging_base_5_context.l().log_debug(s.l_statement_code_Z1, l_statement_code)
-            List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(l_statement_code, "resulting_statement"))
-            return (Statement) l_resulting_statements.first()
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
         }
+        String l_statement_code = "$i_code_line $l_serialized_parameters)"
+        l().log_trace(l_statement_code)
+        List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
+        return (Statement) l_resulting_statements.first()
     }
 
-    static Statement create_log_exit_statement(String i_log_exit_funtion) {
-        final String LC_METHOD_NAME = "create_log_exit_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_log_exit_funtion, "i_log_exit_funtion"))
-        try {
-            String l_statement_code = "l_logger.$i_log_exit_funtion()"
-            List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(l_statement_code, "l_statement_code"))
-            return (Statement) l_resulting_statements.first()
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    TryCatchStatement create_try_catch(String i_log_error_code_line, BlockStatement i_main_block, Statement i_finally_block, Parameter[] i_parameters) {
+        TryCatchStatement l_try_catch_statement = new TryCatchStatement(i_main_block, i_finally_block)
+        BlockStatement l_throw_block = new BlockStatement()
+        l_throw_block.addStatement(create_log_method_call_with_traces(i_log_error_code_line, i_parameters))
+        l_throw_block.addStatement(create_rethrow())
+        l_try_catch_statement.addCatch(GeneralUtils.catchS(GeneralUtils.param(PC_CATCHED_THROWABLE_TYPE, GC_EXCEPTION_VARIABLE_NAME), l_throw_block))
+        return l_try_catch_statement
     }
 
-    static Statement create_log_error_statement(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, Parameter[] i_parameters) {
-        final String LC_METHOD_NAME = "create_log_error_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_parameters, "i_parameters"))
-        try {
-            Parameter[] l_arguments = i_parameters
-            String l_serialized_parameters = T_common_base_1_const.GC_EMPTY_STRING
-            if (T_logging_base_5_context.method_arguments_present(i_parameters)) {
-                T_logging_base_5_context.l().log_debug(T_logging_base_5_context.s.Parameters_present, i_parameters)
-                for (l_argument in l_arguments) {
-                    l_serialized_parameters += ", l_shortcuts.r(${l_argument.getName()}, \"${l_argument.getName()}\")"
-                }
-            }
-            String l_statement_code
-            if (i_statement_name == T_logging_base_5_context.GC_STATEMENT_NAME_METHOD) {
-                l_statement_code = "l_logger.log_method_error(\"$i_class_name\", \"$i_method_name\", ${i_line_number.toString()}, $PC_EXCEPTION_VARIABLE_NAME $l_serialized_parameters)"
-            } else {
-                l_statement_code = "l_logger.log_statement_error(\"$i_class_name\", \"$i_method_name\", \"$i_statement_name\", ${i_line_number.toString()}, $PC_EXCEPTION_VARIABLE_NAME  $l_serialized_parameters)"
-            }
-            T_logging_base_5_context.l().log_debug(s.l_statement_code_Z1, l_statement_code)
-            List<ASTNode> l_resulting_statements = new AstBuilder().buildFromString(CompilePhase.SEMANTIC_ANALYSIS, l_statement_code)
-            T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(((Statement) l_resulting_statements.first()).getText(), "resulting_statement"))
-            return (Statement) l_resulting_statements.first()
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
-    }
-
-    TryCatchStatement create_try_catch_statement(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, BlockStatement i_try_block, Statement i_finally_block, Parameter[] i_parameters) {
-        final String LC_METHOD_NAME = "create_try_catch_statement"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, T_logging_base_6_util.r(i_try_block.getText(), "i_try_block"), T_logging_base_6_util.r(i_finally_block.getText(), "i_finally_block"), T_logging_base_6_util.r(i_parameters, "i_parameters"))
-        try {
-            TryCatchStatement l_try_catch_statement = new TryCatchStatement(i_try_block, i_finally_block)
-            BlockStatement l_throw_block = new BlockStatement()
-            l_throw_block.addStatement(create_log_error_statement(i_class_name, i_method_name, i_statement_name, i_line_number, i_parameters))
-            l_throw_block.addStatement(rethrow())
-            l_try_catch_statement.addCatch(GeneralUtils.catchS(GeneralUtils.param(PC_CATCHED_THROWABLE_TYPE, PC_EXCEPTION_VARIABLE_NAME), l_throw_block))
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(l_try_catch_statement, "l_try_catch_statement")) as TryCatchStatement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
-    }
-
-    Statement rethrow() {
-        final String LC_METHOD_NAME = "rethrow"
-        T_logging_base_5_context.l().log_method_enter(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO)
-        try {
-            ThrowStatement l_throw_statement = GeneralUtils.throwS(GeneralUtils.varX(PC_EXCEPTION_VARIABLE_NAME))
-            l_throw_statement.setSourcePosition(p_annotation_node)
-            return T_logging_base_5_context.l().log_result(T_logging_base_6_util.r(l_throw_statement, "l_throw_statement")) as Statement
-        } catch (Throwable e_others) {
-            T_logging_base_5_context.l().log_method_error(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_4_const.GC_ZERO, e_others)
-            throw e_others
-        } finally {
-            T_logging_base_5_context.l().log_method_exit()
-        }
+    Statement create_rethrow() {
+        ThrowStatement l_throw_statement = GeneralUtils.throwS(GeneralUtils.varX(GC_EXCEPTION_VARIABLE_NAME))
+        l_throw_statement.setSourcePosition(p_annotation_node)
+        return l_throw_statement
     }
 
 }

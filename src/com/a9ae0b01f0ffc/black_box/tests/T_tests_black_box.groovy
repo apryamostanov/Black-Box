@@ -22,4 +22,9 @@ class T_tests_black_box {
         }
     }
 
+    @Test
+    void test_003() {
+        System.out.println("l_logger.log_enter_method(, $T_logging_base_5_context.GC_EMPTY_STRING")
+    }
+
 }
