@@ -40,6 +40,14 @@ class T_logging_base_6_util extends T_logging_base_5_context {
         return l_trace
     }
 
+    static Object run_closure(Closure i_closure) {
+        System.out.println(i_closure.getClass().getName())
+        for (l_method in i_closure.getClass().getDeclaredMethods()) {
+            System.out.println(l_method.getName())
+        }
+        System.out.println(i_closure instanceof Class)
+        return i_closure.call()
+    }
 
     static ArrayList<I_trace> objects2traces(Collection<Object> i_objects, String i_source) {
         ArrayList<I_trace> l_method_args = new ArrayList<I_trace>()

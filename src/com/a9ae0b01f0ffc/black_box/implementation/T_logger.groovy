@@ -25,12 +25,11 @@ class T_logger extends T_logging_base_6_util implements I_logger {
     }
 
     @Override
-    I_event create_event(String i_event_type, String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
-        I_event l_event = get_ioc().instantiate(i_event_type) as I_event
+    I_event create_event(String i_event_type, String i_class_name = get_default_method_invocation().get_class_name(), String i_method_name = get_default_method_invocation().get_method_name(), String i_statement_name = get_default_method_invocation().get_statement_name(), Integer i_line_number = get_default_method_invocation().get_line_number()) {
+        I_event l_event = get_ioc().instantiate("I_event") as I_event
         l_event.set_event_type(i_event_type)
         l_event.set_class_name(i_class_name)
         l_event.set_method_name(i_method_name)
-        l_event.set_depth(p_method_invocation_stack.size())
         l_event.set_datetimestamp(new Date())
         l_event.set_invocation(get_current_method_invocation())
         l_event.set_statement_name(i_statement_name)
@@ -63,6 +62,25 @@ class T_logger extends T_logging_base_6_util implements I_logger {
     }
 
     @Override
+    I_method_invocation get_current_method_invocation() {
+        if (!p_method_invocation_stack.isEmpty()) {
+            return p_method_invocation_stack.peek()
+        } else {
+            return PC_DEFAULT_METHOD_INVOCATION
+        }
+    }
+
+    @Override
+    I_method_invocation get_default_method_invocation() {
+        return PC_DEFAULT_METHOD_INVOCATION
+    }
+
+    @Override
+    LinkedList<I_method_invocation> get_invocation_stack() {
+        return p_method_invocation_stack
+    }
+
+    @Override
     void print_stats() {
         System.out.println("Call counts:")
         TreeMap<Integer, String> l_sorted_statistics_method_calls_count = new TreeMap<Integer, String>()
@@ -90,11 +108,10 @@ class T_logger extends T_logging_base_6_util implements I_logger {
         }
     }
 
-    void add_invocation(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, ArrayList<I_trace> i_traces = GC_SKIPPED_ARGS as ArrayList<I_trace>) {
+    void add_invocation(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
         I_method_invocation l_method_invocation = get_ioc().instantiate("I_method_invocation") as I_method_invocation
         l_method_invocation.set_class_name(i_class_name)
         l_method_invocation.set_method_name(i_method_name)
-        l_method_invocation.set_method_arguments(i_traces)
         l_method_invocation.set_statement_name(i_statement_name)
         l_method_invocation.set_line_number(i_line_number)
         p_method_invocation_stack.push(l_method_invocation)
@@ -122,20 +139,30 @@ class T_logger extends T_logging_base_6_util implements I_logger {
     }
 
     @Override
-    void profile_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
-        add_invocation(i_class_name, i_method_name, i_statement_name, i_line_number)
+    void profile_method_enter(String i_class_name, String i_method_name, Integer i_line_number) {
+            add_invocation(i_class_name, i_method_name, GC_STATEMENT_NAME_METHOD, i_line_number)
     }
 
     @Override
-    void profile_exit() {
-        pop_invocation()
+    void profile_method_exit() {
+            pop_invocation()
     }
 
     @Override
-    void log_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+    void profile_statement_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number) {
+            add_invocation(i_class_name, i_method_name, i_statement_name, i_line_number)
+    }
+
+    @Override
+    void profile_statement_exit() {
+            pop_invocation()
+    }
+
+    @Override
+    void log_method_enter(String i_class_name, String i_method_name, Integer i_line_number, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
         ArrayList<I_trace> l_method_arguments = objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME)
-        add_invocation(i_class_name, i_method_name, i_statement_name, i_line_number, l_method_arguments)
-        I_event l_event = create_event("enter", i_class_name, i_method_name, i_statement_name, i_line_number)
+        profile_method_enter(i_class_name, i_method_name, i_line_number)
+        I_event l_event = create_event(GC_EVENT_TYPE_METHOD_ENTER, i_class_name, i_method_name, GC_STATEMENT_NAME_METHOD, i_line_number)
         if (method_arguments_present(i_traces)) {
             l_event.add_traces_runtime(l_method_arguments)
         }
@@ -143,37 +170,65 @@ class T_logger extends T_logging_base_6_util implements I_logger {
     }
 
     @Override
-    void log_exit() {
-        I_event l_event = create_event("exit", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+    void log_method_exit() {
+        I_event l_event = create_event(GC_EVENT_TYPE_METHOD_EXIT, get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), GC_STATEMENT_NAME_METHOD, get_current_method_invocation().get_line_number())
+        profile_method_exit()
         log_generic(l_event)
-        pop_invocation()
+    }
+
+    @Override
+    void log_statement_enter(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+        ArrayList<I_trace> l_method_arguments = objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME)
+        profile_statement_enter(i_class_name, i_method_name, i_statement_name, i_line_number)
+        I_event l_event = create_event(GC_EVENT_TYPE_STATEMENT_ENTER, i_class_name, i_method_name, i_statement_name, i_line_number)
+        if (method_arguments_present(i_traces)) {
+            l_event.add_traces_runtime(l_method_arguments)
+        }
+        log_generic(l_event)
+    }
+
+    @Override
+    void log_statement_exit() {
+        I_event l_event = create_event(GC_EVENT_TYPE_STATEMENT_EXIT, get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+        profile_statement_exit()
+        log_generic(l_event)
     }
 
     @Override
     Object log_result(I_trace i_return_object_trace) {
-        I_event l_event = create_event("result", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+        I_event l_event = create_event(GC_EVENT_TYPE_RESULT, get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
         l_event.add_trace_runtime(i_return_object_trace)
         log_generic(l_event)
         return i_return_object_trace.get_ref() //wow smart code like a real programmar is doin lol
     }
 
     @Override
-    Object profile_exit_automatic(Object i_return_object) {
-        profile_exit()
-        return i_return_object //wow smart code like a real programmar is doin lol
-    }
-
-    @Override
-    void log_error(Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
-        I_event l_event = create_event("error", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+    void log_method_error(String i_class_name, String i_method_name, Integer i_line_number, Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+        I_event l_event = create_event(GC_EVENT_TYPE_METHOD_ERROR, i_class_name, i_method_name, GC_STATEMENT_NAME_METHOD, i_line_number)
         l_event.set_throwable(i_throwable)
         l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
         log_generic(l_event)
     }
 
     @Override
+    void log_statement_error(String i_class_name, String i_method_name, String i_statement_name, Integer i_line_number, Throwable i_throwable, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+        I_event l_event = create_event(GC_EVENT_TYPE_STATEMENT_ERROR, i_class_name, i_method_name, i_statement_name, i_line_number)
+        l_event.set_throwable(i_throwable)
+        l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+        log_generic(l_event)
+    }
+    @Override
+    void log_trace(Object... i_traces) {
+        I_event l_event = create_event(GC_EVENT_TYPE_TRACES)
+        if (method_arguments_present(i_traces)) {
+            l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+        }
+        log_generic(l_event)
+    }
+
+    @Override
     void log_debug(T_static_string i_static_string_message, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("debug", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+        I_event l_event = create_event(GC_EVENT_TYPE_DEBUG)
         l_event.set_message(i_static_string_message)
         if (method_arguments_present(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -183,7 +238,7 @@ class T_logger extends T_logging_base_6_util implements I_logger {
 
     @Override
     void log_info(T_static_string i_static_string_info, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("info", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+        I_event l_event = create_event(GC_EVENT_TYPE_INFO)
         l_event.set_message(i_static_string_info)
         if (method_arguments_present(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -192,8 +247,22 @@ class T_logger extends T_logging_base_6_util implements I_logger {
     }
 
     @Override
+    void log_generic_automatic(String i_event_type, Integer i_line_number, T_static_string i_message, String i_class_name, String i_method_name, I_trace... i_traces = GC_SKIPPED_ARGS as I_trace[]) {
+        I_event l_event = create_event(i_event_type, i_class_name, i_method_name, GC_STATEMENT_NAME_METHOD, i_line_number)
+        l_event.set_message(i_message)
+        l_event.set_line_number(i_line_number)
+        l_event.set_class_name(i_class_name)
+        l_event.set_method_name(i_method_name)
+        l_event.set_statement_name(GC_STATEMENT_NAME_METHOD)
+        if (method_arguments_present(i_traces)) {
+            l_event.add_traces_runtime(Arrays.asList(i_traces))
+        }
+        log_generic(l_event)
+    }
+
+    @Override
     void log_warning(T_static_string i_static_string_warning, Object... i_traces = GC_SKIPPED_ARGS as Object[]) {
-        I_event l_event = create_event("warning", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
+        I_event l_event = create_event(GC_EVENT_TYPE_WARNING)
         l_event.set_message(i_static_string_warning)
         if (method_arguments_present(i_traces)) {
             l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
@@ -201,48 +270,81 @@ class T_logger extends T_logging_base_6_util implements I_logger {
         log_generic(l_event)
     }
 
-    @Override
-    void log_receive(Object i_incoming_data) {
-        I_event l_event = create_event("receive", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
-        l_event.add_trace_runtime(r(i_incoming_data, "incoming_data"))
-        log_generic(l_event)
-    }
-
-    @Override
-    void log_send(Object i_outgoing_data) {
-        I_event l_event = create_event("send", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
-        l_event.add_trace_runtime(r(i_outgoing_data, "outgoing_data"))
-        log_generic(l_event)
-    }
-
-    @Override
-    void log_sql(String i_sql_operation, String i_sql_string, String... i_bind_variables) {
-        I_event l_event = create_event("sql", get_current_method_invocation().get_class_name(), get_current_method_invocation().get_method_name(), get_current_method_invocation().get_statement_name(), get_current_method_invocation().get_line_number())
-        l_event.add_trace_runtime(r(i_sql_operation, "sql_operation"))
-        l_event.add_trace_runtime(r(i_sql_string, "sql_string"))
-        l_event.add_trace_runtime(r(i_bind_variables, "bind_variables"))
-        log_generic(l_event)
-    }
-
-    @Override
-    Integer get_depth() {
-        return p_method_invocation_stack.size()
-    }
-
-    I_method_invocation get_current_method_invocation() {
-        if (!p_method_invocation_stack.isEmpty()) {
-            return p_method_invocation_stack.peek()
-        } else {
-            return PC_DEFAULT_METHOD_INVOCATION
+    void log_send_receive_generic(String i_event_type, Object[] i_traces) {
+        I_event l_event = create_event(i_event_type)
+        if (method_arguments_present(i_traces)) {
+            l_event.add_traces_runtime(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
         }
-    }
-
-    I_method_invocation get_default_method_invocation() {
-        return PC_DEFAULT_METHOD_INVOCATION
+        log_generic(l_event)
     }
 
     @Override
-    LinkedList<I_method_invocation> get_invocation_stack() {
-        return p_method_invocation_stack
+    void log_receive_tcp(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_TCP, i_traces)
+    }
+
+    @Override
+    void log_send_tcp(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_TCP, i_traces)
+    }
+
+    @Override
+    void log_send_sql(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_SQL, i_traces)
+    }
+
+    @Override
+    void log_receive_sql(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_SQL, i_traces)
+    }
+
+    @Override
+    void log_send_http(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_HTTP, i_traces)
+    }
+
+    @Override
+    void log_receive_http(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_HTTP, i_traces)
+    }
+
+    @Override
+    void log_send_i2c(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_I2C, i_traces)
+    }
+
+    @Override
+    void log_receive_i2c(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_I2C, i_traces)
+    }
+
+    @Override
+    void log_send_spi(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_SPI, i_traces)
+    }
+
+    @Override
+    void log_receive_spi(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_SPI, i_traces)
+    }
+
+    @Override
+    void log_send_serial(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_SERIAL, i_traces)
+    }
+
+    @Override
+    void log_receive_serial(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_SERIAL, i_traces)
+    }
+
+    @Override
+    void log_send_bluetooth(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_SEND_BLUETOOTH, i_traces)
+    }
+
+    @Override
+    void log_receive_bluetooth(Object... i_traces) {
+        log_send_receive_generic(GC_EVENT_TYPE_RECEIVE_BLUETOOTH, i_traces)
     }
 }

@@ -49,7 +49,7 @@ abstract class T_destination extends T_inherited_configurations implements I_des
 
     @Override
     void log_generic(I_event i_event) {
-        if (p_configuration_events_by_name.containsKey(i_event.get_event_type())) {
+        if (p_configuration_events_by_name.containsKey(i_event.get_event_type()) || p_configuration_events_by_name.containsKey(GC_EVENT_TYPE_ALL)) {
             store(i_event)
             i_event.get_invocation().set_event_logged_for_destination(i_event.get_event_type(), this)
         }

@@ -8,8 +8,6 @@ interface I_event extends I_inherited_configurations {
 
     String get_method_name()
 
-    Integer get_depth()
-
     void add_trace_runtime(I_trace i_trace)
 
     void add_trace_config(I_trace i_trace_config)
@@ -31,8 +29,6 @@ interface I_event extends I_inherited_configurations {
     void set_class_name(String i_class_name)
 
     void set_method_name(String i_method_name)
-
-    void set_depth(Integer p_depth)
 
     void set_datetimestamp(Date i_datetimestamp)
 

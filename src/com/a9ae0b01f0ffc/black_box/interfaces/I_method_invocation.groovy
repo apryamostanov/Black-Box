@@ -9,8 +9,6 @@ interface I_method_invocation {
 
     Integer get_line_number()
 
-    ArrayList<I_trace> get_method_arguments()
-
     void set_class_name(String i_class_name)
 
     void set_method_name(String i_method_name)
@@ -18,8 +16,6 @@ interface I_method_invocation {
     void set_statement_name(String i_statement_name)
 
     void set_line_number(Integer i_line_number)
-
-    void set_method_arguments(ArrayList<I_trace> i_method_arguments)
 
     void stop_timing()
 

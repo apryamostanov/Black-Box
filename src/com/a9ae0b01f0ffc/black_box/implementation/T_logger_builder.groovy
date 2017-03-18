@@ -58,7 +58,7 @@ class T_logger_builder extends T_logging_base_6_util implements I_logger_builder
     }
 
     I_event init_event(GPathResult i_event_xml, I_inherited_configurations i_inherited_configurations) {
-        I_event l_event = (I_event) get_ioc().instantiate(i_event_xml.name())
+        I_event l_event = (I_event) get_ioc().instantiate("I_event")
         l_event.set_event_type(i_event_xml.name())
         if (!i_event_xml.@mask.isEmpty()) {
             l_event.set_mask(i_event_xml.@mask.text())

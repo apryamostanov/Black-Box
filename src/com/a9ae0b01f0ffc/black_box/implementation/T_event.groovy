@@ -14,7 +14,6 @@ class T_event extends T_inherited_configurations implements I_event {
     private String p_class_name = GC_EMPTY_STRING
     private String p_method_name = GC_EMPTY_STRING
     private String p_statement_name = GC_EMPTY_STRING
-    private Integer p_depth = GC_ZERO
     private Date p_datetimestamp = new Date()
     private ArrayList<I_trace> p_traces_runtime = new ArrayList<I_trace>()
     private ArrayList<I_trace> p_traces_config = new ArrayList<I_trace>()
@@ -31,11 +30,6 @@ class T_event extends T_inherited_configurations implements I_event {
     @Override
     String get_method_name() {
         return p_method_name
-    }
-
-    @Override
-    Integer get_depth() {
-        return p_depth
     }
 
     @Override
@@ -91,11 +85,6 @@ class T_event extends T_inherited_configurations implements I_event {
     @Override
     void set_method_name(String i_method_name) {
         this.p_method_name = i_method_name
-    }
-
-    @Override
-    void set_depth(Integer i_depth) {
-        this.p_depth = i_depth
     }
 
     @Override

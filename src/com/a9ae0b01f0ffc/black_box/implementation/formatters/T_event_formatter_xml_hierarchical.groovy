@@ -17,16 +17,11 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     static final String PC_ATTR_MILLISECONDS = "milliseconds"
     static final String PC_ATTR_EXCEPTION_CLASS = "exception_class"
     static final String PC_ATTR_CLASS = "class"
+    static final String PC_ATTR_METHOD = "method"
     static final String PC_ATTR_NAME = "name"
     static final String PC_ATTR_DATETIMESTAMP = "datetimestamp"
     static final String PC_ATTR_LINE = "line"
     static final String PC_ATTR_MESSAGE = "message"
-    static final String PC_EVENT_TYPE_ENTER = "enter"
-    static final String PC_EVENT_TYPE_EXIT = "exit"
-    static final String PC_EVENT_TYPE_RESULT = "result"
-    static final String PC_EVENT_TYPE_ERROR = "error"
-    static final String PC_EVENT_TYPE_INFO = "info"
-    static final String PC_EVENT_TYPE_WARNING = "warning"
     static final String PC_TRACE_TAG_NAME_PARAMETER = "argument"
     static final String PC_TRACE_TAG_NAME_RESULT = "result"
     static final String PC_TRACE_TAG_NAME_EXCEPTION_TRACE_SOURCE = "root_cause_exception_trace"
@@ -113,10 +108,6 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
         }
     }
 
-    static String get_attrs(I_event i_source_event) {
-        return attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString()), attr(PC_ATTR_EXCEPTION_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_MESSAGE, i_source_event.get_message()))
-    }
-
     String make_traces(ArrayList<I_trace> i_event_traces, I_event i_source_event, String i_tag_name) {
         String l_result = GC_EMPTY_STRING
         if (method_arguments_present(i_event_traces)) {
@@ -133,16 +124,34 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
     String format_event(I_event i_source_event) {
         String l_result = GC_EMPTY_STRING
         String l_event_type = i_source_event.get_event_type()
-        if (l_event_type == PC_EVENT_TYPE_ENTER) {
-            l_result += open_tag(nvl(i_source_event.get_statement_name(), i_source_event.get_method_name()) as String, get_attrs(i_source_event))
+        if (l_event_type == GC_EVENT_TYPE_METHOD_ENTER) {
+            l_result += open_tag(i_source_event.get_method_name(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString())))
             l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_PARAMETER)
-        } else if (l_event_type == PC_EVENT_TYPE_RESULT) {
+        } else if (l_event_type == GC_EVENT_TYPE_STATEMENT_ENTER) {
+            l_result += open_tag(i_source_event.get_statement_name(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString())))
+            l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_PARAMETER)
+        } else if (l_event_type == GC_EVENT_TYPE_RESULT) {
             l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_RESULT)
-        } else if (l_event_type == PC_EVENT_TYPE_EXIT) {
+        } else if (l_event_type == GC_EVENT_TYPE_METHOD_EXIT) {
             l_result += make_line(get_elapsed_time(i_source_event))
-            l_result += close_tag(nvl(i_source_event.get_statement_name(), i_source_event.get_method_name()) as String)
-        } else if (l_event_type == PC_EVENT_TYPE_ERROR) {
-            l_result += open_tag(PC_TAG_EXCEPTION, make_exception_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + get_attrs(i_source_event))
+            l_result += close_tag(i_source_event.get_method_name())
+        } else if (l_event_type == GC_EVENT_TYPE_STATEMENT_EXIT) {
+            l_result += make_line(get_elapsed_time(i_source_event))
+            l_result += close_tag(i_source_event.get_statement_name())
+        } else if (l_event_type == GC_EVENT_TYPE_METHOD_ERROR) {
+            l_result += open_tag(PC_TAG_EXCEPTION, make_exception_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_message()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_METHOD, get_short_name(i_source_event.get_method_name()))))
+            if (i_source_event.get_throwable() != GC_NULL_OBJ_REF) {
+                l_result += open_tag(PC_TAG_EXCEPTION_STACKTRACE)
+                l_result += make_line(escape_xml(Arrays.toString(new StackTraceUtils().sanitizeRootCause(i_source_event.get_throwable())?.getStackTrace()).replace(GC_COMMA, System.lineSeparator() + get_indent())).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
+                l_result += close_tag(PC_TAG_EXCEPTION_STACKTRACE)
+                if (i_source_event.get_throwable() instanceof E_application_exception) {
+                    l_result += make_traces(objects2traces(((E_application_exception) i_source_event.get_throwable()).get_traces(), GC_TRACE_SOURCE_EXCEPTION_TRACES), i_source_event, PC_TRACE_TAG_NAME_EXCEPTION_TRACE_SOURCE)
+                }
+            }
+            l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_EXCEPTION_TRACE_UNIT)
+            l_result += close_tag(PC_TAG_EXCEPTION)
+        }  else if (l_event_type == GC_EVENT_TYPE_STATEMENT_ERROR) {
+            l_result += open_tag(PC_TAG_EXCEPTION, make_exception_class_name_attribute(i_source_event.get_throwable().getClass().getSimpleName()) + GC_SPACE + attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_message()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_METHOD, get_short_name(i_source_event.get_method_name()))))
             if (i_source_event.get_throwable() != GC_NULL_OBJ_REF) {
                 l_result += open_tag(PC_TAG_EXCEPTION_STACKTRACE)
                 l_result += make_line(escape_xml(Arrays.toString(new StackTraceUtils().sanitizeRootCause(i_source_event.get_throwable())?.getStackTrace()).replace(GC_COMMA, System.lineSeparator() + get_indent())).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
@@ -154,12 +163,16 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter implements I_
             l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_EXCEPTION_TRACE_UNIT)
             l_result += close_tag(PC_TAG_EXCEPTION)
         } else {
-            if ([PC_EVENT_TYPE_INFO, PC_EVENT_TYPE_WARNING].contains(i_source_event.get_event_type()) && method_arguments_present(i_source_event.get_traces_runtime())) {
-                l_result += open_tag(i_source_event.get_event_type(), get_attrs(i_source_event))
+            if ((![GC_EVENT_TYPE_INFO, GC_EVENT_TYPE_WARNING].contains(i_source_event.get_event_type())) && method_arguments_present(i_source_event.get_traces_runtime())) {
+                l_result += open_tag(i_source_event.get_event_type(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_message()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_METHOD, i_source_event.get_method_name()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString())))
+                l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_TRACE)
+                l_result += close_tag(i_source_event.get_event_type())
+            } else if (i_source_event.get_event_type() == GC_EVENT_TYPE_TRACES) {
+                l_result += open_tag(i_source_event.get_event_type(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_METHOD, i_source_event.get_method_name()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString())))
                 l_result += make_traces(i_source_event.get_traces_runtime(), i_source_event, PC_TRACE_TAG_NAME_TRACE)
                 l_result += close_tag(i_source_event.get_event_type())
             } else {
-                l_result += tag(i_source_event.get_event_type(), get_attrs(i_source_event))
+                l_result += tag(i_source_event.get_event_type(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_message()), attr(PC_ATTR_CLASS, get_short_name(i_source_event.get_class_name())), attr(PC_ATTR_METHOD, i_source_event.get_method_name()), attr(PC_ATTR_LINE, i_source_event.get_line_number().toString())))
             }
         }
         return l_result
