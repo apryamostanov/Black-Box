@@ -84,7 +84,7 @@ class T_logger extends T_logging_base_6_util {
 
     void add_new_execution_node(String i_execution_node_name, Integer i_line_number, T_trace... i_traces) {
         T_execution_node l_new_execution_node = new T_execution_node()
-        ArrayList<T_trace> l_method_arguments = objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME)
+        ArrayList<T_trace> l_method_arguments = objects2traces_array(i_traces)
         if (method_arguments_present(i_traces)) {
             l_new_execution_node.set_parameter_traces(l_method_arguments)
         }
@@ -115,7 +115,7 @@ class T_logger extends T_logging_base_6_util {
 
 
     void profile_start_method(String i_class_name, String i_method_name, Integer i_line_number, T_trace... i_traces) {
-        add_new_execution_node(make_method_execution_node_name(i_class_name, i_method_name, i_line_number), i_line_number)
+        add_new_execution_node(make_method_execution_node_name(i_class_name, i_method_name, i_line_number), i_line_number, i_traces)
     }
 
     void profile_start_statement(String i_name, Integer i_line_number) {
@@ -213,7 +213,7 @@ class T_logger extends T_logging_base_6_util {
         T_event l_event = create_event(GC_EVENT_TYPE_DEBUG)
         l_event.set_message(i_static_string_message)
         if (method_arguments_present(i_traces)) {
-            l_event.set_standalone_traces(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+            l_event.set_standalone_traces(objects2traces_array(i_traces))
         }
         log_generic(l_event)
     }
@@ -222,7 +222,7 @@ class T_logger extends T_logging_base_6_util {
         T_event l_event = create_event(GC_EVENT_TYPE_INFO)
         l_event.set_message(i_static_string_info)
         if (method_arguments_present(i_traces)) {
-            l_event.set_standalone_traces(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+            l_event.set_standalone_traces(objects2traces_array(i_traces))
         }
         log_generic(l_event)
     }
@@ -241,7 +241,7 @@ class T_logger extends T_logging_base_6_util {
         T_event l_event = create_event(GC_EVENT_TYPE_WARNING)
         l_event.set_message(i_static_string_warning)
         if (method_arguments_present(i_traces)) {
-            l_event.set_standalone_traces(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+            l_event.set_standalone_traces(objects2traces_array(i_traces))
         }
         log_generic(l_event)
     }
@@ -249,7 +249,7 @@ class T_logger extends T_logging_base_6_util {
     void log_send_receive_generic(String i_event_type, Object[] i_traces) {
         T_event l_event = create_event(i_event_type)
         if (method_arguments_present(i_traces)) {
-            l_event.set_standalone_traces(objects2traces_array(i_traces, GC_TRACE_SOURCE_RUNTIME))
+            l_event.set_standalone_traces(objects2traces_array(i_traces))
         }
         log_generic(l_event)
     }

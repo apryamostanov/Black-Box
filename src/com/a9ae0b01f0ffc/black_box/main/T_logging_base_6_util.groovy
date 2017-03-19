@@ -4,20 +4,6 @@ import com.a9ae0b01f0ffc.black_box.implementation.T_trace
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
-import groovy.transform.CompileStatic
-import org.codehaus.groovy.ast.ASTNode
-import org.codehaus.groovy.ast.ClassNode
-import org.codehaus.groovy.ast.Parameter
-import org.codehaus.groovy.ast.builder.AstBuilder
-import org.codehaus.groovy.ast.expr.ArgumentListExpression
-import org.codehaus.groovy.ast.expr.ConstructorCallExpression
-import org.codehaus.groovy.ast.stmt.BlockStatement
-import org.codehaus.groovy.ast.stmt.EmptyStatement
-import org.codehaus.groovy.ast.stmt.Statement
-import org.codehaus.groovy.ast.stmt.ThrowStatement
-import org.codehaus.groovy.ast.stmt.TryCatchStatement
-import org.codehaus.groovy.ast.tools.GeneralUtils
-import org.codehaus.groovy.control.CompilePhase
 
 import java.util.logging.Level
 
