@@ -33,4 +33,10 @@ class T_tests_black_box {
        // T_black_box_transformation.create_log_method_call_with_traces("l_logger.log_enter_expression(ConstructorCallExpression, new com.a9ae0b01f0ffc.VSMSGEN.implementation.T_vts_log_parser(), 126 ))
     }
 
+    @Test
+    void test_005() {
+        int i = 1
+        System.out.println(i.getClass().getSimpleName())
+    }
+
 }

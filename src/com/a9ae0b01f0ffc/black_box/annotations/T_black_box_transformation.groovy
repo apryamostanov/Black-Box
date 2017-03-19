@@ -84,7 +84,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
                     l_method_node.setCode(l_changed_block_statement)
                     StringWriter l_string_writer = new StringWriter()
                     l_method_node.getCode().visit(new AstNodeToScriptVisitor(l_string_writer))
-                    u.l().log_trace(l_string_writer)
+                    u.l().log_trace(l_string_writer.getBuffer().toString())
                     u.l().log_debug(u.s.Finished_Processing_method_Z1, l_method_node.getName())
                 } else {
                     this.addError("@I_black_box_base should be applied to Methods.", l_method_node)

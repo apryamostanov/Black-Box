@@ -25,6 +25,14 @@ class T_logging_base_6_util extends T_logging_base_5_context {
     
     private static final String PC_CLASS_NAME = "T_logging_base_5_context"
 
+    static Boolean is_primitive(String i_class_name_short) {
+        if (["Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Char"].contains(i_class_name_short)) {
+            return GC_TRUE
+        } else {
+            return GC_FALSE
+        }
+    }
+
     static String escape_xml(String i_unescaped_xml_string) {
         if (i_unescaped_xml_string.contains(GC_XML_DOUBLE_QUOTE)
                 || i_unescaped_xml_string.contains(GC_XML_DOUBLE_QUOTE)

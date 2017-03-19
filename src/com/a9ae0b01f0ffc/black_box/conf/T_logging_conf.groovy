@@ -21,6 +21,7 @@ class T_logging_conf extends T_common_conf {
     String GC_JUL_CONF_FILE_NAME = "./conf/logging.properties"
     String GC_PROFILE_ALL = "true"
     String GC_IGNORE_INTERNAL_METHODS_PACKAGE_NAME = "a9ae0b01f0ffc"
+    String GC_MAX_TRACE_LENGTH = "512"
 
     T_logging_conf() {
         super()
