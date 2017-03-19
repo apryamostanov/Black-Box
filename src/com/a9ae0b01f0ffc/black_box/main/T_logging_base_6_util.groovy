@@ -26,7 +26,7 @@ class T_logging_base_6_util extends T_logging_base_5_context {
     private static final String PC_CLASS_NAME = "T_logging_base_5_context"
 
     static Boolean is_primitive(String i_class_name_short) {
-        if (["Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Char"].contains(i_class_name_short)) {
+        if (["Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Char", "String", "GString"].contains(i_class_name_short)) {
             return GC_TRUE
         } else {
             return GC_FALSE

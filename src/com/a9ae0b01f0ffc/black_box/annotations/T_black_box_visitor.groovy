@@ -9,6 +9,7 @@ import org.codehaus.groovy.ast.CodeVisitorSupport
 import org.codehaus.groovy.ast.expr.*
 import org.codehaus.groovy.ast.stmt.*
 import org.codehaus.groovy.ast.tools.GeneralUtils
+import org.codehaus.groovy.util.StringUtil
 
 @ToString(includeNames = true, includeFields = true)
 class T_black_box_visitor extends CodeVisitorSupport {
@@ -69,7 +70,13 @@ class T_black_box_visitor extends CodeVisitorSupport {
     @Override
     void visitBinaryExpression(BinaryExpression i_binary_expression) {
         super.visitBinaryExpression(i_binary_expression)
-        i_binary_expression.setRightExpression(p_black_box_transformation.decorate_expression(i_binary_expression.getRightExpression(), i_binary_expression.getRightExpression().getClass().getSimpleName(), i_binary_expression.getRightExpression().getText()))
+        String l_text = i_binary_expression.getRightExpression().getText()
+        if (l_text.contains("\"") || l_text.contains("'") || l_text.contains("\n") || l_text.length() > new Integer(T_logging_base_6_util.c().GC_MAX_CODE_LENGTH)) {
+            l_text = i_binary_expression.getRightExpression().getType().getNameWithoutPackage()
+        }
+        if (!(i_binary_expression.getRightExpression() instanceof ConstantExpression || i_binary_expression.getRightExpression() instanceof ClassExpression || i_binary_expression.getRightExpression() instanceof EmptyExpression)) {
+            i_binary_expression.setRightExpression(p_black_box_transformation.decorate_expression(i_binary_expression.getRightExpression(), i_binary_expression.getRightExpression().getClass().getSimpleName(), l_text))
+        }
     }
 
     @Override
@@ -131,7 +138,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
         //todo return # number
         super.visitReturnStatement(i_return_statement)
         if (T_logging_base_4_const.GC_BLACK_BOX_TYPE_FULL == p_black_box_transformation.p_black_box_type) {
-            i_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_shortcuts"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText()))))))
+            i_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_util"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText()))))))
         }
     }
 

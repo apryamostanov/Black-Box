@@ -1,6 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.annotations
 
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context
+import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
 import groovy.transform.ToString
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.AnnotatedNode
@@ -27,7 +28,7 @@ class T_fix_variable_scopes_transformation extends AbstractASTTransformation {
         if (!T_logging_base_5_context.is_init()) {
             T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
         }
-        l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO)
+        l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_6_util.GC_ZERO)
         try {
             init(nodes, source)
             AnnotatedNode targetClass = (AnnotatedNode) nodes[1]
@@ -38,7 +39,7 @@ class T_fix_variable_scopes_transformation extends AbstractASTTransformation {
                 l_variable_scope_visitor.visitClass(it)
             }
         } catch (Throwable e_others) {
-            l().log_error_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO, e_others)
+            l().log_error_method(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_6_util.GC_ZERO, e_others)
             throw e_others
         } finally {
             l().log_exit_method()

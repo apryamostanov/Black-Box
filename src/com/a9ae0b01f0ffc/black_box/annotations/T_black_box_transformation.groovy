@@ -145,7 +145,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
         if (u.GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
             l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.log_enter_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}", i_parameters))
             l_finally_block = create_log_method_call_with_traces("l_logger.log_exit_method(")
-            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
+            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}, $u.GC_EXCEPTION_VARIABLE_NAME", l_try_block, l_finally_block, i_parameters))
         } else if (p_black_box_type == u.GC_BLACK_BOX_TYPE_ERROR) {
             if (u.c().GC_PROFILE_ALL == GC_TRUE_STRING) {
                 l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.profile_start_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}"))
@@ -153,11 +153,11 @@ class T_black_box_transformation extends AbstractASTTransformation {
             } else {
                 l_finally_block = new EmptyStatement()
             }
-            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
+            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}, $u.GC_EXCEPTION_VARIABLE_NAME", l_try_block, l_finally_block, i_parameters))
         } else if (p_black_box_type == u.GC_BLACK_BOX_TYPE_PROFILE) {
             l_decorated_block_statement.addStatement(create_log_method_call_with_traces("l_logger.profile_start_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}"))
             l_finally_block = create_log_method_call_with_traces("l_logger.profile_stop_any(")
-            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}", l_try_block, l_finally_block, i_parameters))
+            l_decorated_block_statement.addStatement(create_try_catch("l_logger.log_error_method(\"$p_class_name\", \"$p_method_name\", ${i_method_code.getLineNumber()}, $u.GC_EXCEPTION_VARIABLE_NAME", l_try_block, l_finally_block, i_parameters))
         } else {
             return i_method_code
         }
