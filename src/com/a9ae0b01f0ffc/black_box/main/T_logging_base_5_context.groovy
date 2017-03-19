@@ -62,7 +62,7 @@ class T_logging_base_5_context extends T_logging_base_4_const {
     }
 
     static Boolean is_init() {
-        if ((p_context_thread_local.get()).p_logger != GC_NULL_OBJ_REF) {
+        if (p_context_thread_local.get() != GC_NULL_OBJ_REF && (p_context_thread_local.get()).p_logger != GC_NULL_OBJ_REF) {
             return GC_TRUE
         } else {
             return GC_FALSE
