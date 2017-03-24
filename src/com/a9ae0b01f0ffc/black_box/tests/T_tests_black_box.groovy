@@ -39,4 +39,16 @@ class T_tests_black_box {
         System.out.println(i.getClass().getSimpleName())
     }
 
+    @Test
+    void test_006() {
+        T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
+        T_logging_base_5_context.l().log_info(T_logging_base_5_context.s.Test_Z1, "ttt")
+    }
+
+    @Test
+    void test_007() {
+        T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
+        new Z().q()
+    }
+
 }

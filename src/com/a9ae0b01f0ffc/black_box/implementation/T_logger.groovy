@@ -2,8 +2,8 @@ package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
+import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
-import groovy.transform.CompileStatic
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
@@ -33,6 +33,7 @@ class T_logger extends T_logging_base_6_util {
     ArrayList<T_trace> get_trace_context_list() {
         return p_trace_context_list
     }
+
     void put_to_context(Object i_object, String i_name) {
         T_trace l_trace = object2trace(i_object)
         l_trace.set_name(i_name)
@@ -82,8 +83,9 @@ class T_logger extends T_logging_base_6_util {
         p_current_execution_node = i_execution_node
     }
 
-    void add_new_execution_node(String i_execution_node_name, Integer i_line_number, T_trace... i_traces) {
+    void add_new_execution_node(String i_type, String i_execution_node_name, Integer i_line_number, T_trace... i_traces) {
         T_execution_node l_new_execution_node = new T_execution_node()
+        l_new_execution_node.set_type(i_type)
         ArrayList<T_trace> l_method_arguments = objects2traces_array(i_traces)
         if (method_arguments_present(i_traces)) {
             l_new_execution_node.set_parameter_traces(l_method_arguments)
@@ -115,15 +117,16 @@ class T_logger extends T_logging_base_6_util {
 
 
     void profile_start_method(String i_class_name, String i_method_name, Integer i_line_number, T_trace... i_traces) {
-        add_new_execution_node(make_method_execution_node_name(i_class_name, i_method_name, i_line_number), i_line_number, i_traces)
+        add_new_execution_node(GC_EXECUTION_NODE_TYPE_METHOD, make_method_execution_node_name(i_class_name, i_method_name, i_line_number), i_line_number, i_traces)
     }
 
-    void profile_start_statement(String i_name, Integer i_line_number) {
-        add_new_execution_node(i_name, i_line_number)
+    void profile_start_statement(String i_name, String i_code, Integer i_line_number) {
+        add_new_execution_node(GC_EXECUTION_NODE_TYPE_STATEMENT, i_name, i_line_number)
+        get_current_execution_node().set_code(i_code)
     }
 
     void profile_start_expression(String i_name, String i_code, Integer i_line_number) {
-        add_new_execution_node(i_name, i_line_number)
+        add_new_execution_node(GC_EXECUTION_NODE_TYPE_EXPRESSION, i_name, i_line_number)
         get_current_execution_node().set_code(i_code)
     }
 
@@ -142,8 +145,8 @@ class T_logger extends T_logging_base_6_util {
         log_generic(l_event)
     }
 
-    void log_enter_statement(String i_statement_name, Integer i_line_number) {
-        profile_start_statement(i_statement_name, i_line_number)
+    void log_enter_statement(String i_statement_name, String i_code, Integer i_line_number) {
+        profile_start_statement(i_statement_name, i_code, i_line_number)
         log_generic(create_event(GC_EVENT_TYPE_STATEMENT_ENTER))
     }
 
@@ -171,19 +174,34 @@ class T_logger extends T_logging_base_6_util {
         return i_return_object_trace.get_ref()
     }
 
-    void log_error_method(String i_class_name, String i_method_name, Integer i_line_number, Throwable i_throwable, T_trace... i_traces) {
+    void log_error_method_standalone(String i_class_name, String i_method_name, Integer i_line_number, Throwable i_throwable, T_trace... i_traces) {
         T_execution_node l_execution_node
-        if (get_current_execution_node().get_name() != make_method_execution_node_name(i_class_name, i_method_name, i_line_number)) {
-            T_execution_node l_standalone_execution_node = get_ioc().instantiate("T_execution_node") as T_execution_node
-            l_standalone_execution_node.set_name(make_method_execution_node_name(i_class_name, i_method_name, i_line_number))
-            l_standalone_execution_node.set_throwable(i_throwable)
-            l_standalone_execution_node.set_line_number(i_line_number)
-            l_standalone_execution_node.set_parameter_traces(Arrays.asList(i_traces) as ArrayList<T_trace>)
-            l_execution_node = l_standalone_execution_node
-        } else {
-            get_current_execution_node().set_throwable(i_throwable)
-            l_execution_node = get_current_execution_node()
+        T_execution_node l_standalone_execution_node = get_ioc().instantiate("T_execution_node") as T_execution_node
+        l_standalone_execution_node.set_name(make_method_execution_node_name(i_class_name, i_method_name, i_line_number))
+        l_standalone_execution_node.set_throwable(i_throwable)
+        l_standalone_execution_node.set_line_number(i_line_number)
+        l_standalone_execution_node.set_parameter_traces(Arrays.asList(i_traces) as ArrayList<T_trace>)
+        l_execution_node = l_standalone_execution_node
+        T_event l_event = create_event(GC_EVENT_TYPE_METHOD_ERROR)
+        l_event.set_execution_node(l_execution_node)
+        log_generic(l_event)
+    }
+
+    void log_error_method(String i_class_name, String i_method_name, Integer i_line_number, Throwable i_throwable, T_trace... i_traces) {
+        while (get_current_execution_node().get_type() != GC_EXECUTION_NODE_TYPE_METHOD) {
+            if (get_current_execution_node().get_type() == GC_EXECUTION_NODE_TYPE_EXPRESSION) {
+                log_error_expression(i_throwable)
+                log_exit_expression()
+            } else if (get_current_execution_node().get_type() == GC_EXECUTION_NODE_TYPE_STATEMENT) {
+                log_error_statement(i_throwable)
+                log_exit_method()
+            } else {
+                throw new E_application_exception(s.Internal_error_unexpected_execution_node_type_Z1, get_current_execution_node().get_type())
+            }
         }
+        T_execution_node l_execution_node
+        get_current_execution_node().set_throwable(i_throwable)
+        l_execution_node = get_current_execution_node()
         T_event l_event = create_event(GC_EVENT_TYPE_METHOD_ERROR)
         l_event.set_execution_node(l_execution_node)
         log_generic(l_event)

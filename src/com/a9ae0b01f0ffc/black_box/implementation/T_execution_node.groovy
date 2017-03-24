@@ -6,6 +6,7 @@ import groovy.transform.ToString
 @ToString(includeNames = true, includeFields = true)
 class T_execution_node extends T_logging_base_6_util {
 
+    String p_type = GC_EMPTY_STRING
     String p_name = GC_EMPTY_STRING
     String p_code = GC_EMPTY_STRING
     Integer p_line_number = GC_ZERO
@@ -16,6 +17,14 @@ class T_execution_node extends T_logging_base_6_util {
     T_execution_node p_parent_node = GC_NULL_OBJ_REF as T_execution_node
     Throwable p_throwable = GC_NULL_OBJ_REF as Throwable
     T_trace p_result = GC_NULL_OBJ_REF as T_trace
+
+    String get_type() {
+        return p_type
+    }
+
+    void set_type(String i_type) {
+        p_type = i_type
+    }
 
     String get_name_xml() {
         return p_name.replace(GC_POINT, GC_HYPHEN).replace(GC_COLON, GC_HYPHEN)

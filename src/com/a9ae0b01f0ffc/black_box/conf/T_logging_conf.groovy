@@ -23,6 +23,7 @@ class T_logging_conf extends T_common_conf {
     String GC_IGNORE_INTERNAL_METHODS_PACKAGE_NAME = "a9ae0b01f0ffc"
     String GC_MAX_TRACE_LENGTH = "512"
     String GC_MAX_CODE_LENGTH = "128"
+    String GC_MAX_CODE_ELEMENT_LENGTH = "256"
 
     T_logging_conf() {
         super()

@@ -49,5 +49,9 @@ class T_logging_base_4_const extends T_common_base_3_utils {
     static final String GC_EXCEPTION_VARIABLE_NAME = "e_others"
     static final Class GC_UTILITY_CLASS = T_logging_base_6_util
     static final String GC_HYPHEN = "-"
+    static final String GC_BLACK_BOX_COMPILER_CONFIG_PATH = "C:/COMPILE/with_logging/commons.conf"
+    static final String GC_EXECUTION_NODE_TYPE_METHOD = "method"
+    static final String GC_EXECUTION_NODE_TYPE_STATEMENT = "statement"
+    static final String GC_EXECUTION_NODE_TYPE_EXPRESSION = "expression"
 
 }

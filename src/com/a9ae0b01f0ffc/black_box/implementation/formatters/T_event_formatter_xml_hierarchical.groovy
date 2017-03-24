@@ -22,6 +22,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
     static final String PC_ATTR_NAME = "name"
     static final String PC_ATTR_DATETIMESTAMP = "datetimestamp"
     static final String PC_ATTR_LINE = "line"
+    static final String PC_ATTR_CODE = "code"
     static final String PC_ATTR_MESSAGE = "message"
     static final String PC_TRACE_TAG_NAME_PARAMETER = "argument"
     static final String PC_TRACE_TAG_NAME_RESULT = "result"
@@ -158,8 +159,11 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
     String format_event(T_event i_source_event) {
         String l_result = GC_EMPTY_STRING
         String l_event_type = i_source_event.get_event_type()
-        if ([GC_EVENT_TYPE_METHOD_ENTER, GC_EVENT_TYPE_STATEMENT_ENTER, GC_EVENT_TYPE_EXPRESSION_ENTER].contains(l_event_type)) {
-            l_result += open_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_NAME, get_name_attr(i_source_event)), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
+        if ([GC_EVENT_TYPE_METHOD_ENTER].contains(l_event_type)) {
+            l_result += open_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
+            l_result += make_traces(i_source_event.get_execution_node().get_parameter_traces(), PC_TRACE_TAG_NAME_PARAMETER)
+        } else if ([GC_EVENT_TYPE_STATEMENT_ENTER, GC_EVENT_TYPE_EXPRESSION_ENTER].contains(l_event_type)) {
+            l_result += open_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_CODE, i_source_event.get_execution_node().get_code()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
             l_result += make_traces(i_source_event.get_execution_node().get_parameter_traces(), PC_TRACE_TAG_NAME_PARAMETER)
         } else if (l_event_type == GC_EVENT_TYPE_RESULT) {
             l_result += make_traces([i_source_event.get_execution_node().get_result()].toList() as ArrayList<T_trace>, PC_TRACE_TAG_NAME_RESULT)
@@ -168,7 +172,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
             l_result += close_tag(i_source_event.get_execution_node().get_name_xml())
         } else if ([GC_EVENT_TYPE_METHOD_ERROR, GC_EVENT_TYPE_STATEMENT_ERROR, GC_EVENT_TYPE_EXPRESSION_ERROR].contains(l_event_type)) {
             l_result += open_tag(PC_TAG_EXCEPTION, make_exception_class_name_attribute(i_source_event.get_execution_node().get_throwable().getClass().getSimpleName()) + GC_SPACE + attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_execution_node().get_throwable().getMessage()), attr(PC_ATTR_LINE, get_line_attr(i_source_event)), attr(PC_ATTR_NAME, get_name_attr(i_source_event))))
-            if (i_source_event.get_execution_node().get_throwable() != GC_NULL_OBJ_REF) {
+            if (i_source_event.get_execution_node().get_throwable() != GC_NULL_OBJ_REF && GC_EVENT_TYPE_METHOD_ERROR == l_event_type) {
                 l_result += open_tag(PC_TAG_EXCEPTION_STACKTRACE)
                 l_result += make_line(escape_xml(Arrays.toString(new StackTraceUtils().sanitizeRootCause(i_source_event.get_execution_node().get_throwable())?.getStackTrace()).replace(GC_COMMA, System.lineSeparator() + get_indent())).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
                 l_result += close_tag(PC_TAG_EXCEPTION_STACKTRACE)

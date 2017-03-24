@@ -2,14 +2,42 @@ package com.a9ae0b01f0ffc.black_box.main
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_trace
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
-import com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
+import com.sun.org.apache.xerces.internal.util.XMLChar
+import groovy.inspect.swingui.AstNodeToScriptVisitor
+import org.codehaus.groovy.ast.ASTNode
 
 import java.util.logging.Level
 
 class T_logging_base_6_util extends T_logging_base_5_context {
-    
+
     private static final String PC_CLASS_NAME = "T_logging_base_5_context"
+
+    static String ast2text(ASTNode i_ast_node) {
+        StringWriter l_string_writer = new StringWriter()
+        i_ast_node.visit(new AstNodeToScriptVisitor(l_string_writer))
+        return l_string_writer.getBuffer().toString()
+    }
+
+    static String code2element(String i_code_text) {
+        String l_element_name = i_code_text.replace(GC_XML_GREATER, GC_HYPHEN).replace(GC_XML_LESS, GC_HYPHEN)
+        String l_result_name = GC_EMPTY_STRING
+        for (Integer l_char_index = GC_FIRST_INDEX; l_char_index < l_element_name.length(); ++l_char_index) {
+            char l_char = l_element_name.charAt(l_char_index)
+            if (XMLChar.isName(l_char as int)) {
+                l_result_name += l_element_name.charAt(l_char_index)
+            } else {
+                l_result_name += GC_UNDERSCORE
+            }
+        }
+        return l_result_name
+    }
+
+    static String code2attribute(String i_code_text) {
+        String l_result = i_code_text.replace(GC_XML_GREATER, GC_HYPHEN).replace(GC_XML_LESS, GC_HYPHEN).replace(GC_XML_DOUBLE_QUOTE, GC_EMPTY_STRING).replace(GC_XML_QUOTE, GC_EMPTY_STRING).replace("{", GC_EMPTY_STRING).replace("}", GC_EMPTY_STRING).replace("\n", GC_EMPTY_STRING)
+        l_result = l_result.substring(GC_FIRST_CHAR, Math.min(l_result.length(), new Integer(c().GC_MAX_CODE_ELEMENT_LENGTH)))
+        return l_result
+    }
 
     static Boolean is_primitive(String i_class_name_short) {
         if (["Byte", "Short", "Integer", "Long", "Float", "Double", "Boolean", "Char", "String", "GString"].contains(i_class_name_short)) {
