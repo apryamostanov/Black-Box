@@ -161,6 +161,16 @@ class T_logger extends T_logging_base_6_util {
         log_generic(l_event)
     }
 
+    Object log_run_closure(String i_name, String i_code, Integer i_line_number, Closure i_method_closure) {
+        log_enter_expression(i_name, i_code, i_line_number)
+        Object l_result = i_method_closure.call()
+        if (is_not_null(l_result)) {
+            log_result(r(l_result, GC_EMPTY_STRING))
+        }
+        log_exit_expression()
+        return l_result
+    }
+
     void log_exit_expression() {
         T_event l_event = create_event(GC_EVENT_TYPE_EXPRESSION_EXIT)
         profile_stop_any()

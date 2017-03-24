@@ -66,6 +66,11 @@ class T_black_box_visitor extends CodeVisitorSupport {
         T_logger l_logger = l()
         l_logger.log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, i_method_call_expression.getLineNumber(), r(i_method_call_expression, "i_method_call_expression"))
         try {
+            HashMap<Expression, String> l_orig_codes = new HashMap<Expression, String>()
+            for (Expression l_expression in ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions()) {
+                l_orig_codes.put(l_expression, code2attribute(ast2text(l_expression)))
+            }
+            String l_orig_receiver_code = code2attribute(ast2text(i_method_call_expression.getObjectExpression()))
             super.visitMethodCallExpression(i_method_call_expression)
             MethodCallExpression l_method_call_expression = i_method_call_expression
             if (PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS.keySet().contains(l_method_call_expression.getMethodAsString())) {
@@ -91,6 +96,16 @@ class T_black_box_visitor extends CodeVisitorSupport {
                     l_method_call_expression.setMethod(l_new_method_call_expression.getMethod())
                     l_method_call_expression.setArguments(l_new_method_call_expression.getArguments())
                 }
+            } else {
+                if (i_method_call_expression.getObjectExpression() instanceof MethodCallExpression) {
+                    i_method_call_expression.setObjectExpression(p_black_box_transformation.decorate_expression(i_method_call_expression.getObjectExpression(), i_method_call_expression.getObjectExpression().getClass().getSimpleName(), l_orig_receiver_code))
+                }
+                ArrayList<Expression> l_expressions = new ArrayList<Expression>()
+                for (Expression l_expression in ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions()) {
+                    l_expressions.add(p_black_box_transformation.decorate_expression(l_expression, "argument", l_orig_codes.get(l_expression)))
+                }
+                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().clear()
+                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().addAll(l_expressions)
             }
         } catch (Throwable e_others) {
             l_logger.log_error_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO, e_others)
@@ -99,6 +114,21 @@ class T_black_box_visitor extends CodeVisitorSupport {
             l().log_exit_method()
         }
     }
+/*
+    @Override
+    void visitArgumentlistExpression(ArgumentListExpression i_expression) {
+        HashMap<Expression, String> l_orig_codes = new HashMap<Expression, String>()
+        for (Expression l_expression in i_expression.getExpressions()) {
+            l_orig_codes.put(l_expression, code2attribute(ast2text(l_expression)))
+        }
+        super.visitArgumentlistExpression(i_expression)
+        ArrayList<Expression> l_expressions = new ArrayList<Expression>()
+        for (Expression l_expression in i_expression.getExpressions()) {
+            l_expressions.add(p_black_box_transformation.decorate_expression(l_expression, "argument", l_orig_codes.get(l_expression)))
+        }
+        i_expression.getExpressions().clear()
+        i_expression.getExpressions().addAll(l_expressions)
+    }*/
 
     @Override
     void visitBinaryExpression(BinaryExpression i_binary_expression) {
@@ -133,7 +163,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
                 if (l_statement_to_modify.getExpression() instanceof MethodCallExpression) {
                     MethodCallExpression l_method_call_expression = l_statement_to_modify.getExpression() as MethodCallExpression
                     if (!(PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS.keySet().contains(l_method_call_expression.getMethodAsString()) || PC_AUTOREPLACEMENT_TARGET_FUNCTION == l_method_call_expression.getMethodAsString())) {
-                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, l_method_call_expression.getMethodAsString(), l_orig_codes_map.get(l_statement_to_modify)))
+                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, l_method_call_expression.getClass().getSimpleName(), l_orig_codes_map.get(l_statement_to_modify)))
                     } else {
                         l_modified_statements.add(l_statement_to_modify)
                     }

@@ -98,22 +98,19 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     Expression decorate_expression(Expression i_expression_to_decorate, String i_expression_name, String i_expression_code) {
         if (GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
-            BlockStatement l_decorated_block_statement = new BlockStatement()
             ReturnStatement l_return_statement = new ReturnStatement(i_expression_to_decorate)
-            l_return_statement.setExpression(new MethodCallExpression(new VariableExpression(PC_LOGGER_VARIABLE_NAME), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression(PC_UTIL_VARIABLE_NAME), "r", new ArgumentListExpression(l_return_statement.getExpression(), new ConstantExpression(l_return_statement.getExpression().getText()))))))
-            l_decorated_block_statement.addStatement(create_log_method_call_with_traces(PC_LOGGER_VARIABLE_NAME + ".log_enter_expression(\"$i_expression_name\", \"$i_expression_code\", ${i_expression_to_decorate.getLineNumber()}"))
-            l_decorated_block_statement.addStatement(create_log_method_call_with_traces(PC_LOGGER_VARIABLE_NAME + ".log_exit_expression("))
-            l_decorated_block_statement.addStatement(l_return_statement)
-            ClosureExpression l_closure_expression = GeneralUtils.closureX(GC_NULL_OBJ_REF as Parameter[], l_decorated_block_statement)
+            l_return_statement.setExpression(i_expression_to_decorate)
+            ClosureExpression l_closure_expression = GeneralUtils.closureX(GC_NULL_OBJ_REF as Parameter[], l_return_statement)
             l_closure_expression.setVariableScope(new VariableScope())//p_variable_scope.copy())
-            MethodCallExpression l_method_call_on_closure = GeneralUtils.callX(l_closure_expression, "call", new ArgumentListExpression())
-            return l_method_call_on_closure
+            MethodCallExpression l_method_call_on_closure_wrapper = GeneralUtils.callX(GeneralUtils.varX(PC_LOGGER_VARIABLE_NAME), "log_run_closure", new ArgumentListExpression(GeneralUtils.constX(i_expression_name), GeneralUtils.constX(i_expression_code), GeneralUtils.constX(i_expression_to_decorate.getLineNumber()), l_closure_expression))
+            return l_method_call_on_closure_wrapper
         } else {
             return i_expression_to_decorate
         }
     }
 
     Statement decorate_statement(Statement i_statement_to_decorate, String i_statement_name, String i_statement_code) {
+        //Note: here we consciously use explicit method calls and not closure runner, because it has slower performance (~2 times)
         BlockStatement l_decorated_block_statement = new BlockStatement()
         if (GC_BLACK_BOX_TYPE_FULL == p_black_box_type) {
             l_decorated_block_statement.addStatement(create_log_method_call_with_traces(PC_LOGGER_VARIABLE_NAME + ".log_enter_statement(\"$i_statement_name\", \"$i_statement_code\", ${i_statement_to_decorate.getLineNumber()}"))

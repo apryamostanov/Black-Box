@@ -3,8 +3,6 @@ package com.a9ae0b01f0ffc.black_box.implementation.formatters
 import com.a9ae0b01f0ffc.black_box.implementation.T_event
 import com.a9ae0b01f0ffc.black_box.implementation.T_trace
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
-import com.a9ae0b01f0ffc.commons.interfaces.I_object_with_uid
-import groovy.transform.CompileStatic
 import groovy.transform.ToString
 import groovy.xml.XmlUtil
 import org.codehaus.groovy.runtime.StackTraceUtils
@@ -110,28 +108,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
         }
     }
 
-    String make_traces(ArrayList<T_trace> i_event_traces, String i_tag_name, Boolean i_ignore_checks = GC_FALSE) {
+    String make_traces(ArrayList<T_trace> i_event_traces, String i_tag_name) {
         String l_result = GC_EMPTY_STRING
-        if (i_ignore_checks == GC_TRUE) {
-            for (T_trace l_runtime_trace in i_event_traces) {
-                l_result += open_tag(i_tag_name, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
-                l_result += make_line(escape_xml(l_runtime_trace.toString()).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
-                l_result += close_tag(i_tag_name)
-            }
-        } else if (method_arguments_present(i_event_traces)) {
-            for (T_trace l_runtime_trace in i_event_traces) {
-                //if (is_primitive(get_short_name(l_runtime_trace.get_ref_class_name())) || l_runtime_trace.get_ref_class_name().indexOf(c().GC_IGNORE_INTERNAL_METHODS_PACKAGE_NAME) > GC_ZERO) {
-                    //if (l_runtime_trace.toString().length() <= new Integer(c().GC_MAX_TRACE_LENGTH)) {
-                        l_result += open_tag(i_tag_name, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
-                        l_result += make_line(escape_xml(l_runtime_trace.toString()).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
-                        l_result += close_tag(i_tag_name)
-                   // }
-                /*} else if (l_runtime_trace.get_ref() instanceof I_object_with_uid) {
-                    l_result += open_tag(i_tag_name, get_class_name_short(l_runtime_trace) + GC_SPACE + get_name(l_runtime_trace))
-                    l_result += make_line(((I_object_with_uid)l_runtime_trace.get_ref()).get_guid())
-                    l_result += close_tag(i_tag_name)
-                }*/
-            }
+        for (T_trace l_runtime_trace in i_event_traces) {
+            l_result += open_tag(i_tag_name, attrs(attr(PC_ATTR_CLASS, get_short_name(l_runtime_trace.get_ref_class_name())), attr(PC_ATTR_NAME, l_runtime_trace.get_name())))
+            l_result += make_line(escape_xml(l_runtime_trace.toString()).replace(System.lineSeparator(), System.lineSeparator() + get_indent()))
+            l_result += close_tag(i_tag_name)
         }
         return l_result
     }
@@ -185,7 +167,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
         } else {
             if (i_source_event.get_event_type() == GC_EVENT_TYPE_TRACES) {
                 l_result += open_tag(i_source_event.get_event_type(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
-                l_result += make_traces(i_source_event.get_traces_standalone(), PC_TRACE_TAG_NAME_TRACE, GC_TRUE)
+                l_result += make_traces(i_source_event.get_traces_standalone(), PC_TRACE_TAG_NAME_TRACE)
                 l_result += close_tag(i_source_event.get_event_type())
             } else if ((![GC_EVENT_TYPE_INFO, GC_EVENT_TYPE_WARNING].contains(i_source_event.get_event_type())) && method_arguments_present(i_source_event.get_traces_standalone())) {
                 l_result += open_tag(i_source_event.get_event_type(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, escape_xml(i_source_event.get_message())), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))

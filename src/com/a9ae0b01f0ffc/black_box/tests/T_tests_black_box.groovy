@@ -2,6 +2,7 @@ package com.a9ae0b01f0ffc.black_box.tests
 
 import com.a9ae0b01f0ffc.black_box.annotations.T_black_box_transformation
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context
+import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
 import org.junit.Test
 
 class T_tests_black_box {
@@ -49,6 +50,12 @@ class T_tests_black_box {
     void test_007() {
         T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
         new Z().q()
+    }
+
+    @Test
+    void test_008() {
+        T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
+        T_logging_base_6_util.l().log_run_method({new Z().q()})
     }
 
 }
