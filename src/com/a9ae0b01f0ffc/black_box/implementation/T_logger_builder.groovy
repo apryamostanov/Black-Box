@@ -37,11 +37,9 @@ class T_logger_builder extends T_logging_base_6_util {
         if (!T_destination_xml.@location.isEmpty()) {
             l_destination.set_location(T_destination_xml.@location.text())
         }
-        if (!T_destination_xml.@buffer.isEmpty()) {
-            l_destination.set_buffer(T_destination_xml.@buffer.text())
-        }
-        if (!T_destination_xml.@spool_event.isEmpty()) {
-            l_destination.set_spool_event(T_destination_xml.@spool_event.text())
+        if (!T_destination_xml.@async_config.isEmpty()) {
+            l_destination.set_async_storer(new T_async_storage(l_destination.clone_with_no_async(), T_destination_xml.@async_config.text(), Thread.currentThread()))
+            l_destination.p_async_storer.start()
         }
         for (l_event_xml in T_destination_xml.children()) {
             l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))

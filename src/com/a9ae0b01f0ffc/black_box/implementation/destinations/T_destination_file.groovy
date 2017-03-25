@@ -11,6 +11,18 @@ class T_destination_file extends T_destination {
     Boolean p_is_file_init = GC_FALSE
 
     @Override
+    T_destination clone_with_no_async() {
+        T_destination_file l_result = new T_destination_file()
+        l_result.p_file = p_file
+        l_result.p_file_writer = p_file_writer
+        l_result.p_is_file_init = p_is_file_init
+        l_result.p_formatter = p_formatter
+        l_result.p_configuration_events_by_name = p_configuration_events_by_name
+        l_result.p_location = p_location
+        return l_result
+    }
+
+    @Override
     void store(T_event i_source_event) {
         init_file()
         p_file_writer.write(p_formatter.format_event(i_source_event))

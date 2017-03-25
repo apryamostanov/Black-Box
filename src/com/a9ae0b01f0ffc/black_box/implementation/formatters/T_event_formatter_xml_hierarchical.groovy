@@ -27,11 +27,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
     static final String PC_TRACE_TAG_NAME_EXCEPTION_TRACE_SOURCE = "root_cause_exception_trace"
     static final String PC_TRACE_TAG_NAME_EXCEPTION_TRACE_UNIT = "local_cause_exception_trace"
     static final String PC_TRACE_TAG_NAME_TRACE = "trace"
-    ThreadLocal<Integer> p_relative_xml_depth = new ThreadLocal<Integer>()
-
-    T_event_formatter_xml_hierarchical() {
-        p_relative_xml_depth.set(GC_ZERO)
-    }
+    Integer p_relative_xml_depth = GC_ZERO
 
     static String get_class_name_short(T_trace T_trace) {
         String l_short_name = get_short_name(T_trace.get_ref_class_name())
@@ -60,12 +56,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
     }
 
     String get_indent() {
-        return GC_EMPTY_STRING.padLeft(p_relative_xml_depth.get(), GC_SPACE)
+        return GC_EMPTY_STRING.padLeft(p_relative_xml_depth, GC_SPACE)
     }
 
     String open_tag(String i_tag_name, String i_attributes = GC_EMPTY_STRING) {
         String l_tag_string = get_indent() + GC_XML_LESS + i_tag_name + (i_attributes == GC_EMPTY_STRING ? GC_EMPTY_STRING : GC_SPACE + i_attributes) + GC_XML_GREATER
-        p_relative_xml_depth.set(p_relative_xml_depth.get() + Integer.parseInt(c().GC_XML_PAD_DEPTH))
+        p_relative_xml_depth += Integer.parseInt(c().GC_XML_PAD_DEPTH)
         return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
@@ -74,9 +70,9 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
         return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
-    String close_tag(String i_tag_name) {
-        p_relative_xml_depth.set(p_relative_xml_depth.get() - Integer.parseInt(c().GC_XML_PAD_DEPTH))
-        String l_tag_string = get_indent() + GC_XML_LESS + GC_XML_END + i_tag_name + GC_XML_GREATER
+    String close_tag(String i_tag_name, String i_attributes = GC_EMPTY_STRING) {
+        p_relative_xml_depth -= Integer.parseInt(c().GC_XML_PAD_DEPTH)
+        String l_tag_string = get_indent() + GC_XML_LESS + GC_XML_END + i_tag_name + (i_attributes == GC_EMPTY_STRING ? GC_EMPTY_STRING : GC_SPACE + i_attributes) + GC_XML_GREATER
         return l_tag_string == GC_EMPTY_STRING ? GC_EMPTY_STRING : l_tag_string + System.lineSeparator()
     }
 
@@ -149,9 +145,12 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
             l_result += make_traces(i_source_event.get_execution_node().get_parameter_traces(), PC_TRACE_TAG_NAME_PARAMETER)
         } else if (l_event_type == GC_EVENT_TYPE_RESULT) {
             l_result += make_traces([i_source_event.get_execution_node().get_result()].toList() as ArrayList<T_trace>, PC_TRACE_TAG_NAME_RESULT)
-        } else if ([GC_EVENT_TYPE_METHOD_EXIT, GC_EVENT_TYPE_STATEMENT_EXIT, GC_EVENT_TYPE_EXPRESSION_EXIT].contains(l_event_type)) {
+        } else if ([GC_EVENT_TYPE_METHOD_EXIT].contains(l_event_type)) {
             l_result += make_line(get_elapsed_time(i_source_event))
             l_result += close_tag(i_source_event.get_execution_node().get_name_xml())
+        }  else if ([GC_EVENT_TYPE_METHOD_EXIT, GC_EVENT_TYPE_STATEMENT_EXIT, GC_EVENT_TYPE_EXPRESSION_EXIT].contains(l_event_type)) {
+            l_result += make_line(get_elapsed_time(i_source_event))
+            l_result += close_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
         } else if ([GC_EVENT_TYPE_METHOD_ERROR, GC_EVENT_TYPE_STATEMENT_ERROR, GC_EVENT_TYPE_EXPRESSION_ERROR].contains(l_event_type)) {
             l_result += open_tag(PC_TAG_EXCEPTION, make_exception_class_name_attribute(i_source_event.get_execution_node().get_throwable().getClass().getSimpleName()) + GC_SPACE + attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_MESSAGE, i_source_event.get_execution_node().get_throwable().getMessage()), attr(PC_ATTR_LINE, get_line_attr(i_source_event)), attr(PC_ATTR_NAME, get_name_attr(i_source_event))))
             if (i_source_event.get_execution_node().get_throwable() != GC_NULL_OBJ_REF && GC_EVENT_TYPE_METHOD_ERROR == l_event_type) {

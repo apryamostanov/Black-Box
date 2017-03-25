@@ -10,4 +10,13 @@ class T_destination_shell extends T_destination {
         System.out.print(p_formatter.format_event(i_source_event))
     }
 
+    @Override
+    T_destination clone_with_no_async() {
+        T_destination_shell l_result = new T_destination_shell()
+        l_result.p_formatter = p_formatter
+        l_result.p_configuration_events_by_name = p_configuration_events_by_name
+        l_result.p_location = p_location
+        return l_result
+    }
+
 }

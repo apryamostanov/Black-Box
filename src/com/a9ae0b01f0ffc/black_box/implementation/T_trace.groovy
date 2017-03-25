@@ -11,7 +11,7 @@ class T_trace extends T_logging_base_6_util {
     Object p_ref = GC_NULL_OBJ_REF
     String p_value = GC_EMPTY_STRING
 
-    String toString() {
+    synchronized String toString() {
         nvl(p_value, p_ref.toString())
     }
 
