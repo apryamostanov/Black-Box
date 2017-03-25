@@ -22,10 +22,8 @@ Intended purpose of usage:
 - Perfomance issues investigations
 - Forensics and legal case study in software
 
-Newly added features:
-- Statement-level debug
-
 Features:
+- Method level, Statement level and Expression level tracing and profiling
 - Multithreaded by nature, designed to be as well used in the Web applications
 - Does not accept free text from programmers
 - Forces straightforward yet mindful coding of tracing in applications
