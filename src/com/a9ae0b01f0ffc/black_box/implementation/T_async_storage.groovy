@@ -21,7 +21,6 @@ class T_async_storage extends Thread {
         p_parent_thread = i_parent_thread
     }
 
-//do not store event stack on event; it is not thread safe; store it on async storage level
     @Override
     void run() {
         init_custom(p_conf_name)

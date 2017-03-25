@@ -184,7 +184,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
         super.visitClosureExpression(i_expression)
         BlockStatement l_changed_block_statement = new BlockStatement()
         T_black_box_transformation l_black_box_transformation = new T_black_box_transformation()
-        l_black_box_transformation.p_black_box_type = p_black_box_transformation.p_black_box_type
+        l_black_box_transformation.p_black_box_level = p_black_box_transformation.p_black_box_level
         l_black_box_transformation.p_class_name = p_black_box_transformation.p_class_name
         l_black_box_transformation.p_method_name = p_black_box_transformation.p_method_name
         l_black_box_transformation.set_annotation_node(p_black_box_transformation.get_annotation_node())
@@ -204,7 +204,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
     void visitReturnStatement(ReturnStatement i_return_statement) {
         //todo return # number
         super.visitReturnStatement(i_return_statement)
-        if (GC_BLACK_BOX_TYPE_FULL == p_black_box_transformation.p_black_box_type) {
+        if (GC_BLACK_BOX_TYPE_FULL == p_black_box_transformation.p_black_box_level) {
             i_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_util"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText()))))))
         }
     }

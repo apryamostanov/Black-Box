@@ -12,8 +12,8 @@ abstract class T_destination extends T_logging_base_6_util {
     String p_location = GC_EMPTY_STRING
     T_async_storage p_async_storage = GC_NULL_OBJ_REF as T_async_storage
 
-    void set_async_storer(T_async_storage i_async_storer) {
-        p_async_storage = i_async_storer
+    void set_async_storage(T_async_storage i_async_storage) {
+        p_async_storage = i_async_storage
     }
 
     void add_configuration_event(T_event i_event) {
