@@ -13,32 +13,6 @@ class T_event extends T_logging_base_6_util {
     private T_static_string p_message = T_static_string.PC_EMPTY_STATIC_STRING
     private T_execution_node p_execution_node = GC_NULL_OBJ_REF as T_execution_node
     private Integer p_line_number = GC_ZERO
-    T_event p_previous_event = GC_NULL_OBJ_REF as T_event
-    T_event p_next_event = GC_NULL_OBJ_REF as T_event
-    
-    T_event get_previous_event() {
-        return p_previous_event
-    }
-    
-    void set_previous_event(T_event i_previous_event) {
-        p_previous_event = i_previous_event
-    }
-    
-    T_event get_next_event() {
-        return p_next_event
-    }
-
-    T_event get_root_event() {
-        T_event l_search_event = this
-        while (is_not_null(l_search_event.get_previous_event())) {
-            l_search_event = l_search_event.get_previous_event()
-        }
-        return l_search_event
-    }
-
-    void set_next_event(T_event i_next_event) {
-        p_next_event = i_next_event
-    }
 
     ArrayList<T_trace> get_traces_standalone() {
         return p_standalone_traces
@@ -50,6 +24,15 @@ class T_event extends T_logging_base_6_util {
 
     String get_message() {
         return tokenize(p_message, c().GC_MESSAGE_FORMAT_TOKEN_SEPARATOR_BEFORE, c().GC_MESSAGE_FORMAT_TOKEN_TRACE, get_traces_standalone())
+    }
+
+    void serialize_traces() {
+        for (T_trace l_trace in p_standalone_traces) {
+            l_trace.serialize_trace()
+        }
+        for (T_trace l_trace in p_execution_node.get_parameter_traces()) {
+            l_trace.serialize_trace()
+        }
     }
 
     String get_event_type() {

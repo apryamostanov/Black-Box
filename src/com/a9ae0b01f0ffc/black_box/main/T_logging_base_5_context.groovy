@@ -31,9 +31,9 @@ class T_logging_base_5_context extends T_logging_base_4_const {
         }
     }
 
-    static void init_logger(String i_logger_conf_file_name) {
+    static void init_logger(String i_logger_conf_file_name, String i_commons_conf_file_name) {
         check_init()
-        p_context_thread_local.get().p_logger = new T_logger_builder().create_logger(i_logger_conf_file_name)
+        p_context_thread_local.get().p_logger = new T_logger_builder().create_logger(i_logger_conf_file_name, i_commons_conf_file_name)
     }
 
     static void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name) {
@@ -42,7 +42,7 @@ class T_logging_base_5_context extends T_logging_base_4_const {
             p_context_thread_local.get().p_common_conf = new T_logging_conf(i_commons_conf_file_name)
         }
         p_context_thread_local.get().p_ioc = new T_class_loader(c().GC_CLASS_LOADER_CONF_FILE_NAME)
-        init_logger(i_logger_conf_file_name)
+        init_logger(i_logger_conf_file_name, i_commons_conf_file_name)
     }
 
     private static void check_init() {

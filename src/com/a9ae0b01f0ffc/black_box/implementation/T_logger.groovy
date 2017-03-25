@@ -15,6 +15,11 @@ class T_logger extends T_logging_base_6_util {
     final T_execution_node PC_INITIAL_STARTING_EXECUTION_NODE = new T_execution_node(c().GC_INITIAL_STARTING_EXECUTION_NODE_NAME)
     private HashMap<String, Integer> p_stat_exec_node_calls_count = new HashMap<String, Integer>()
     private HashMap<String, Long> p_statistics_method_calls_duration = new HashMap<String, Long>()
+    String p_commons_conf_file_name = GC_EMPTY_STRING
+
+    void set_commons_conf_file_name(String i_commons_conf_file_name) {
+        p_commons_conf_file_name
+    }
 
     T_event create_event(String i_event_type) {
         T_event l_event = new T_event()
@@ -22,6 +27,12 @@ class T_logger extends T_logging_base_6_util {
         l_event.set_datetimestamp(new Date())
         l_event.set_execution_node(get_current_execution_node())
         return l_event
+    }
+
+    void flush() {
+        for (T_destination l_destination in p_destinations) {
+            l_destination.flush()
+        }
     }
 
     void log_generic(T_event i_event) {
