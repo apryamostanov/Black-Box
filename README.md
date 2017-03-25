@@ -9,6 +9,7 @@ Work in progress. Version: 0.89
 Readiness for usage by public: 15-th August 2017
 
 Performance: Now performance is very good.
+Stability/testing: Testing is done manually on Tomcat Web application, Multithreaded HTTP Client application and Bulk-file processing application. So certain level of assurance is there and you may try it in your application.
 
 Intended purpose of usage:
 - Credit card processing
