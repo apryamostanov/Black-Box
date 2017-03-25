@@ -39,6 +39,15 @@ class T_logger_builder extends T_logging_base_6_util {
         if (!T_destination_xml.@location.isEmpty()) {
             l_destination.set_location(T_destination_xml.@location.text())
         }
+        if (!T_destination_xml.@auto_zip.isEmpty()) {
+            if (T_destination_xml.@auto_zip.text() == GC_TRUE_STRING) {
+                l_destination.set_auto_zip(GC_TRUE)
+            }
+        }
+        for (l_event_xml in T_destination_xml.children()) {
+            l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))
+        }
+        /*\/\/\/ This should always come last, as we clone the created destination*/
         if (!T_destination_xml.@async.isEmpty()) {
             if (T_destination_xml.@async.text() == GC_TRUE_STRING) {
                 l_destination.set_async_storage(new T_async_storage(l_destination.clone_with_no_async(), i_commons_conf_file_name, Thread.currentThread()))
@@ -46,9 +55,6 @@ class T_logger_builder extends T_logging_base_6_util {
                     l_destination.p_async_storage.start()
                 }
             }
-        }
-        for (l_event_xml in T_destination_xml.children()) {
-            l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))
         }
         return l_destination
     }

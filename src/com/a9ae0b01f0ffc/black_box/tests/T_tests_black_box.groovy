@@ -58,4 +58,14 @@ class T_tests_black_box {
         T_logging_base_6_util.l().log_run_method({new Z().q()})
     }
 
+    @Test
+    void test_009() {
+        T_logging_base_6_util.zip_file(new File("C:\\Users\\anton\\IdeaProjects\\VSMSGEN\\LOGS\\DEBUG\\20170325_220504557_anton.xml"))
+    }
+
+    @Test
+    void test_010() {
+        System.out.println(new File("C:\\Users\\anton\\IdeaProjects\\VSMSGEN\\LOGS\\DEBUG\\").list())
+    }
+
 }

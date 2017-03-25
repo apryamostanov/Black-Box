@@ -11,6 +11,15 @@ abstract class T_destination extends T_logging_base_6_util {
     HashMap<String, T_event> p_configuration_events_by_name = new HashMap<String, T_event>()
     String p_location = GC_EMPTY_STRING
     T_async_storage p_async_storage = GC_NULL_OBJ_REF as T_async_storage
+    Boolean p_is_auto_zip = GC_FALSE
+
+    Boolean is_auto_zip() {
+        return p_is_auto_zip
+    }
+
+    void set_auto_zip(Boolean i_is_auto_zip) {
+        p_is_auto_zip = i_is_auto_zip
+    }
 
     void set_async_storage(T_async_storage i_async_storage) {
         p_async_storage = i_async_storage

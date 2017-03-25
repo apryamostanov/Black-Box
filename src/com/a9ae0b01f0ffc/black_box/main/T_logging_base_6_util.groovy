@@ -8,6 +8,8 @@ import groovy.inspect.swingui.AstNodeToScriptVisitor
 import org.codehaus.groovy.ast.ASTNode
 
 import java.util.logging.Level
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 class T_logging_base_6_util extends T_logging_base_5_context {
 
@@ -107,6 +109,25 @@ class T_logging_base_6_util extends T_logging_base_5_context {
 
     static ArrayList<T_trace> objects2traces_array(Object[] i_objects) {
         return objects2traces(Arrays.asList(i_objects))
+    }
+
+    static void zip_file(File i_file) {
+        final Integer LC_BUFFER_LENGTH = 2048
+        if (i_file.isFile()) {
+            FileOutputStream l_file_output_stream = new FileOutputStream(i_file.getAbsolutePath() + GC_ZIP_SUFFIX)
+            ZipOutputStream l_zip_output_stream = new ZipOutputStream(new BufferedOutputStream(l_file_output_stream))
+            byte[] l_byte_array = new byte[LC_BUFFER_LENGTH]
+            FileInputStream l_file_input_stream = new FileInputStream(i_file)
+            BufferedInputStream l_buffered_input_stream = new BufferedInputStream(l_file_input_stream, LC_BUFFER_LENGTH)
+            ZipEntry entry = new ZipEntry(i_file.getName())
+            l_zip_output_stream.putNextEntry(entry)
+            Integer l_count_bytes
+            while ((l_count_bytes = l_buffered_input_stream.read(l_byte_array, GC_ZERO, LC_BUFFER_LENGTH)) != GC_CHAR_INDEX_NOT_EXISTING) {
+                l_zip_output_stream.write(l_byte_array, GC_ZERO, l_count_bytes)
+            }
+            l_buffered_input_stream.close()
+            l_zip_output_stream.close()
+        }
     }
 
     static Level jul_level_by_name(String i_level_name) {
