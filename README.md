@@ -5,7 +5,7 @@ If used in Error-only mode (@I_black_box("error")) - it logs only errors.
 
 As of now it works ~3 times faster than java.util.logging, not saying about HUGE amount of boiler plate code and maintenance.
 
-Work in progress. Version: 0.88
+Work in progress. Version: 0.89
 Readiness for usage by public: 15-th August 2017
 
 Performance: Now performance is very good.
