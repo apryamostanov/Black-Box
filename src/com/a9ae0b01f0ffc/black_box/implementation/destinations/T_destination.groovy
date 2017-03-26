@@ -59,7 +59,8 @@ abstract class T_destination extends T_logging_base_6_util {
 
     void flush() {
         if (is_not_null(p_async_storage)) {
-            p_async_storage.flush()
+            p_async_storage.start()
+            p_async_storage = p_async_storage.clone()
         }
     }
 

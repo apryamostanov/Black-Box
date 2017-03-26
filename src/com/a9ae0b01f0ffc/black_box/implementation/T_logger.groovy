@@ -151,6 +151,16 @@ class T_logger extends T_logging_base_6_util {
     }
 
     void log_exit_method() {
+        /*\/\/\/ There is no Finally block for Statements and Expressions, so we implicitly close them upon reaching to Method's Finally block*/
+        while (get_current_execution_node().get_type() != GC_EXECUTION_NODE_TYPE_METHOD) {
+            if (get_current_execution_node().get_type() == GC_EXECUTION_NODE_TYPE_EXPRESSION) {
+                log_exit_expression()
+            } else if (get_current_execution_node().get_type() == GC_EXECUTION_NODE_TYPE_STATEMENT) {
+                log_exit_statement()
+            } else {
+                throw new E_application_exception(s.Internal_error_unexpected_execution_node_type_Z1, get_current_execution_node().get_type())
+            }
+        }
         T_event l_event = create_event(GC_EVENT_TYPE_METHOD_EXIT)
         profile_stop_any()
         log_generic(l_event)
@@ -215,7 +225,7 @@ class T_logger extends T_logging_base_6_util {
                 log_exit_expression()
             } else if (get_current_execution_node().get_type() == GC_EXECUTION_NODE_TYPE_STATEMENT) {
                 log_error_statement(i_throwable)
-                log_exit_method()
+                log_exit_statement()
             } else {
                 throw new E_application_exception(s.Internal_error_unexpected_execution_node_type_Z1, get_current_execution_node().get_type())
             }

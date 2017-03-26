@@ -142,7 +142,6 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
             l_result += make_traces(i_source_event.get_execution_node().get_parameter_traces(), PC_TRACE_TAG_NAME_PARAMETER)
         } else if ([GC_EVENT_TYPE_STATEMENT_ENTER, GC_EVENT_TYPE_EXPRESSION_ENTER].contains(l_event_type)) {
             l_result += open_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_CODE, i_source_event.get_execution_node().get_code()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
-            l_result += make_traces(i_source_event.get_execution_node().get_parameter_traces(), PC_TRACE_TAG_NAME_PARAMETER)
         } else if (l_event_type == GC_EVENT_TYPE_RESULT) {
             l_result += make_traces([i_source_event.get_execution_node().get_result()].toList() as ArrayList<T_trace>, PC_TRACE_TAG_NAME_RESULT)
         } else if ([GC_EVENT_TYPE_METHOD_EXIT].contains(l_event_type)) {

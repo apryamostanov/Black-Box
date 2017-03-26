@@ -76,13 +76,13 @@ class T_black_box_visitor extends CodeVisitorSupport {
                 super.visitMethodCallExpression(i_method_call_expression)
                 if (i_method_call_expression.getObjectExpression() instanceof MethodCallExpression) {
                     i_method_call_expression.setObjectExpression(p_black_box_transformation.decorate_expression(i_method_call_expression.getObjectExpression(), i_method_call_expression.getObjectExpression().getClass().getSimpleName(), l_orig_receiver_code))
-                }
+                }/*
                 ArrayList<Expression> l_expressions = new ArrayList<Expression>()
                 for (Expression l_expression in ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions()) {
                     l_expressions.add(p_black_box_transformation.decorate_expression(l_expression, "argument", l_orig_codes.get(l_expression)))
                 }
                 ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().clear()
-                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().addAll(l_expressions)
+                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().addAll(l_expressions)*/
             } else {
                 Expression l_orig_args = l_method_call_expression.getArguments()
                 ArrayList<Expression> l_modified_args = new ArrayList<Expression>()
@@ -132,13 +132,10 @@ class T_black_box_visitor extends CodeVisitorSupport {
 
     @Override
     void visitBinaryExpression(BinaryExpression i_binary_expression) {
+        String l_orig_code = code2attribute(ast2text(i_binary_expression))
         super.visitBinaryExpression(i_binary_expression)
-        String l_text = i_binary_expression.getRightExpression().getText()
-        if (l_text.contains("\"") || l_text.contains("'") || l_text.contains("\n") || l_text.length() > new Integer(c().GC_MAX_CODE_LENGTH)) {
-            l_text = i_binary_expression.getRightExpression().getType().getNameWithoutPackage()
-        }
         if (!(i_binary_expression.getRightExpression() instanceof ConstantExpression || i_binary_expression.getRightExpression() instanceof ClassExpression || i_binary_expression.getRightExpression() instanceof EmptyExpression)) {
-            i_binary_expression.setRightExpression(p_black_box_transformation.decorate_expression(i_binary_expression.getRightExpression(), i_binary_expression.getRightExpression().getClass().getSimpleName(), l_text))
+            i_binary_expression.setRightExpression(p_black_box_transformation.decorate_expression(i_binary_expression.getRightExpression(), i_binary_expression.getRightExpression().getClass().getSimpleName(), l_orig_code))
         }
     }
 
@@ -203,9 +200,10 @@ class T_black_box_visitor extends CodeVisitorSupport {
     @Override
     void visitReturnStatement(ReturnStatement i_return_statement) {
         //todo return # number
+        String l_orig_code = code2attribute(ast2text(i_return_statement.getExpression()))
         super.visitReturnStatement(i_return_statement)
         if (GC_BLACK_BOX_TYPE_FULL == p_black_box_transformation.p_black_box_level) {
-            i_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_util"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(i_return_statement.getExpression().getText()))))))
+            i_return_statement.setExpression(new MethodCallExpression(new VariableExpression("l_logger"), "log_result", new ArgumentListExpression(new MethodCallExpression(new VariableExpression("l_util"), "r", new ArgumentListExpression(i_return_statement.getExpression(), new ConstantExpression(l_orig_code))))))
         }
     }
 

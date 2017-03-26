@@ -51,8 +51,15 @@ class T_logger_builder extends T_logging_base_6_util {
         if (!T_destination_xml.@async.isEmpty()) {
             if (T_destination_xml.@async.text() == GC_TRUE_STRING) {
                 l_destination.set_async_storage(new T_async_storage(l_destination.clone_with_no_async(), i_commons_conf_file_name, Thread.currentThread()))
-                if (T_destination_xml.@async_mode.text() != GC_ASYNC_MODE_FLUSH) {
+                l_destination.p_async_storage.setDaemon(GC_FALSE)
+                l_destination.p_async_storage.setName(Thread.currentThread().getName() + GC_LOGGER_THREAD_NAME_SUFFIX)
+                if (T_destination_xml.@async_mode.text() == GC_ASYNC_MODE_REALTIME) {
+                    l_destination.p_async_storage.set_mode(GC_ASYNC_MODE_REALTIME)
                     l_destination.p_async_storage.start()
+                } else if (T_destination_xml.@async_mode.text() == GC_ASYNC_MODE_FLUSH) {
+                    l_destination.p_async_storage.set_mode(GC_ASYNC_MODE_FLUSH)
+                } else {
+                    throw new E_application_exception(s.Unsupported_async_mode_Z1, T_destination_xml.@async_mode.text())
                 }
             }
         }
