@@ -147,7 +147,7 @@ class T_event_formatter_xml_hierarchical extends T_event_formatter {
         } else if ([GC_EVENT_TYPE_METHOD_EXIT].contains(l_event_type)) {
             l_result += make_line(get_elapsed_time(i_source_event))
             l_result += close_tag(i_source_event.get_execution_node().get_name_xml())
-        }  else if ([GC_EVENT_TYPE_METHOD_EXIT, GC_EVENT_TYPE_STATEMENT_EXIT, GC_EVENT_TYPE_EXPRESSION_EXIT].contains(l_event_type)) {
+        } else if ([GC_EVENT_TYPE_METHOD_EXIT, GC_EVENT_TYPE_STATEMENT_EXIT, GC_EVENT_TYPE_EXPRESSION_EXIT].contains(l_event_type)) {
             l_result += make_line(get_elapsed_time(i_source_event))
             l_result += close_tag(i_source_event.get_execution_node().get_name_xml(), attrs(attr(PC_ATTR_DATETIMESTAMP, i_source_event.get_datetimestamp()), attr(PC_ATTR_LINE, get_line_attr(i_source_event))))
         } else if ([GC_EVENT_TYPE_METHOD_ERROR, GC_EVENT_TYPE_STATEMENT_ERROR, GC_EVENT_TYPE_EXPRESSION_ERROR].contains(l_event_type)) {
