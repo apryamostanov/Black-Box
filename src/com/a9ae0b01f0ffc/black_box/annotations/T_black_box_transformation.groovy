@@ -142,11 +142,11 @@ class T_black_box_transformation extends AbstractASTTransformation {
             } else {
                 l_finally_block = new EmptyStatement()
             }
-            l_decorated_block_statement.addStatement(create_try_catch(PC_LOGGER_VARIABLE_NAME + PC_PROC_NAME_LOG_ERROR_METHOD_STANDALONE + GC_BRACKET_OPEN + GC_XML_DOUBLE_QUOTE + p_class_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + GC_XML_DOUBLE_QUOTE + p_method_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + i_method_code.getLineNumber() + GC_COMMA + GC_SPACE + GC_EXCEPTION_VARIABLE_NAME, l_try_block, l_finally_block, i_parameters))
+            l_decorated_block_statement.addStatement(create_try_catch(PC_LOGGER_VARIABLE_NAME + GC_POINT + PC_PROC_NAME_LOG_ERROR_METHOD_STANDALONE + GC_BRACKET_OPEN + GC_XML_DOUBLE_QUOTE + p_class_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + GC_XML_DOUBLE_QUOTE + p_method_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + i_method_code.getLineNumber() + GC_COMMA + GC_SPACE + GC_EXCEPTION_VARIABLE_NAME, l_try_block, l_finally_block, i_parameters))
         } else if (p_black_box_level == GC_BLACK_BOX_TYPE_PROFILE) {
             l_decorated_block_statement.addStatement(create_log_method_call_with_traces(PC_LOGGER_VARIABLE_NAME + PC_PROC_NAME_PROFILE_START_METHOD + GC_BRACKET_OPEN + GC_XML_DOUBLE_QUOTE + p_class_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + GC_XML_DOUBLE_QUOTE + p_method_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + i_method_code.getLineNumber()))
             l_finally_block = create_log_method_call_with_traces(PC_LOGGER_VARIABLE_NAME + PC_PROC_NAME_PROFILE_STOP_ANY + GC_BRACKET_OPEN)
-            l_decorated_block_statement.addStatement(create_try_catch(PC_LOGGER_VARIABLE_NAME + PC_PROC_NAME_LOG_ERROR_METHOD_STANDALONE + GC_BRACKET_OPEN + GC_XML_DOUBLE_QUOTE + p_class_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + GC_XML_DOUBLE_QUOTE + p_method_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + i_method_code.getLineNumber() + GC_COMMA + GC_SPACE + GC_EXCEPTION_VARIABLE_NAME, l_try_block, l_finally_block, i_parameters))
+            l_decorated_block_statement.addStatement(create_try_catch(PC_LOGGER_VARIABLE_NAME + GC_POINT + PC_PROC_NAME_LOG_ERROR_METHOD_STANDALONE + GC_BRACKET_OPEN + GC_XML_DOUBLE_QUOTE + p_class_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + GC_XML_DOUBLE_QUOTE + p_method_name + GC_XML_DOUBLE_QUOTE + GC_COMMA + GC_SPACE + i_method_code.getLineNumber() + GC_COMMA + GC_SPACE + GC_EXCEPTION_VARIABLE_NAME, l_try_block, l_finally_block, i_parameters))
         } else {
             return i_method_code
         }

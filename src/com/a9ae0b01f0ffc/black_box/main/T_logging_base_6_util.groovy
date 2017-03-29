@@ -18,7 +18,7 @@ class T_logging_base_6_util extends T_logging_base_5_context {
     static String ast2text(ASTNode i_ast_node) {
         StringWriter l_string_writer = new StringWriter()
         i_ast_node.visit(new AstNodeToScriptVisitor(l_string_writer))
-        return l_string_writer.getBuffer().toString()
+        return l_string_writer.getBuffer().toString().replace("\$", GC_EMPTY_STRING)
     }
 
     static String code2element(String i_code_text) {

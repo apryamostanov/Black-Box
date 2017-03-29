@@ -207,7 +207,7 @@ class T_logger extends T_logging_base_6_util {
 
     void log_error_method_standalone(String i_class_name, String i_method_name, Integer i_line_number, Throwable i_throwable, T_trace... i_traces) {
         T_execution_node l_execution_node
-        T_execution_node l_standalone_execution_node = get_ioc().instantiate("T_execution_node") as T_execution_node
+        T_execution_node l_standalone_execution_node = new T_execution_node()
         l_standalone_execution_node.set_name(make_method_execution_node_name(i_class_name, i_method_name, i_line_number))
         l_standalone_execution_node.set_throwable(i_throwable)
         l_standalone_execution_node.set_line_number(i_line_number)
