@@ -2,6 +2,7 @@ package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_async_storage
 import com.a9ae0b01f0ffc.black_box.implementation.T_event
+import com.a9ae0b01f0ffc.black_box.implementation.T_trace
 import com.a9ae0b01f0ffc.black_box.implementation.formatters.T_event_formatter
 import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
 
@@ -40,6 +41,7 @@ abstract class T_destination extends T_logging_base_6_util {
     void log_generic(T_event i_event) {
         if (p_configuration_events_by_name.containsKey(i_event.get_event_type()) || p_configuration_events_by_name.containsKey(GC_EVENT_TYPE_ALL)) {
             if (is_not_null(p_async_storage)) {
+                i_event.set_context_map(l().get_context_map().clone() as HashMap<String, T_trace>)
                 /*\/\/\/Prevent changes on trace objects from separate threads*/
                 i_event.serialize_traces()
                 /*/\/\/\This slows down the main thread, however without this there are Concurrent Modification exceptions on ArrayList serialization (when array list was logged but is being accessed from another thread)*/

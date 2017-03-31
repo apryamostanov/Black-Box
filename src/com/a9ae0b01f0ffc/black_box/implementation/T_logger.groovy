@@ -11,11 +11,19 @@ class T_logger extends T_logging_base_6_util {
 
     private ArrayList<T_destination> p_destinations = new ArrayList<T_destination>()
     private T_execution_node p_current_execution_node = GC_NULL_OBJ_REF as T_execution_node
-    private ArrayList<T_trace> p_trace_context_list = new ArrayList<T_trace>()
+    private HashMap<String, T_trace> p_trace_context_map = new HashMap<String, T_trace>()
     final T_execution_node PC_INITIAL_STARTING_EXECUTION_NODE = new T_execution_node(c().GC_INITIAL_STARTING_EXECUTION_NODE_NAME)
     private HashMap<String, Integer> p_stat_exec_node_calls_count = new HashMap<String, Integer>()
     private HashMap<String, Long> p_statistics_method_calls_duration = new HashMap<String, Long>()
     String p_commons_conf_file_name = GC_EMPTY_STRING
+
+    HashMap<String, T_trace> get_context_map() {
+        return p_trace_context_map
+    }
+
+    void set_context_map(HashMap<String, T_trace> i_trace_context_map) {
+        p_trace_context_map = i_trace_context_map
+    }
 
     void set_commons_conf_file_name(String i_commons_conf_file_name) {
         p_commons_conf_file_name
@@ -41,14 +49,10 @@ class T_logger extends T_logging_base_6_util {
         }
     }
 
-    ArrayList<T_trace> get_trace_context_list() {
-        return p_trace_context_list
-    }
-
     void put_to_context(Object i_object, String i_name) {
         T_trace l_trace = object2trace(i_object)
         l_trace.set_name(i_name)
-        p_trace_context_list.add(l_trace)
+        p_trace_context_map.put(i_name, l_trace)
     }
 
     void add_destination(T_destination T_destination) {

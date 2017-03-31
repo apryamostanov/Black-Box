@@ -1,10 +1,13 @@
 package com.a9ae0b01f0ffc.black_box.main
 
+import com.a9ae0b01f0ffc.black_box.implementation.T_event
 import com.a9ae0b01f0ffc.black_box.implementation.T_trace
+import com.a9ae0b01f0ffc.commons.implementation.config.T_common_conf
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import com.a9ae0b01f0ffc.commons.implementation.static_string.T_static_string
 import com.sun.org.apache.xerces.internal.util.XMLChar
 import groovy.inspect.swingui.AstNodeToScriptVisitor
+import groovy.text.SimpleTemplateEngine
 import org.codehaus.groovy.ast.ASTNode
 
 import java.util.logging.Level
@@ -33,6 +36,19 @@ class T_logging_base_6_util extends T_logging_base_5_context {
             }
         }
         return l_result_name
+    }
+
+    static final String process_location(String i_location, T_common_conf i_commons, T_event i_source_event) {
+        Date l_current_date = new Date()
+        String l_location = i_location
+        l_location = l_location.replace(i_commons.GC_SUBST_USERNAME, GC_USERNAME)
+        l_location = l_location.replace(i_commons.GC_SUBST_DATE, l_current_date.format(i_commons.GC_FILENAME_DATE_FORMAT))
+        l_location = l_location.replace(i_commons.GC_SUBST_TIME, nvl(((i_source_event.get_from_context(GC_CONTEXT_NAME_OPERATION_START_TIME)?.get_ref() as Date)?.format(i_commons.GC_FILENAME_TIME_FORMAT)), GC_EMPTY_STRING) as String)
+        l_location = l_location.replace(i_commons.GC_SUBST_THREADID, i_commons.GC_THREADID)
+        l_location = l_location.replace(i_commons.GC_SUBST_THREADNAME, i_commons.GC_THREADNAME)
+        l_location = l_location.replace(i_commons.GC_SUBST_PROCESSID, GC_PROCESSID)
+        Map l_template_variable_map = ["logger": i_source_event]
+        return new SimpleTemplateEngine().createTemplate(l_location).make(l_template_variable_map).toString()
     }
 
     static String code2attribute(String i_code_text) {
@@ -128,32 +144,6 @@ class T_logging_base_6_util extends T_logging_base_5_context {
             l_buffered_input_stream.close()
             l_zip_output_stream.close()
         }
-    }
-
-    static Level jul_level_by_name(String i_level_name) {
-        Level l_level
-        if (i_level_name == "ALL") {
-            l_level = Level.ALL
-        } else if (i_level_name == "CONFIG") {
-            l_level = Level.CONFIG
-        } else if (i_level_name == "FINE") {
-            l_level = Level.FINE
-        } else if (i_level_name == "FINER") {
-            l_level = Level.FINER
-        } else if (i_level_name == "FINEST") {
-            l_level = Level.FINEST
-        } else if (i_level_name == "INFO") {
-            l_level = Level.INFO
-        } else if (i_level_name == "OFF") {
-            l_level = Level.OFF
-        } else if (i_level_name == "SEVERE") {
-            l_level = Level.SEVERE
-        } else if (i_level_name == "WARNING") {
-            l_level = Level.WARNING
-        } else {
-            throw new E_application_exception(s.Unsupported_java_util_logging_level_Z1, i_level_name)
-        }
-        return l_level
     }
 
 }

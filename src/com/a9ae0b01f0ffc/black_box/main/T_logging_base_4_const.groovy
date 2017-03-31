@@ -57,5 +57,6 @@ class T_logging_base_4_const extends T_common_base_3_utils {
     static final String GC_ASYNC_MODE_FLUSH = "flush"
     static final String GC_ZIP_SUFFIX = ".zip"
     static final String GC_LOGGER_THREAD_NAME_SUFFIX = "L"
+    static final String GC_CONTEXT_NAME_OPERATION_START_TIME = "operation_start_time"
 
 }

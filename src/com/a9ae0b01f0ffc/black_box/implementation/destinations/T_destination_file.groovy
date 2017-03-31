@@ -28,35 +28,25 @@ class T_destination_file extends T_destination {
 
     @Override
     void store(T_event i_source_event) {
-        init()
+        init(i_source_event)
         p_file_writer.write(p_formatter.format_event(i_source_event))
         p_file_writer.flush()
     }
 
-    void init() {
-        if (!p_is_dest_init) {
-            p_current_location = process_location(p_location, c())
+    void init(T_event i_source_event) {
+        String l_new_location = process_location(p_location, c(), i_source_event)
+        if (p_current_location != l_new_location) {
+            p_file_writer?.close()
+            if (p_is_auto_zip && is_not_null(p_file)) {
+                Thread.start({
+                    zip_file(p_file)
+                    p_file.delete()
+                })
+            }
+            p_current_location = l_new_location
             p_file = new File(p_current_location)
             p_file.getParentFile().mkdirs()
             p_file_writer = new FileWriter(p_file, GC_FILE_APPEND_YES)
-            p_is_dest_init = GC_TRUE
-        } else if (p_is_auto_zip) {
-            if (p_location.indexOf(c().GC_SUBST_TIME) != GC_CHAR_INDEX_NOT_EXISTING) {
-                throw new E_application_exception(s.Auto_zip_is_not_supported_when_file_name_mask_contains_Time_Z1, p_location)
-            }
-            String l_new_location = process_location(p_location, c())
-            if (p_current_location != l_new_location) {
-                File l_file_to_zip = p_file
-                Thread.start({
-                    zip_file(l_file_to_zip)
-                    l_file_to_zip.delete()
-                })
-                p_current_location = l_new_location
-                p_file = new File(p_current_location)
-                p_file.getParentFile().mkdirs()
-                p_file_writer = new FileWriter(p_file, GC_FILE_APPEND_YES)
-                p_is_dest_init = GC_TRUE
-            }
         }
     }
 

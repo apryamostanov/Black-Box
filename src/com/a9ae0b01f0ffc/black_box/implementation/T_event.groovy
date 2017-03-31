@@ -13,6 +13,23 @@ class T_event extends T_logging_base_6_util {
     private T_static_string p_message = T_static_string.PC_EMPTY_STATIC_STRING
     private T_execution_node p_execution_node = GC_NULL_OBJ_REF as T_execution_node
     private Integer p_line_number = GC_ZERO
+    private HashMap<String, T_trace> p_trace_context_map = new HashMap<String, T_trace>()
+
+    HashMap<String, T_trace> get_context_map() {
+        return p_trace_context_map
+    }
+
+    void set_context_map(HashMap<String, T_trace> i_trace_context_map) {
+        p_trace_context_map = i_trace_context_map
+    }
+
+    T_trace get_from_context(String i_name) {
+        return p_trace_context_map.get(i_name)
+    }
+
+    T_trace context(String i_name) {
+        return get_from_context(i_name)
+    }
 
     ArrayList<T_trace> get_traces_standalone() {
         return p_standalone_traces
