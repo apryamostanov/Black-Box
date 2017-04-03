@@ -1,6 +1,8 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
+import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
+import org.codehaus.groovy.runtime.StackTraceUtils
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
@@ -38,7 +40,8 @@ class T_async_storage extends Thread {
 
     @Override
     void run() {
-        init_custom(p_conf_name)
+        Boolean LC_IS_NO_ASYNC_TRUE = GC_TRUE
+        init_custom(p_conf_name, LC_IS_NO_ASYNC_TRUE)
         if (p_mode == GC_ASYNC_MODE_REALTIME) {
             while (GC_TRUE) {
                 while (not(p_event_queue.isEmpty())) {

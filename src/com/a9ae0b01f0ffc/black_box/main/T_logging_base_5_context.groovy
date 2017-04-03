@@ -15,10 +15,10 @@ class T_logging_base_5_context extends T_logging_base_4_const {
     protected T_logger p_logger = GC_NULL_OBJ_REF as T_logger
     private Boolean p_is_init = GC_FALSE
 
-    static void init_custom(String i_commons_conf_file_name) {
+    static void init_custom(String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
         check_init()
         p_context_thread_local.get().p_common_conf = new T_logging_conf(i_commons_conf_file_name)
-        init_custom_with_custom_logger(i_commons_conf_file_name, c().GC_DEFAULT_LOGGER_CONF_FILE_NAME)
+        init_custom_with_custom_logger(i_commons_conf_file_name, c().GC_DEFAULT_LOGGER_CONF_FILE_NAME, is_no_async)
     }
 
     static T_class_loader get_ioc() {
@@ -31,18 +31,18 @@ class T_logging_base_5_context extends T_logging_base_4_const {
         }
     }
 
-    static void init_logger(String i_logger_conf_file_name, String i_commons_conf_file_name) {
+    static void init_logger(String i_logger_conf_file_name, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
         check_init()
-        p_context_thread_local.get().p_logger = new T_logger_builder().create_logger(i_logger_conf_file_name, i_commons_conf_file_name)
+        p_context_thread_local.get().p_logger = new T_logger_builder().create_logger(i_logger_conf_file_name, i_commons_conf_file_name, is_no_async)
     }
 
-    static void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name) {
+    static void init_custom_with_custom_logger(String i_commons_conf_file_name, String i_logger_conf_file_name, Boolean is_no_async = GC_FALSE) {
         check_init()
         if (c() == GC_NULL_OBJ_REF) {
             p_context_thread_local.get().p_common_conf = new T_logging_conf(i_commons_conf_file_name)
         }
         p_context_thread_local.get().p_ioc = new T_class_loader(c().GC_CLASS_LOADER_CONF_FILE_NAME)
-        init_logger(i_logger_conf_file_name, i_commons_conf_file_name)
+        init_logger(i_logger_conf_file_name, i_commons_conf_file_name, is_no_async)
     }
 
     private static void check_init() {
