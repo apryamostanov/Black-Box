@@ -11,6 +11,14 @@ class T_trace extends T_logging_base_6_util {
     Object p_ref = GC_NULL_OBJ_REF
     String p_value = GC_EMPTY_STRING
 
+    T_trace() {
+    }
+
+    T_trace(String p_name, Object p_ref) {
+        this.p_name = p_name
+        this.p_ref = p_ref
+    }
+
     void serialize_trace() {
         if (is_null(p_value)) {
             p_value = toString()

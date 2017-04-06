@@ -60,9 +60,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         final String LC_METHOD_NAME = "visit"
-        if (!T_logging_base_5_context.is_init()) {
-            T_logging_base_5_context.init_custom(GC_BLACK_BOX_COMPILER_CONFIG_PATH)
-        }
+        T_logging_base_5_context.init_custom(GC_BLACK_BOX_COMPILER_CONFIG_PATH)
         u.l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO)
         try {
             if (u.c().GC_BLACK_BOX_ENABLED != GC_TRUE_STRING) {

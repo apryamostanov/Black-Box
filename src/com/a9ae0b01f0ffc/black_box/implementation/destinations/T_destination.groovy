@@ -13,6 +13,26 @@ abstract class T_destination extends T_logging_base_6_util {
     String p_location = GC_EMPTY_STRING
     T_async_storage p_async_storage = GC_NULL_OBJ_REF as T_async_storage
     Boolean p_is_auto_zip = GC_FALSE
+    private Date p_init_date = new Date()
+    Closure p_dynamic_location_closure = GC_NULL_OBJ_REF as Closure
+
+    void set_dynamic_location_closure(Closure i_closure) {
+        p_dynamic_location_closure = i_closure
+    }
+
+    Closure get_dynamic_location_closure() {
+        return p_dynamic_location_closure
+    }
+
+    Date get_init_date() {
+        return p_init_date
+    }
+
+    void deinit() {
+        if (is_not_null(p_async_storage)) {
+            p_async_storage.interrupt()
+        }
+    }
 
     Boolean is_auto_zip() {
         return p_is_auto_zip
@@ -47,7 +67,7 @@ abstract class T_destination extends T_logging_base_6_util {
                 /*/\/\/\This slows down the main thread, however without this there are Concurrent Modification exceptions on ArrayList serialization (when array list was logged but is being accessed from another thread)*/
                 p_async_storage.p_event_queue.add(i_event)
                 synchronized (p_async_storage) {
-                    p_async_storage.notifyAll()
+                    p_async_storage.notify()
                 }
             } else {
                 store(i_event)
@@ -60,7 +80,8 @@ abstract class T_destination extends T_logging_base_6_util {
     }
 
     void flush() {
-        if (is_not_null(p_async_storage)) {
+        p_async_storage.notify()
+        if (is_not_null(p_async_storage) && p_async_storage.p_mode == GC_ASYNC_MODE_FLUSH) {
             p_async_storage.start()
             p_async_storage = p_async_storage.clone()
         }

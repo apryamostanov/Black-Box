@@ -1,17 +1,9 @@
 package com.a9ae0b01f0ffc.black_box.implementation
 
 import com.a9ae0b01f0ffc.black_box.implementation.destinations.T_destination
-import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
-import org.codehaus.groovy.runtime.StackTraceUtils
-
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
 
-import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const.GC_ASYNC_MODE_REALTIME
-import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.init_custom
-import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.l
-import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const.*
-import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_3_utils.not
+import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.*
 
 class T_async_storage extends Thread {
 
@@ -40,21 +32,32 @@ class T_async_storage extends Thread {
 
     @Override
     void run() {
-        Boolean LC_IS_NO_ASYNC_TRUE = GC_TRUE
-        init_custom(p_conf_name, LC_IS_NO_ASYNC_TRUE)
-        if (p_mode == GC_ASYNC_MODE_REALTIME) {
-            while (GC_TRUE) {
+        try {
+            Boolean LC_IS_NO_ASYNC_TRUE = GC_TRUE
+            init_custom(p_conf_name, LC_IS_NO_ASYNC_TRUE)
+            if (p_mode == GC_ASYNC_MODE_REALTIME) {
+                while (GC_TRUE) {
+                    while (not(p_event_queue.isEmpty())) {
+                        p_synchronous_destination.store(p_event_queue.poll())
+                    }
+                    synchronized (this) {
+                        try {
+                            if (isInterrupted()) {
+                                return
+                            }
+                            wait()
+                        } catch (InterruptedException e_interrupted) {
+                            return
+                        }
+                    }
+                }
+            } else {
                 while (not(p_event_queue.isEmpty())) {
                     p_synchronous_destination.store(p_event_queue.poll())
                 }
-                synchronized (this) {
-                    wait()
-                }
             }
-        } else {
-            while (not(p_event_queue.isEmpty())) {
-                p_synchronous_destination.store(p_event_queue.poll())
-            }
+        } finally {
+            deinit()
         }
     }
 

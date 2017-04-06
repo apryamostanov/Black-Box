@@ -1,6 +1,7 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_event
+import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
 import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import groovy.transform.ToString
 
@@ -23,6 +24,7 @@ class T_destination_file extends T_destination {
         l_result.p_formatter = p_formatter
         l_result.p_configuration_events_by_name = p_configuration_events_by_name
         l_result.p_location = p_location
+        l_result.p_dynamic_location_closure = p_dynamic_location_closure
         return l_result
     }
 
@@ -34,13 +36,14 @@ class T_destination_file extends T_destination {
     }
 
     void init(T_event i_source_event) {
-        String l_new_location = process_location(p_location, c(), i_source_event)
+        String l_new_location = process_location(p_location, c(), i_source_event, this)
         if (p_current_location != l_new_location) {
             p_file_writer?.close()
+            File l_file_to_zip = p_file
             if (p_is_auto_zip && is_not_null(p_file)) {
                 Thread.start({
-                    zip_file(p_file)
-                    p_file.delete()
+                    zip_file(l_file_to_zip)
+                    l_file_to_zip.delete()
                 })
             }
             p_current_location = l_new_location

@@ -25,9 +25,7 @@ class T_fix_variable_scopes_transformation extends AbstractASTTransformation {
 
     public void visit(ASTNode[] nodes, final SourceUnit source) {
         final String LC_METHOD_NAME = "visit"
-        if (!T_logging_base_5_context.is_init()) {
-            T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
-        }
+        T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
         l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, T_logging_base_6_util.GC_ZERO)
         try {
             init(nodes, source)

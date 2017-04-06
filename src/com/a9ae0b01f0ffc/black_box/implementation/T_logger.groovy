@@ -17,6 +17,12 @@ class T_logger extends T_logging_base_6_util {
     private HashMap<String, Long> p_statistics_method_calls_duration = new HashMap<String, Long>()
     String p_commons_conf_file_name = GC_EMPTY_STRING
 
+    void deinit() {
+        for (T_destination l_destination in p_destinations) {
+            l_destination.deinit()
+        }
+    }
+
     HashMap<String, T_trace> get_context_map() {
         return p_trace_context_map
     }

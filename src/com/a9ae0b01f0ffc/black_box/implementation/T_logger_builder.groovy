@@ -48,6 +48,9 @@ class T_logger_builder extends T_logging_base_6_util {
             l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))
         }
         /*\/\/\/ This should always come last, as we clone the created destination*/
+        if (is_not_null(c().GC_DYNAMIC_TOKEN_CODE)) {
+            l_destination.set_dynamic_location_closure(new GroovyShell().evaluate(c().GC_DYNAMIC_TOKEN_CODE) as Closure)
+        }
         if (!T_destination_xml.@async.isEmpty()) {
             if (T_destination_xml.@async.text() == GC_TRUE_STRING && not(is_no_async)) {
                 l_destination.set_async_storage(new T_async_storage(l_destination.clone_with_no_async(), i_commons_conf_file_name, Thread.currentThread()))
@@ -71,5 +74,7 @@ class T_logger_builder extends T_logging_base_6_util {
         l_event.set_event_type(i_event_xml.name())
         return l_event
     }
+
+
 
 }

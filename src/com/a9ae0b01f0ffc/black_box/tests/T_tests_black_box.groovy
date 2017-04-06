@@ -32,7 +32,7 @@ class T_tests_black_box {
 
     @Test
     void test_004() {
-       // T_black_box_transformation.create_log_method_call_with_traces("l_logger.log_enter_expression(ConstructorCallExpression, new com.a9ae0b01f0ffc.VSMSGEN.implementation.T_vts_log_parser(), 126 ))
+        // T_black_box_transformation.create_log_method_call_with_traces("l_logger.log_enter_expression(ConstructorCallExpression, new com.a9ae0b01f0ffc.VSMSGEN.implementation.T_vts_log_parser(), 126 ))
     }
 
     @Test
@@ -56,7 +56,7 @@ class T_tests_black_box {
     @Test
     void test_008() {
         T_logging_base_5_context.init_custom("C:/COMPILE/with_logging/commons.conf")
-        T_logging_base_6_util.l().log_run_method({new Z().q()})
+        T_logging_base_6_util.l().log_run_method({ new Z().q() })
     }
 
     @Test
@@ -76,6 +76,16 @@ class T_tests_black_box {
         System.out.println(T_logging_base_5_context.l().get_from_context("name"))
         //System.out.println(new File("C:\\Users\\anton.pryamostanov\\IdeaProjects\\Black-Box\\src\\com\\a9ae0b01f0ffc\\black_box\\tests\\m.txt").readLines().first())
         System.out.println(T_logging_base_6_util.process_location(new File("C:\\Users\\anton.pryamostanov\\IdeaProjects\\Black-Box\\src\\com\\a9ae0b01f0ffc\\black_box\\tests\\m.txt").readLines().first(), T_logging_base_6_util.c()))
+    }
+
+    @Test
+    void test_012() {
+        T_logging_base_6_util.init_custom("C:\\middleware\\conf\\black_box\\logger_commons.conf")
+        T_logging_base_6_util.l().put_to_context(new Date(), "operation_start_time")
+        T_logging_base_6_util.l().put_to_context("123", "UniqueID")
+        T_logging_base_6_util.l().log_debug(T_logging_base_6_util.s.zzz)
+        T_logging_base_6_util.l().flush()
+        Thread.sleep(6000)
     }
 
 }
