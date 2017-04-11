@@ -14,11 +14,11 @@ class T_logging_base_5_context extends T_logging_base_4_const {
     private T_logging_conf p_conf = GC_NULL_OBJ_REF as T_logging_conf
     protected T_logger p_logger = GC_NULL_OBJ_REF as T_logger
 
-    static void init_custom(String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
+    static void init_custom(String i_commons_conf_file_name, Boolean i_force_no_async = GC_FALSE, Closure i_dynamic_name_closure = GC_NULL_OBJ_REF as Closure) {
         p_context_thread_local.set(new T_logging_base_5_context())
         get_context().p_conf = new T_logging_conf(i_commons_conf_file_name)
         get_context().p_ioc = new T_class_loader(c().GC_CLASS_LOADER_CONF_FILE_NAME)
-        get_context().p_logger = new T_logger_builder().create_logger(c().GC_DEFAULT_LOGGER_CONF_FILE_NAME, i_commons_conf_file_name, is_no_async)
+        get_context().p_logger = new T_logger_builder().create_logger(c().GC_DEFAULT_LOGGER_CONF_FILE_NAME, i_commons_conf_file_name, i_force_no_async, i_dynamic_name_closure)
     }
 
     static void deinit() {

@@ -80,7 +80,7 @@ class T_tests_black_box {
 
     @Test
     void test_012() {
-        T_logging_base_6_util.init_custom("C:\\middleware\\conf\\black_box\\logger_commons.conf")
+        T_logging_base_6_util.init_custom("C:\\middleware\\conf\\black_box\\logger_commons.conf", false, "z")
         T_logging_base_6_util.l().put_to_context(new Date(), "operation_start_time")
         T_logging_base_6_util.l().put_to_context("123", "UniqueID")
         T_logging_base_6_util.l().log_debug(T_logging_base_6_util.s.zzz)

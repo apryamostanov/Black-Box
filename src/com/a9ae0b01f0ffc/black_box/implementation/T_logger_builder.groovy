@@ -12,22 +12,22 @@ class T_logger_builder extends T_logging_base_6_util {
 
     GPathResult p_conf = GC_NULL_OBJ_REF as GPathResult
 
-    T_logger create_logger(GPathResult i_log_conf, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
+    T_logger create_logger(GPathResult i_log_conf, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE, Closure i_dynamic_name_closure = GC_NULL_OBJ_REF as Closure) {
         p_conf = i_log_conf
         T_logger l_logger = new T_logger()
         for (l_destination_xml in p_conf.children()) {
-            l_logger.add_destination(init_destination(l_destination_xml as GPathResult, i_commons_conf_file_name, is_no_async))
+            l_logger.add_destination(init_destination(l_destination_xml as GPathResult, i_commons_conf_file_name, is_no_async, i_dynamic_name_closure))
         }
         return l_logger
     }
 
-    T_logger create_logger(String i_conf_file_name, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
-        T_logger l_logger = create_logger((GPathResult) new XmlSlurper().parse(i_conf_file_name), i_commons_conf_file_name, is_no_async)
+    T_logger create_logger(String i_conf_file_name, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE, Closure i_dynamic_name_closure = GC_NULL_OBJ_REF as Closure) {
+        T_logger l_logger = create_logger((GPathResult) new XmlSlurper().parse(i_conf_file_name), i_commons_conf_file_name, is_no_async, i_dynamic_name_closure)
         l_logger.set_commons_conf_file_name(i_commons_conf_file_name)
         return l_logger
     }
 
-    static T_destination init_destination(GPathResult T_destination_xml, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE) {
+    static T_destination init_destination(GPathResult T_destination_xml, String i_commons_conf_file_name, Boolean is_no_async = GC_FALSE, Closure i_dynamic_name_closure = GC_NULL_OBJ_REF as Closure) {
         T_destination l_destination = (T_destination) get_ioc().instantiate(T_destination_xml.name())
         if (!T_destination_xml.@formatter.isEmpty()) {
             T_event_formatter l_event_formatter = get_ioc().instantiate(T_destination_xml.@formatter.text()) as T_event_formatter
@@ -48,8 +48,8 @@ class T_logger_builder extends T_logging_base_6_util {
             l_destination.add_configuration_event(init_event((GPathResult) l_event_xml))
         }
         /*\/\/\/ This should always come last, as we clone the created destination*/
-        if (is_not_null(c().GC_DYNAMIC_TOKEN_CODE)) {
-            l_destination.set_dynamic_location_closure(new GroovyShell().evaluate(c().GC_DYNAMIC_TOKEN_CODE) as Closure)
+        if (is_not_null(i_dynamic_name_closure)) {
+            l_destination.set_dynamic_location_closure(i_dynamic_name_closure)
         }
         if (!T_destination_xml.@async.isEmpty()) {
             if (T_destination_xml.@async.text() == GC_TRUE_STRING && not(is_no_async)) {
