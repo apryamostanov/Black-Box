@@ -70,6 +70,7 @@ abstract class T_destination extends T_logging_base_6_util {
                     p_async_storage.notify()
                 }
             } else {
+                i_event.set_context_map(l().get_context_map())
                 store(i_event)
             }
         }
