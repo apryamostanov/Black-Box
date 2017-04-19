@@ -1,8 +1,6 @@
 package com.a9ae0b01f0ffc.black_box.implementation.destinations
 
 import com.a9ae0b01f0ffc.black_box.implementation.T_event
-import com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const
-import com.a9ae0b01f0ffc.commons.implementation.exceptions.E_application_exception
 import groovy.transform.ToString
 
 @ToString(includeNames = true, includeFields = true)
@@ -29,16 +27,17 @@ class T_destination_file extends T_destination {
     }
 
     @Override
-    void store(T_event i_source_event) {
+    synchronized void store(T_event i_source_event) {
         init(i_source_event)
         p_file_writer.write(p_formatter.format_event(i_source_event))
         p_file_writer.flush()
     }
 
-    void init(T_event i_source_event) {
+    synchronized void init(T_event i_source_event) {
         String l_new_location = process_location(p_location, c(), i_source_event, this)
         if (p_current_location != l_new_location) {
             p_file_writer?.close()
+            p_file_writer = GC_NULL_OBJ_REF as FileWriter
             File l_file_to_zip = p_file
             if (p_is_auto_zip && is_not_null(p_file)) {
                 Thread.start({

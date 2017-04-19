@@ -6,6 +6,9 @@ import com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util
 import org.codehaus.groovy.runtime.GStringImpl
 import org.junit.Test
 
+import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const.getGC_BLACK_BOX_COMPILER_CONFIG_PATH
+import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const.getGC_CONTEXT_NAME_METHOD_NAME
+
 class T_tests_black_box {
 
     @Test
@@ -80,7 +83,7 @@ class T_tests_black_box {
 
     @Test
     void test_012() {
-        T_logging_base_6_util.init_custom("C:\\middleware\\conf\\black_box\\logger_commons.conf", false, "z")
+        T_logging_base_6_util.init_custom(GC_BLACK_BOX_COMPILER_CONFIG_PATH, false, {event -> return event.context(GC_CONTEXT_NAME_METHOD_NAME).toString()})
         T_logging_base_6_util.l().put_to_context(new Date(), "operation_start_time")
         T_logging_base_6_util.l().put_to_context("123", "UniqueID")
         T_logging_base_6_util.l().log_debug(T_logging_base_6_util.s.zzz)

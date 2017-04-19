@@ -5,10 +5,8 @@ import groovy.transform.ToString
 import org.codehaus.groovy.ast.CodeVisitorSupport
 import org.codehaus.groovy.ast.expr.*
 import org.codehaus.groovy.ast.stmt.*
-import org.codehaus.groovy.ast.tools.GeneralUtils
 
 import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_4_const.getGC_BLACK_BOX_TYPE_FULL
-import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.c
 import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_5_context.l
 import static com.a9ae0b01f0ffc.black_box.main.T_logging_base_6_util.*
 import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_const.GC_NULL_OBJ_REF
@@ -16,11 +14,6 @@ import static com.a9ae0b01f0ffc.commons.implementation.main.T_common_base_1_cons
 
 @ToString(includeNames = true, includeFields = true)
 class T_black_box_visitor extends CodeVisitorSupport {
-
-    static
-    final HashMap<String, String> PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS = ["log_info": "info", "log_debug": "debug", "log_warning": "warning", "log_receive_tcp": "receive_tcp", "log_trace": "traces"]
-    static final String PC_AUTOREPLACEMENT_TARGET_FUNCTION = "log_generic_with_message"
-    static final ArrayList<String> PC_LOGGING_FUNCTIONS_WITH_MESSAGE = ["log_info", "log_warning", "log_debug"]
 
     static final String PC_CLASS_NAME = "T_black_box_visitor"
     T_black_box_transformation p_black_box_transformation = GC_NULL_OBJ_REF as T_black_box_transformation
@@ -67,45 +60,13 @@ class T_black_box_visitor extends CodeVisitorSupport {
         l_logger.log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, i_method_call_expression.getLineNumber(), r(i_method_call_expression, "i_method_call_expression"))
         try {
             HashMap<Expression, String> l_orig_codes = new HashMap<Expression, String>()
-            for (Expression l_expression in ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions()) {
+            for (Expression l_expression in ((ArgumentListExpression) i_method_call_expression.getArguments()).getExpressions()) {
                 l_orig_codes.put(l_expression, code2attribute(ast2text(l_expression)))
             }
             String l_orig_receiver_code = code2attribute(ast2text(i_method_call_expression.getObjectExpression()))
-            MethodCallExpression l_method_call_expression = i_method_call_expression
-            if (not(PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS.keySet().contains(l_method_call_expression.getMethodAsString()))) {
-                super.visitMethodCallExpression(i_method_call_expression)
-                if (i_method_call_expression.getObjectExpression() instanceof MethodCallExpression) {
-                    i_method_call_expression.setObjectExpression(p_black_box_transformation.decorate_expression(i_method_call_expression.getObjectExpression(), i_method_call_expression.getObjectExpression().getClass().getSimpleName(), l_orig_receiver_code))
-                }/*
-                ArrayList<Expression> l_expressions = new ArrayList<Expression>()
-                for (Expression l_expression in ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions()) {
-                    l_expressions.add(p_black_box_transformation.decorate_expression(l_expression, "argument", l_orig_codes.get(l_expression)))
-                }
-                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().clear()
-                ((ArgumentListExpression)i_method_call_expression.getArguments()).getExpressions().addAll(l_expressions)*/
-            } else {
-                Expression l_orig_args = l_method_call_expression.getArguments()
-                ArrayList<Expression> l_modified_args = new ArrayList<Expression>()
-                if (l_orig_args instanceof ArgumentListExpression) {
-                    l_modified_args.add(GeneralUtils.constX(PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS.get(l_method_call_expression.getMethodAsString())))
-//event type
-                    l_modified_args.add(GeneralUtils.constX(l_method_call_expression.getLineNumber()))
-                    if (PC_LOGGING_FUNCTIONS_WITH_MESSAGE.contains(l_method_call_expression.getMethodAsString())) {
-                        l_modified_args.add(l_orig_args.getExpressions().first()) //message
-                    }
-                    for (Expression l_argument in l_orig_args.getExpressions()) {
-                        if (l_argument == l_orig_args.getExpressions().first()) {
-                            if (!PC_LOGGING_FUNCTIONS_WITH_MESSAGE.contains(l_method_call_expression.getMethodAsString())) {
-                                l_modified_args.add(l_orig_args.getExpressions().first()) //not a message
-                            }
-                        } else {
-                            l_modified_args.add(GeneralUtils.callX(l_method_call_expression.getObjectExpression(), "r", GeneralUtils.args(l_argument, GeneralUtils.constX(l_argument.getText()))))
-                        }
-                    }
-                    MethodCallExpression l_new_method_call_expression = GeneralUtils.callX(l_method_call_expression.getObjectExpression(), PC_AUTOREPLACEMENT_TARGET_FUNCTION, GeneralUtils.args(l_modified_args))
-                    l_method_call_expression.setMethod(l_new_method_call_expression.getMethod())
-                    l_method_call_expression.setArguments(l_new_method_call_expression.getArguments())
-                }
+            super.visitMethodCallExpression(i_method_call_expression)
+            if (i_method_call_expression.getObjectExpression() instanceof MethodCallExpression) {
+                i_method_call_expression.setObjectExpression(p_black_box_transformation.decorate_expression(i_method_call_expression.getObjectExpression(), i_method_call_expression.getObjectExpression().getClass().getSimpleName(), l_orig_receiver_code))
             }
         } catch (Throwable e_others) {
             l_logger.log_error_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO, e_others)
@@ -159,11 +120,7 @@ class T_black_box_visitor extends CodeVisitorSupport {
             } else if (l_statement_to_modify instanceof ExpressionStatement) {
                 if (l_statement_to_modify.getExpression() instanceof MethodCallExpression) {
                     MethodCallExpression l_method_call_expression = l_statement_to_modify.getExpression() as MethodCallExpression
-                    if (!(PC_LOGGING_AUTOREPLACEMENT_FUNCTIONS.keySet().contains(l_method_call_expression.getMethodAsString()) || PC_AUTOREPLACEMENT_TARGET_FUNCTION == l_method_call_expression.getMethodAsString())) {
-                        l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, l_method_call_expression.getClass().getSimpleName(), l_orig_codes_map.get(l_statement_to_modify)))
-                    } else {
-                        l_modified_statements.add(l_statement_to_modify)
-                    }
+                    l_modified_statements.add(p_black_box_transformation.decorate_statement(l_statement_to_modify, l_method_call_expression.getClass().getSimpleName(), l_orig_codes_map.get(l_statement_to_modify)))
                 } else {
                     l_modified_statements.add(l_statement_to_modify)
                 }

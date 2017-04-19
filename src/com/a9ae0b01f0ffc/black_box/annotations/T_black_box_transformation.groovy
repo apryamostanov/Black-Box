@@ -60,8 +60,7 @@ class T_black_box_transformation extends AbstractASTTransformation {
 
     void visit(ASTNode[] i_ast_nodes, SourceUnit i_source_unit) {
         final String LC_METHOD_NAME = "visit"
-        T_logging_base_5_context.init_custom(GC_BLACK_BOX_COMPILER_CONFIG_PATH)
-        u.l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO)
+        T_logging_base_5_context.init_custom(GC_BLACK_BOX_COMPILER_CONFIG_PATH, GC_FALSE, {event -> return event.context(GC_CONTEXT_NAME_METHOD_NAME).toString()})
         try {
             if (u.c().GC_BLACK_BOX_ENABLED != GC_TRUE_STRING) {
                 return
@@ -73,10 +72,12 @@ class T_black_box_transformation extends AbstractASTTransformation {
             if (l_type_member != GC_NULL_OBJ_REF) {
                 l_black_box_type = l_type_member.getText()
             }
-            u.l().log_debug(u.s.Black_box_type_Z1, l_black_box_type)
-            u.l().log_debug(u.s.Processing_method_Z1, l_method_node.getName())
             p_method_name = u.code2attribute(l_method_node.getName())
             p_class_name = l_method_node.getDeclaringClass().getNameWithoutPackage()
+            u.l().put_to_context(p_class_name + GC_POINT + l_method_node.getName().replace(GC_XML_LESS, GC_EMPTY_STRING).replace(GC_XML_GREATER, GC_EMPTY_STRING), GC_CONTEXT_NAME_METHOD_NAME)
+            u.l().log_enter_method(PC_CLASS_NAME, LC_METHOD_NAME, GC_ZERO)
+            u.l().log_debug(u.s.Processing_method_Z1, l_method_node.getName())
+            u.l().log_debug(u.s.Black_box_type_Z1, l_black_box_type)
             p_statement_name = GC_STATEMENT_NAME_METHOD
             p_black_box_level = l_black_box_type
             p_parameters = l_method_node.getParameters()
